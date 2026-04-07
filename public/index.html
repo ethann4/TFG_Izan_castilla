@@ -29,207 +29,7 @@
     <!--    Stylesheets-->
     <!-- ===============================================-->
     <link href="assets/css/theme.css" rel="stylesheet" />
-    <style>
-      .catalog-dropdown {
-        position: static;
-      }
-
-      .catalog-dropdown .dropdown-toggle {
-        color: #f5f5f5;
-        position: relative;
-      }
-
-      .catalog-dropdown .dropdown-toggle::after {
-        margin-left: 0.55rem;
-      }
-
-      .catalog-dropdown .dropdown-toggle::before {
-        content: "";
-        position: absolute;
-        left: 0.5rem;
-        right: 0.5rem;
-        bottom: -0.7rem;
-        height: 3px;
-        border-radius: 999px;
-        background: #d62828;
-        transform: scaleX(0);
-        transform-origin: center;
-        transition: transform 0.25s ease;
-      }
-
-      .catalog-dropdown:hover .dropdown-toggle::before,
-      .catalog-dropdown .dropdown-toggle:focus::before {
-        transform: scaleX(1);
-      }
-
-      .catalog-dropdown .dropdown-menu {
-        width: min(860px, calc(100vw - 3rem));
-        margin-top: 1.2rem;
-        padding: 0;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 26px;
-        background: rgba(8, 8, 8, 0.98);
-        overflow: hidden;
-        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
-      }
-
-      .mega-catalog-menu {
-        color: #f5f5f5;
-      }
-
-      .mega-catalog-grid {
-        display: grid;
-        grid-template-columns: 250px 1fr 220px;
-        min-height: 420px;
-      }
-
-      .mega-catalog-side {
-        background: rgba(255, 255, 255, 0.03);
-        padding: 1.75rem 1.5rem;
-        border-right: 1px solid rgba(255, 255, 255, 0.06);
-      }
-
-      .mega-catalog-side-title,
-      .mega-catalog-panel-title {
-        color: #d62828;
-        font-size: 0.82rem;
-        font-weight: 700;
-        letter-spacing: 0.16em;
-        margin-bottom: 1rem;
-        text-transform: uppercase;
-      }
-
-      .mega-catalog-categories {
-        display: grid;
-        gap: 0.35rem;
-      }
-
-      .mega-catalog-category {
-        display: block;
-        color: #f5f5f5;
-        text-decoration: none;
-        font-size: 1rem;
-        font-weight: 600;
-        padding: 0.8rem 0.9rem;
-        border-radius: 14px;
-        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
-      }
-
-      .mega-catalog-category.is-active,
-      .mega-catalog-category:hover {
-        background: rgba(214, 40, 40, 0.14);
-        color: #fff;
-        transform: translateX(4px);
-      }
-
-      .mega-catalog-main {
-        padding: 1.75rem 1.5rem;
-      }
-
-      .mega-catalog-columns {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.5rem;
-      }
-
-      .mega-catalog-panel {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 20px;
-        padding: 1.35rem 1.3rem;
-      }
-
-      .mega-catalog-links {
-        display: grid;
-        gap: 0.45rem;
-      }
-
-      .mega-catalog-link {
-        color: #e8e8e8;
-        text-decoration: none;
-        font-weight: 500;
-        padding: 0.3rem 0;
-      }
-
-      .mega-catalog-link:hover {
-        color: #d62828;
-      }
-
-      .mega-catalog-aside {
-        padding: 1.75rem 1.25rem 1.75rem 0;
-        display: grid;
-        gap: 1rem;
-      }
-
-      .mega-catalog-card {
-        background: linear-gradient(180deg, rgba(214, 40, 40, 0.18), rgba(255, 255, 255, 0.03));
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 20px;
-        padding: 1.25rem;
-      }
-
-      .mega-catalog-card h6 {
-        color: #fff;
-        font-size: 1rem;
-        margin-bottom: 0.45rem;
-        text-transform: uppercase;
-      }
-
-      .mega-catalog-card p {
-        color: #d0d0d0;
-        font-size: 0.9rem;
-        line-height: 1.5;
-        margin-bottom: 0.8rem;
-      }
-
-      .mega-catalog-card a {
-        color: #d62828;
-        font-weight: 700;
-        text-decoration: none;
-      }
-
-      @media (min-width: 992px) {
-        .catalog-dropdown:hover > .dropdown-menu {
-          display: block;
-        }
-      }
-
-      @media (max-width: 991.98px) {
-        .catalog-dropdown {
-          position: relative;
-        }
-
-        .catalog-dropdown .dropdown-toggle::before {
-          display: none;
-        }
-
-        .catalog-dropdown .dropdown-menu {
-          width: 100%;
-          margin-top: 0.5rem;
-          border-radius: 20px;
-        }
-
-        .mega-catalog-grid,
-        .mega-catalog-columns {
-          grid-template-columns: 1fr;
-        }
-
-        .mega-catalog-side,
-        .mega-catalog-main,
-        .mega-catalog-aside {
-          padding: 1.2rem;
-        }
-
-        .mega-catalog-side {
-          border-right: 0;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .mega-catalog-aside {
-          padding-top: 0;
-        }
-      }
-    </style>
+    <link href="assets/css/index.css" rel="stylesheet" />
 
   </head>
 
@@ -244,13 +44,13 @@
     
     <main class="main" id="top">
       <nav class="navbar navbar-expand-lg navbar-light fixed-top py-6 d-block" data-navbar-on-scroll="data-navbar-on-scroll">
-        <div class="container"><a class="navbar-brand d-inline-flex align-items-center " href="index.html"><img class="navbar-logo" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs" style="height: 184px; width: auto;"/></a>
+        <div class="container"><a class="navbar-brand d-inline-flex align-items-center " href="index.html"><img class="navbar-logo navbar-logo--tall" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs"/></a>
           <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
           <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item dropdown fs-3 px-2 catalog-dropdown">
                 <a class="nav-link fw-bold dropdown-toggle" href="/public/Catalogo.html" id="catalogoDropdownHome" role="button" data-bs-toggle="dropdown" aria-expanded="false">CATALOGO</a>
-                <div class="dropdown-menu mega-catalog-menu" aria-labelledby="catalogoDropdownHome">
+                <ul class="dropdown-menu" aria-labelledby="catalogoDropdownHome">
                   <li class="dropdown-submenu">
                     <a class="dropdown-item dropdown-toggle submenu-toggle" href="/public/Catalogo.html#volantes">Volantes</a>
                     <ul class="dropdown-menu">
@@ -275,7 +75,7 @@
                   </li>
                   <li><a class="dropdown-item" href="/public/Catalogo.html#llantas">Llantas</a></li>
                   <li><a class="dropdown-item" href="/public/Catalogo.html#merchandising">Merchandising</a></li>
-                </div>
+                </ul>
               </li>
               <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="#store">NOSOTROS</a></li>
               <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="#contact">CONTACTO</a></li>
@@ -293,7 +93,7 @@
       </nav>
    <section class="py-0" id="header">
 
-  <div class="bg-holder" style="background-image:url(assets/img/gallery/header-bg.png); background-position:left center; background-size:contain;">
+  <div class="bg-holder hero-bg-holder">
   </div>
   <!--/.bg-holder PRINCIPAL FOTO -->
 
@@ -317,7 +117,7 @@
 
 </section>
       <section class="bg-black py-8 pt-0" id="store">
-        <div class="bg-holder" style="background-image:url(assets/img/gallery/bmw_hero_banner.jpg);background-position:left bottom;background-size:contain;;">
+        <div class="bg-holder store-bg-holder">
         </div>
         <!--/.bg-holder-->
 
@@ -389,7 +189,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$1200</h6>
                                 <h4 class="text-light">E46 Carbono galaxy RPM</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                           <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
@@ -397,7 +197,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$1000</h6>
                                 <h4 class="text-light">E90 Alcantra RPM </h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                           <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
@@ -405,7 +205,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$550</h6>
                                 <h4 class="text-light">F82 Carbono cuero</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                         </div>
@@ -417,7 +217,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$600</h6>
                                 <h4 class="text-light"> Alcantara Cuero Levas Amarillo</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                           <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
@@ -425,7 +225,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$500</h6>
                                 <h4 class="text-light">Alcantara Cuero Rojo</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                           <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
@@ -433,7 +233,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$470</h6>
                                 <h4 class="text-light">Cuero metalizado negro</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                         </div>
@@ -445,7 +245,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$490</h6>
                                 <h4 class="text-light">Alcantara Cuero Amarillo</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                           <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
@@ -453,7 +253,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$470</h6>
                                 <h4 class="text-light">Cuero Liso Rojo</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                           <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
@@ -461,7 +261,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$600.00</h6>
                                 <h4 class="text-light">Carbono Rojo Alcatara Airbag</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                         </div>
@@ -473,7 +273,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$550.00</h6>
                                 <h4 class="text-light">Carbono cuero M</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                           <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
@@ -481,7 +281,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$1000</h6>
                                 <h4 class="text-light">Cuero M RPM</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                           <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
@@ -489,7 +289,7 @@
                               <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
                                 <h6 class="text-primary">$1250.00</h6>
                                 <h4 class="text-light">Carbomo galaxy RPM</h4>
-                              </div><a class="stretched-link" href="#"></a>
+                              </div><a class="stretched-link" href="/public/Catalogo.html"></a>
                             </div>
                           </div>
                         </div>
@@ -500,7 +300,9 @@
                       </div>
                     </div> 
                   </div>
-                  <button class="">VER MAS </button>
+                    <br>
+                    <br>
+                    <Br>
                 </div>
               </div>
             </div>
@@ -732,64 +534,6 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
     <script src="vendors/feather-icons/feather.min.js"></script>
     <script>
-      const catalogDropdownHome = document.getElementById('catalogoDropdownHome');
-      if (catalogDropdownHome) {
-        const dropdownMenu = catalogDropdownHome.nextElementSibling;
-        if (dropdownMenu) {
-          dropdownMenu.className = 'dropdown-menu mega-catalog-menu';
-          dropdownMenu.innerHTML = `
-            <div class="mega-catalog-grid">
-              <div class="mega-catalog-side">
-                <div class="mega-catalog-side-title">Categorias</div>
-                <div class="mega-catalog-categories">
-                  <a class="mega-catalog-category is-active" href="/public/Catalogo.html#volantes">Volantes</a>
-                  <a class="mega-catalog-category" href="/public/Catalogo.html#anadidos">A&ntilde;adidos</a>
-                  <a class="mega-catalog-category" href="/public/Catalogo.html#llantas">Llantas</a>
-                  <a class="mega-catalog-category" href="/public/Catalogo.html#merchandising">Merchandising</a>
-                </div>
-              </div>
-              <div class="mega-catalog-main">
-                <div class="mega-catalog-columns">
-                  <div class="mega-catalog-panel">
-                    <div class="mega-catalog-panel-title">Volantes</div>
-                    <div class="mega-catalog-links">
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#bmw">BMW</a>
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#mercedes">Mercedes</a>
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#audi">Audi</a>
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#volkswagen">Volkswagen</a>
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#seat">Seat</a>
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#cupra">Cupra</a>
-                    </div>
-                  </div>
-                  <div class="mega-catalog-panel">
-                    <div class="mega-catalog-panel-title">A&ntilde;adidos</div>
-                    <div class="mega-catalog-links">
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#bmw">BMW</a>
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#mercedes">Mercedes</a>
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#audi">Audi</a>
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#volkswagen">Volkswagen</a>
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#seat">Seat</a>
-                      <a class="mega-catalog-link" href="/public/Catalogo.html#cupra">Cupra</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="mega-catalog-aside">
-                <div class="mega-catalog-card">
-                  <h6>Llantas</h6>
-                  <p>Modelos deportivos, OEM+ y acabados premium para completar el look del coche.</p>
-                  <a href="/public/Catalogo.html#llantas">Ver llantas</a>
-                </div>
-                <div class="mega-catalog-card">
-                  <h6>Merchandising</h6>
-                  <p>Camisetas, accesorios y detalles con la identidad de CDP Customs.</p>
-                  <a href="/public/Catalogo.html#merchandising">Ver merchandising</a>
-                </div>
-              </div>
-            </div>`;
-        }
-      }
-
       feather.replace();
     </script>
     <script src="assets/js/theme.js"></script>

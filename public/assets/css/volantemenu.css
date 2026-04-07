@@ -1,0 +1,8 @@
+html {
+  scroll-behavior: smooth;
+}
+
+#bmw-volantes,
+#bmw-serie-f {
+  scroll-margin-top: 110px;
+}

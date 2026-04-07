@@ -3,9 +3,54 @@ body.catalog-page {
   color: #bdbdbd;
 }
 
+.navbar-logo--tall {
+  height: 184px;
+  width: auto;
+}
+
 .catalog-page .navbar-light .navbar-nav .nav-link,
 .catalog-page .navbar-light .navbar-brand {
   color: #fff;
+}
+
+.catalog-dropdown .dropdown-menu {
+  background: rgba(10, 10, 10, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  min-width: 250px;
+  padding: 0.75rem;
+}
+
+.catalog-dropdown .dropdown-item,
+.catalog-dropdown .dropdown-toggle {
+  color: #f5f5f5;
+}
+
+.catalog-dropdown .dropdown-item {
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 0.7rem 0.9rem;
+}
+
+.catalog-dropdown .dropdown-item:hover,
+.catalog-dropdown .dropdown-item:focus {
+  background: rgba(214, 40, 40, 0.18);
+  color: #d62828;
+}
+
+.catalog-dropdown .dropdown-submenu {
+  position: relative;
+}
+
+.catalog-dropdown .dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: calc(100% - 0.35rem);
+  margin-top: 0;
+}
+
+.catalog-dropdown .submenu-toggle::after {
+  float: right;
+  margin-top: 0.35rem;
 }
 
 .catalog-shell {
@@ -300,6 +345,17 @@ body.catalog-page {
 }
 
 @media (max-width: 991.98px) {
+  .catalog-dropdown .dropdown-menu {
+    background: rgba(255, 255, 255, 0.03);
+    margin-top: 0.5rem;
+  }
+
+  .catalog-dropdown .dropdown-submenu > .dropdown-menu {
+    position: static;
+    margin-left: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
   .catalog-shell {
     padding-top: 8rem;
   }
@@ -345,5 +401,12 @@ body.catalog-page {
 
   .product-price {
     text-align: left;
+  }
+}
+
+@media (min-width: 992px) {
+  .catalog-dropdown:hover > .dropdown-menu,
+  .catalog-dropdown .dropdown-submenu:hover > .dropdown-menu {
+    display: block;
   }
 }
