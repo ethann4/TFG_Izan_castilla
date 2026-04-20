@@ -3,8 +3,8 @@
 //- ===============================================
 block variables
   - var CWD = '';
-  - var attrsHtml = { lang: `${ dir === 'rtl' ? 'ar' : 'en-US'}`, dir: dir || 'ltr' };
-  - var title = 'watch| Landing, Ecommerce & Business Template';
+  - var attrsHtml = { lang: `${ dir === 'rtl' ? 'ar' : 'es'}`, dir: dir || 'ltr' };
+  - var title = 'CDP Customs | Volantes personalizados premium';
   - var attrsBody = {};
   - var attrsMain = {};
   - var attrsLayout = {};
@@ -48,7 +48,7 @@ html()&attributes(attrsHtml)
       link(rel="shortcut icon" type="image/x-icon", href=`${CWD}assets/img/favicons/favicon.ico`)
       link(rel="manifest", href=`${CWD}assets/img/favicons/manifest.json`)
       meta(name='msapplication-TileImage', content=`${CWD}assets/img/favicons/mstile-150x150.png`)
-      meta(name="theme-color" content="#ffffff")
+      meta(name="theme-color" content="#000000")
 
 
     block headScripts
@@ -60,6 +60,8 @@ html()&attributes(attrsHtml)
 
     block styles
       +ThemeStyle
+      link(href=`${CWD}assets/css/cdp-common.css` rel='stylesheet')
+      link(href=`${CWD}assets/css/index.css` rel='stylesheet')
 
 
   = '\n\n'

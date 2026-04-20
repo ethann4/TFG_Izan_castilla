@@ -1,9 +1,8 @@
 extends Layout
-include ../mixins/navbars/NavbarWatch
+include ../mixins/navbars/NavbarCDP
 include ../mixins/Variables
 
 prepend scripts
-  script(src=`https://polyfill.io/v3/polyfill.min.js?features=window.scroll`)
   script(src=`${CWD}vendors/feather-icons/feather.min.js`)
   script.
     feather.replace();
@@ -13,7 +12,7 @@ append footerStyles
   link(href='https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&display=swap' rel='stylesheet')
 
 block mainContent
-  +NavbarWatch
+  +NavbarCDP
   block wrapperContent 
     block beforeContent
     block content

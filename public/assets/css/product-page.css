@@ -3,13 +3,8 @@ body.product-page {
   color: #bdbdbd;
 }
 
-.product-page .navbar-light .navbar-nav .nav-link,
-.product-page .navbar-light .navbar-brand {
-  color: #fff;
-}
-
 .product-shell {
-  padding-top: 10rem;
+  padding-top: 10.5rem;
   padding-bottom: 4rem;
   position: relative;
 }
@@ -18,7 +13,7 @@ body.product-page {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.96)), url("assets/img/gallery/bmw_hero_banner.jpg");
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.96)), url("../img/gallery/bmw_hero_banner.jpg");
   background-size: cover;
   background-position: center top;
   opacity: 0.25;
@@ -30,7 +25,7 @@ body.product-page {
   z-index: 1;
   background: rgba(10, 10, 10, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 30px;
+  border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(16px);
@@ -60,7 +55,7 @@ body.product-page {
 .product-gallery-alt {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 26px;
+  border-radius: 8px;
   min-height: 420px;
   display: flex;
   align-items: center;
@@ -79,7 +74,7 @@ body.product-page {
 .product-panel {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 26px;
+  border-radius: 8px;
   padding: 1.5rem;
 }
 
@@ -177,7 +172,7 @@ body.product-page {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
   color: #f5f5f5;
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
 .detail-chip {
@@ -248,7 +243,7 @@ body.product-page {
 .product-info-box {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.03);
-  border-radius: 18px;
+  border-radius: 8px;
   padding: 1rem;
   text-align: center;
 }
@@ -276,13 +271,13 @@ body.product-page {
 @media (max-width: 575.98px) {
   .product-wrap {
     padding: 1rem;
-    border-radius: 22px;
+    border-radius: 8px;
   }
 
   .product-gallery-main,
   .product-gallery-alt,
   .product-panel {
-    border-radius: 20px;
+    border-radius: 8px;
   }
 
   .product-cta-row,

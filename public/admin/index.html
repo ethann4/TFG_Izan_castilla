@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin demo | CDP Customs</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicons/favicon-32x32.png">
+    <link href="../assets/css/theme.css" rel="stylesheet">
+    <link href="../assets/css/cdp-common.css" rel="stylesheet">
+    <link href="../assets/css/admin.css" rel="stylesheet">
+  </head>
+
+  <body class="admin-page">
+    <main class="main" id="top">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4 d-block cdp-navbar" data-navbar-on-scroll="data-navbar-on-scroll">
+        <div class="container">
+          <a class="navbar-brand d-inline-flex align-items-center" href="../index.html">
+            <img class="navbar-logo navbar-logo--tall" src="../assets/img/logo_cdp_transparente.png" alt="CDP Customs">
+          </a>
+          <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" aria-controls="navbarAdmin" aria-expanded="false" aria-label="Abrir navegacion">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarAdmin">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="../index.html">WEB</a></li>
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="../Catalogo.html">CATALOGO</a></li>
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold active" href="index.html">ADMIN DEMO</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <section class="admin-shell">
+        <div class="container">
+          <div class="row mb-4">
+            <div class="col-lg-8">
+              <div class="cdp-section-kicker">Base futura</div>
+              <h1 class="cdp-section-title">Panel admin</h1>
+              <p class="cdp-section-copy">Pantalla estatica preparada para explicar el CRUD final: productos, marcas/modelos y pedidos personalizados con PHP, MySQL, sesiones y consultas preparadas.</p>
+            </div>
+          </div>
+
+          <div class="admin-grid">
+            <aside class="admin-sidebar">
+              <a class="is-active" href="#productos"><span data-feather="package"></span>Productos</a>
+              <a href="#pedidos"><span data-feather="clipboard"></span>Pedidos</a>
+              <a href="#usuarios"><span data-feather="lock"></span>Sesiones</a>
+            </aside>
+
+            <section class="admin-panel">
+              <div class="admin-stat-grid">
+                <div class="admin-stat"><span>Productos demo</span><strong>12</strong></div>
+                <div class="admin-stat"><span>Pedidos demo</span><strong>4</strong></div>
+                <div class="admin-stat"><span>Tablas previstas</span><strong>3</strong></div>
+              </div>
+
+              <div class="table-responsive" id="productos">
+                <table class="table admin-table align-middle">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Producto</th>
+                      <th>Marca</th>
+                      <th>Material</th>
+                      <th>Precio</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Carbono Galaxy RPM</td>
+                      <td>BMW E46</td>
+                      <td>Carbono + cuero</td>
+                      <td>1.200 EUR</td>
+                      <td><span class="badge bg-success">Activo</span></td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Alcantara RPM Amarillo</td>
+                      <td>BMW E90</td>
+                      <td>Alcantara</td>
+                      <td>1.000 EUR</td>
+                      <td><span class="badge bg-success">Activo</span></td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>S-Line Alcantara RPM</td>
+                      <td>Audi</td>
+                      <td>Alcantara</td>
+                      <td>790 EUR</td>
+                      <td><span class="badge bg-warning text-dark">Demo</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="backend-note mt-4" id="pedidos">
+                CRUD previsto: `productos`, `marcas_modelos` y `pedidos_personalizados`. El login admin debera usar password_hash, password_verify, sesiones seguras y consultas PDO preparadas.
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="../vendors/@popperjs/popper.min.js"></script>
+    <script src="../vendors/bootstrap/bootstrap.min.js"></script>
+    <script src="../vendors/is/is.min.js"></script>
+    <script src="../vendors/feather-icons/feather.min.js"></script>
+    <script src="../assets/js/theme.js"></script>
+    <script>feather.replace();</script>
+  </body>
+
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contacto | CDP Customs</title>
+    <meta name="description" content="Formulario de contacto y pedido personalizado para CDP Customs.">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicons/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicons/favicon.ico">
+    <link rel="manifest" href="assets/img/favicons/manifest.json">
+    <meta name="msapplication-TileImage" content="assets/img/favicons/mstile-150x150.png">
+    <meta name="theme-color" content="#000000">
+    <link href="assets/css/theme.css" rel="stylesheet">
+    <link href="assets/css/cdp-common.css" rel="stylesheet">
+    <link href="assets/css/contact.css" rel="stylesheet">
+  </head>
+
+  <body class="contact-page">
+    <main class="main" id="top">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4 d-block cdp-navbar" data-navbar-on-scroll="data-navbar-on-scroll">
+        <div class="container">
+          <a class="navbar-brand d-inline-flex align-items-center" href="index.html">
+            <img class="navbar-logo navbar-logo--tall" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs">
+          </a>
+          <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContact" aria-controls="navbarContact" aria-expanded="false" aria-label="Abrir navegacion">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarContact">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="index.html">INICIO</a></li>
+              <li class="nav-item dropdown fs-3 px-2 cdp-shop-dropdown">
+                <a class="nav-link fw-bold dropdown-toggle" href="Catalogo.html" id="tiendaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">TIENDA</a>
+                <ul class="dropdown-menu" aria-labelledby="tiendaDropdown">
+                  <li><a class="dropdown-item" href="Catalogo.html">Catalogo completo<small>Volantes y acabados</small></a></li>
+                  <li><a class="dropdown-item" href="Catalogo.html?brand=bmw#catalogo-grid">BMW<small>E46 / E39, E90 / E60 y Serie F</small></a></li>
+                  <li><a class="dropdown-item" href="Catalogo.html?brand=audi#catalogo-grid">Audi<small>S-Line y RS</small></a></li>
+                  <li><a class="dropdown-item" href="Catalogo.html?brand=mercedes#catalogo-grid">Mercedes<small>AMG Line</small></a></li>
+                  <li><a class="dropdown-item" href="Catalogo.html?brand=volkswagen#catalogo-grid">Volkswagen<small>GTI y R</small></a></li>
+                </ul>
+              </li>
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="Creacionvirtual.html">CONFIGURADOR</a></li>
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold active" href="contacto.html">CONTACTO</a></li>
+            </ul>
+            <a class="cdp-phone-link" href="tel:+34676525005"><span data-feather="phone-call"></span><span>(+34) 676 525 005</span></a>
+          </div>
+        </div>
+      </nav>
+
+      <section class="contact-shell">
+        <div class="container">
+          <div class="contact-layout">
+            <aside class="contact-card">
+              <div class="cdp-section-kicker">Contacto y pedidos</div>
+              <h1 class="cdp-section-title">Hablemos de tu volante</h1>
+              <p class="cdp-section-copy">Esta pagina queda preparada para convertir el formulario en alta real de pedido con PHP, validacion de datos, sesiones y guardado en MySQL.</p>
+              <ul class="contact-list">
+                <li><span data-feather="map-pin"></span><div><strong>Ubicacion</strong><br>Vizcaya, Espana</div></li>
+                <li><span data-feather="phone"></span><div><strong>Telefono</strong><br><a href="tel:+34676525005">(+34) 676 525 005</a></div></li>
+                <li><span data-feather="mail"></span><div><strong>Email demo</strong><br><a href="mailto:info@cdpcustoms.local">info@cdpcustoms.local</a></div></li>
+              </ul>
+            </aside>
+
+            <section class="contact-card">
+              <form action="#" method="post" data-backend-table="pedidos_personalizados">
+                <div class="contact-form-grid">
+                  <div>
+                    <label class="filter-label" for="nombre">Nombre</label>
+                    <input class="form-control cdp-form-control" id="nombre" name="nombre" type="text" placeholder="Tu nombre" required maxlength="80">
+                  </div>
+                  <div>
+                    <label class="filter-label" for="email">Email</label>
+                    <input class="form-control cdp-form-control" id="email" name="email" type="email" placeholder="correo@ejemplo.com" required maxlength="120">
+                  </div>
+                  <div>
+                    <label class="filter-label" for="telefono">Telefono</label>
+                    <input class="form-control cdp-form-control" id="telefono" name="telefono" type="tel" placeholder="+34..." maxlength="30">
+                  </div>
+                  <div>
+                    <label class="filter-label" for="modelo">Modelo del coche</label>
+                    <input class="form-control cdp-form-control" id="modelo" name="modelo" type="text" placeholder="BMW E46, Audi A3..." maxlength="80">
+                  </div>
+                  <div>
+                    <label class="filter-label" for="material">Material</label>
+                    <select class="form-select cdp-form-select" id="material" name="material">
+                      <option value="">Sin decidir</option>
+                      <option value="cuero">Cuero</option>
+                      <option value="alcantara">Alcantara</option>
+                      <option value="carbono">Carbono</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="filter-label" for="presupuesto">Presupuesto</label>
+                    <select class="form-select cdp-form-select" id="presupuesto" name="presupuesto">
+                      <option value="">Selecciona rango</option>
+                      <option value="400-600">400 - 600 EUR</option>
+                      <option value="600-900">600 - 900 EUR</option>
+                      <option value="900+">900 EUR o mas</option>
+                    </select>
+                  </div>
+                  <div class="is-wide">
+                    <label class="filter-label" for="mensaje">Idea del pedido</label>
+                    <textarea class="form-control cdp-form-control" id="mensaje" name="mensaje" rows="5" placeholder="Cuero negro, costura roja, marcador central, pantalla RPM..." required maxlength="1000"></textarea>
+                  </div>
+                  <div class="is-wide backend-note">
+                    Backend previsto: validar servidor, usar consultas preparadas PDO, guardar en tabla `pedidos_personalizados` y proteger zona admin con sesiones.
+                  </div>
+                  <div class="is-wide d-flex flex-column flex-sm-row gap-3">
+                    <button class="btn btn-primary" type="submit">Enviar solicitud demo</button>
+                    <a class="btn btn-outline-primary" href="https://wa.me/34676525005" target="_blank" rel="noreferrer">Abrir WhatsApp</a>
+                  </div>
+                </div>
+              </form>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="vendors/@popperjs/popper.min.js"></script>
+    <script src="vendors/bootstrap/bootstrap.min.js"></script>
+    <script src="vendors/is/is.min.js"></script>
+    <script src="vendors/feather-icons/feather.min.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script>feather.replace();</script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">
+  </body>
+
+</html>

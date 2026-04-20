@@ -1,104 +1,28 @@
-append variables
-  -
-    var arrivals= [
-      {
-        image:'watch-2.png',
-        title:'ADRIATICA ADR',
-        price:'$650.00',
-         
-      },
-      {
-        image:'watch-3.png',
-        title:'SEIKO SNZGO7K1',
-        price:'$126.00',
-      },
-      {
-        image:'watch-1.png',
-        title:'ROAMER RM 220837',
-        price:'$250.00',
-      },
-      
-    ];
-
-
-mixin CollectionItem(config)
-  .col-sm-6.col-md-4.mb-3.mb-md-0
-    .card.bg-black.text-white.p-6.pb-8
-      img.card-img(src=`${CWD}assets/img/gallery/${config.image}` alt='...')
-      .card-img-overlay.bg-dark-gradient.d-flex.flex-column-reverse.align-items-center
-        h6.text-primary=config.price
-        h4.text-light=config.title
-      a.stretched-link(href='#')
-      
 mixin Collection
-  section.py-0.pb-6#collections
+  section.py-7#catalogo-preview
     .container
-      .row.h-100
-        .col-lg-7.mt-7
-          h5.fs-3.fs-lg-5.lh-sm.mb-0.text-uppercase Collections
-        .col-12
-          nav
-            .nav.nav-tabs.watch-tabs.mb-4.justify-content-end#nav-tab(role='tablist')
-              button.nav-link.active#nav-latest-tab(data-bs-toggle='tab' data-bs-target='#nav-latest' type='button' role='tab' aria-controls='nav-latest' aria-selected='true') LATEST 
-              button.nav-link#nav-popular-tab(data-bs-toggle='tab' data-bs-target='#nav-popular' type='button' role='tab' aria-controls='nav-popular' aria-selected='false') POPULAR
-          .tab-content#nav-tabContent
-            .tab-pane.fade.show.active#nav-latest(role='tabpanel' aria-labelledby='nav-latest-tab')
-              #carouselLatest.carousel.slide(data-bs-ride='carousel')
-                .carousel-inner
-                  .carousel-item.active(data-bs-interval='10000')
-                    .row.h-100.align-items-center               
-                      +CollectionItem(arrivals[0])                                                                    
-                      +CollectionItem(arrivals[1])                                                                    
-                      +CollectionItem(arrivals[2])                                                                                                                                       
-                  .carousel-item(data-bs-interval='5000')
-                    .row.h-100.align-items-center               
-                      +CollectionItem(arrivals[0])                                                                    
-                      +CollectionItem(arrivals[1])                                                                    
-                      +CollectionItem(arrivals[2])                    
-                  .carousel-item(data-bs-interval='3000')
-                    .row.h-100.align-items-center                                 
-                      +CollectionItem(arrivals[0])                                                                    
-                      +CollectionItem(arrivals[1])                                                                    
-                      +CollectionItem(arrivals[2])                      
-                  .carousel-item
-                    .row.h-100.align-items-center         
-                      +CollectionItem(arrivals[0])                                                                    
-                      +CollectionItem(arrivals[1])                                                                    
-                      +CollectionItem(arrivals[2])   
-                  .row
-                    button.carousel-control-prev(type='button' data-bs-target='#carouselLatest' data-bs-slide='prev')
-                      span.carousel-control-prev-icon(aria-hidden='true')
-                      span.visually-hidden Previous
-                    button.carousel-control-next(type='button' data-bs-target='#carouselLatest' data-bs-slide='next')
-                      span.carousel-control-next-icon(aria-hidden='true')
-                      span.visually-hidden Next 
-            .tab-pane.fade#nav-popular(role='tabpanel' aria-labelledby='nav-popular-tab')
-              #carouselPopular.carousel.slide(data-bs-ride='carousel')
-                .carousel-inner
-                  .carousel-item.active(data-bs-interval='10000')
-                    .row.h-100.align-items-center               
-                      +CollectionItem(arrivals[0])                                                                    
-                      +CollectionItem(arrivals[1])                                                                    
-                      +CollectionItem(arrivals[2])                                                                                                                                       
-                  .carousel-item(data-bs-interval='5000')
-                    .row.h-100.align-items-center               
-                      +CollectionItem(arrivals[0])                                                                    
-                      +CollectionItem(arrivals[1])                                                                    
-                      +CollectionItem(arrivals[2])                    
-                  .carousel-item(data-bs-interval='3000')
-                    .row.h-100.align-items-center                                 
-                      +CollectionItem(arrivals[0])                                                                    
-                      +CollectionItem(arrivals[1])                                                                    
-                      +CollectionItem(arrivals[2])                      
-                  .carousel-item
-                    .row.h-100.align-items-center         
-                      +CollectionItem(arrivals[0])                                                                    
-                      +CollectionItem(arrivals[1])                                                                    
-                      +CollectionItem(arrivals[2])   
-                  .row
-                    button.carousel-control-prev(type='button' data-bs-target='#carouselPopular' data-bs-slide='prev')
-                      span.carousel-control-prev-icon(aria-hidden='true')
-                      span.visually-hidden Previous
-                    button.carousel-control-next(type='button' data-bs-target='#carouselPopular' data-bs-slide='next')
-                      span.carousel-control-next-icon(aria-hidden='true')
-                      span.visually-hidden Next 
+      .row.align-items-end.mb-4
+        .col-lg-7
+          .cdp-section-kicker Catalogo destacado
+          h2.cdp-section-title.mb-0 Novedades CDP
+        .col-lg-5.text-lg-end.mt-3.mt-lg-0
+          a.btn.btn-outline-primary(href='Catalogo.html') Abrir catalogo completo
+      .row.g-4
+        .col-md-4
+          a.home-product-card(href='producto.html?id=e46-carbono-galaxy-rpm')
+            img(src='assets/img/gallery/E46/E46_pantalla_galaxy_carbono.png' alt='Volante BMW E46 carbono galaxy RPM')
+            span BMW E46 / E39
+            strong Carbono Galaxy RPM
+            em 1.200 EUR
+        .col-md-4
+          a.home-product-card(href='producto.html?id=e90-alcantara-rpm-amarillo')
+            img(src='assets/img/gallery/E90/E60_ALCANTARA_PANTALLA_LEVAS_AMARILLO.png' alt='Volante BMW E90 alcantara RPM')
+            span BMW E90 / E60
+            strong Alcantara RPM Amarillo
+            em 1.000 EUR
+        .col-md-4
+          a.home-product-card(href='producto.html?id=f82-carbono-cuero-m')
+            img(src='assets/img/gallery/F82/F82_Carbono_cuero.png' alt='Volante BMW F82 carbono cuero')
+            span BMW Serie F
+            strong Carbono Cuero M
+            em 550 EUR

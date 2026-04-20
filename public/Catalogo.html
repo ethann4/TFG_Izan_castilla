@@ -6,88 +6,75 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Catalogo | CDP Customs</title>
+    <meta name="description" content="Catalogo premium de volantes personalizados CDP Customs para BMW, Audi, Mercedes y Volkswagen.">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicons/favicon-16x16.png">
     <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicons/favicon.ico">
     <link rel="manifest" href="assets/img/favicons/manifest.json">
     <meta name="msapplication-TileImage" content="assets/img/favicons/mstile-150x150.png">
-    <meta name="theme-color" content="#ffffff">
-    <link href="assets/css/theme.css" rel="stylesheet" />
-    <link href="assets/css/catalog.css" rel="stylesheet" />
+    <meta name="theme-color" content="#000000">
+    <link href="assets/css/theme.css" rel="stylesheet">
+    <link href="assets/css/cdp-common.css" rel="stylesheet">
+    <link href="assets/css/catalog.css" rel="stylesheet">
   </head>
 
   <body class="catalog-page">
     <main class="main" id="top">
-      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4 d-block" data-navbar-on-scroll="data-navbar-on-scroll">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4 d-block cdp-navbar" data-navbar-on-scroll="data-navbar-on-scroll">
         <div class="container">
-          <a class="navbar-brand d-inline-flex align-items-center" href="index.html"><img class="navbar-logo navbar-logo--tall" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs"/></a>
-          <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCatalogo" aria-controls="navbarCatalogo" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+          <a class="navbar-brand d-inline-flex align-items-center" href="index.html">
+            <img class="navbar-logo navbar-logo--tall" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs">
+          </a>
+          <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCatalogo" aria-controls="navbarCatalogo" aria-expanded="false" aria-label="Abrir navegacion">
+            <span class="navbar-toggler-icon"></span>
+          </button>
           <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarCatalogo">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item dropdown fs-3 px-2 catalog-dropdown">
-                <a class="nav-link fw-bold active dropdown-toggle" href="Catalogo.html" id="catalogoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">CATALOGO</a>
-                <ul class="dropdown-menu" aria-labelledby="catalogoDropdown">
-                  <li class="dropdown-submenu">
-                    <a class="dropdown-item dropdown-toggle submenu-toggle" href="#volantes">Volantes</a>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#bmw">BMW</a></li>
-                      <li><a class="dropdown-item" href="#mercedes">Mercedes</a></li>
-                      <li><a class="dropdown-item" href="#audi">Audi</a></li>
-                      <li><a class="dropdown-item" href="#volkswagen">Volkswagen</a></li>
-                      <li><a class="dropdown-item" href="#seat">Seat</a></li>
-                      <li><a class="dropdown-item" href="#cupra">Cupra</a></li>
-                    </ul>
-                  </li>
-                  <li class="dropdown-submenu">
-                    <a class="dropdown-item dropdown-toggle submenu-toggle" href="#anadidos">Añadidos</a>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#bmw">BMW</a></li>
-                      <li><a class="dropdown-item" href="#mercedes">Mercedes</a></li>
-                      <li><a class="dropdown-item" href="#audi">Audi</a></li>
-                      <li><a class="dropdown-item" href="#volkswagen">Volkswagen</a></li>
-                      <li><a class="dropdown-item" href="#seat">Seat</a></li>
-                      <li><a class="dropdown-item" href="#cupra">Cupra</a></li>
-                    </ul>
-                  </li>
-                  <li><a class="dropdown-item" href="#llantas">Llantas</a></li>
-                  <li><a class="dropdown-item" href="#merchandising">Merchandising</a></li>
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="index.html">INICIO</a></li>
+              <li class="nav-item dropdown fs-3 px-2 cdp-shop-dropdown">
+                <a class="nav-link fw-bold active dropdown-toggle" href="Catalogo.html" id="tiendaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">TIENDA</a>
+                <ul class="dropdown-menu" aria-labelledby="tiendaDropdown">
+                  <li><a class="dropdown-item" href="Catalogo.html">Catalogo completo<small>Volantes, acabados y piezas a medida</small></a></li>
+                  <li><a class="dropdown-item" href="Catalogo.html?brand=bmw#catalogo-grid">BMW<small>E46 / E39, E90 / E60 y Serie F</small></a></li>
+                  <li><a class="dropdown-item" href="Catalogo.html?brand=audi#catalogo-grid">Audi<small>S-Line, RS y proyectos demo</small></a></li>
+                  <li><a class="dropdown-item" href="Catalogo.html?brand=mercedes#catalogo-grid">Mercedes<small>AMG Line y acabados nappa</small></a></li>
+                  <li><a class="dropdown-item" href="Catalogo.html?brand=volkswagen#catalogo-grid">Volkswagen<small>GTI, R y OEM+</small></a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="Creacionvirtual.html">Configurador visual<small>Base funcional para pedidos a medida</small></a></li>
                 </ul>
               </li>
-              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="index.html#store">NOSOTROS</a></li>
-              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="index.html#contact">CONTACTO</a></li>
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="index.html#marcas">MARCAS</a></li>
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="index.html#nosotros">NOSOTROS</a></li>
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="contacto.html">CONTACTO</a></li>
             </ul>
-            <form class="d-flex">
-              <a class="text-primary" href="#!"><span data-feather="phone-call"></span></a>
-              <div class="ms-4 text-light fw-bold">(+34) 676525005</div>
-            </form>
+            <a class="cdp-phone-link" href="tel:+34676525005"><span data-feather="phone-call"></span><span>(+34) 676 525 005</span></a>
           </div>
         </div>
       </nav>
 
-      <div class="catalog-promo">Big Promo: descubre nuestros volantes personalizados y acabados exclusivos para BMW, Audi, Mercedes,Volkswagen y mas !.</div>
+      <div class="catalog-promo">Volantes personalizados con acabados en cuero, alcantara, carbono, levas y pantalla RPM.</div>
 
-      <section class="catalog-shell">
-        <div class="container">
+      <section class="catalog-shell" id="catalogo">
+        <div class="container" data-catalog>
           <div class="catalog-surface">
             <div class="catalog-toolbar">
               <div class="d-flex flex-column gap-3">
                 <div class="catalog-top-links">
-                  <a href="#bmw">BMW</a>
-                  <a href="#audi">AUDI</a>
-                  <a href="#mercedes">MERCEDES</a>
-                  <a href="#volkswagen">VOLKSWAGEN</a>
+                  <a href="Catalogo.html?brand=bmw#catalogo-grid">BMW</a>
+                  <a href="Catalogo.html?brand=audi#catalogo-grid">AUDI</a>
+                  <a href="Catalogo.html?brand=mercedes#catalogo-grid">MERCEDES</a>
+                  <a href="Catalogo.html?brand=volkswagen#catalogo-grid">VOLKSWAGEN</a>
                 </div>
-                <div class="catalog-sub-links">
-                  <a class="active" href="#todos">Todos</a>
-                  <a href="#e46">E46</a>
-                  <a href="#e90">E90 / E60</a>
-                  <a href="#f82">F82</a>
-                  <a href="#carbono">Carbono</a>
-                  <a href="#alcantara">Alcantara</a>
-                  <a href="#cuero">Cuero</a>
-                  <a href="#pantalla">Pantalla RPM</a>
-                  <a href="#levas">Levas</a>
+                <div class="catalog-sub-links" aria-label="Filtros rapidos de catalogo">
+                  <button class="is-active" type="button" data-quick-filter="" data-quick-type="all">Todos</button>
+                  <button type="button" data-quick-filter="e46" data-quick-type="model">E46 / E39</button>
+                  <button type="button" data-quick-filter="e90" data-quick-type="model">E90 / E60</button>
+                  <button type="button" data-quick-filter="f82" data-quick-type="model">BMW Serie F</button>
+                  <button type="button" data-quick-filter="carbono" data-quick-type="material">Carbono</button>
+                  <button type="button" data-quick-filter="alcantara" data-quick-type="material">Alcantara</button>
+                  <button type="button" data-quick-filter="pantalla" data-quick-type="search">Pantalla RPM</button>
+                  <button type="button" data-quick-filter="levas" data-quick-type="search">Levas</button>
                 </div>
               </div>
             </div>
@@ -95,446 +82,256 @@
             <div class="catalog-actions">
               <div class="catalog-search">
                 <span data-feather="search"></span>
-                <input type="text" value="" placeholder="Buscar volante, modelo o acabado" />
+                <input type="text" value="" placeholder="Buscar volante, modelo o acabado" data-catalog-search>
               </div>
-              <div class="catalog-stats">18 resultado(s)</div>
-              <button class="catalog-filter-btn" type="button">
-                <span data-feather="sliders"></span>
-                Mostrar filtros y orden
+              <div class="catalog-stats" data-catalog-count>0 resultado(s)</div>
+              <button class="catalog-reset-btn" type="button" data-reset-filters>
+                <span data-feather="rotate-ccw"></span>
+                Limpiar
               </button>
             </div>
 
-            <div class="catalog-breadcrumb">Inicio / Catalogo / Volantes</div>
+            <div class="catalog-breadcrumb">Inicio / Catalogo / Volantes personalizados</div>
 
             <div class="catalog-hero">
-              <h1>Volantes</h1>
-              <div class="catalog-stats">Selección premium de volantes personalizados, restaurados y listos para montar.</div>
+              <div>
+                <div class="cdp-section-kicker">CDP Customs Shop</div>
+                <h1>Volantes premium</h1>
+              </div>
+              <div class="catalog-stats">Catalogo preparado para PHP/MySQL con filtros normalizados.</div>
             </div>
 
             <div class="catalog-chip-row">
-              <span class="catalog-chip is-active">Todos</span>
-              <span class="catalog-chip">BMW</span>
-              <span class="catalog-chip">Carbono</span>
-              <span class="catalog-chip">Alcantara</span>
-              <span class="catalog-chip">Cuero</span>
-              <span class="catalog-chip">Levas</span>
-              <span class="catalog-chip">Pantalla RPM</span>
+              <button class="catalog-chip is-active" type="button" data-quick-filter="" data-quick-type="all">Todos</button>
+              <button class="catalog-chip" type="button" data-quick-filter="bmw" data-quick-type="brand">BMW</button>
+              <button class="catalog-chip" type="button" data-quick-filter="audi" data-quick-type="brand">Audi</button>
+              <button class="catalog-chip" type="button" data-quick-filter="mercedes" data-quick-type="brand">Mercedes</button>
+              <button class="catalog-chip" type="button" data-quick-filter="volkswagen" data-quick-type="brand">Volkswagen</button>
+              <button class="catalog-chip" type="button" data-quick-filter="carbono" data-quick-type="material">Carbono</button>
+              <button class="catalog-chip" type="button" data-quick-filter="alcantara" data-quick-type="material">Alcantara</button>
             </div>
 
-            <div class="product-grid">
-              <a class="product-card" href="Volante-single.html?product=e46-carbono-galaxy-rpm">
-                <div class="product-media">
-                  <span class="product-badge">Nuevo</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.9</span>
-                  <img src="assets/img/gallery/E46/E46_pantalla_galaxy_carbono.png" alt="Volante E46 carbono galaxy rpm" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Carbono Galaxy RPM</div>
-                      <div class="product-fit">Pantalla integrada · Cuero perforado</div>
-                    </div>
-                    <div class="product-price">
-                      <strong>1.200,00 €</strong><br />
-                      <s>1.420,00 €</s><br />
-                      <span class="product-discount">-15%</span>
-                    </div>
+            <div class="catalog-layout">
+              <aside class="catalog-filters" aria-label="Filtros de catalogo">
+                <h2>Filtros</h2>
+                <form data-filter-form>
+                  <div class="filter-group">
+                    <label class="filter-label" for="filterBrand">Marca</label>
+                    <select class="form-select cdp-form-select" id="filterBrand" name="brand">
+                      <option value="">Todas</option>
+                      <option value="bmw">BMW</option>
+                      <option value="audi">Audi</option>
+                      <option value="mercedes">Mercedes</option>
+                      <option value="volkswagen">Volkswagen</option>
+                    </select>
                   </div>
-                </div>
-              </a>
+                  <div class="filter-group">
+                    <label class="filter-label" for="filterModel">Modelo</label>
+                    <select class="form-select cdp-form-select" id="filterModel" name="model">
+                      <option value="">Todos</option>
+                      <option value="e46">BMW E46 / E39</option>
+                      <option value="e90">BMW E90 / E60</option>
+                      <option value="f82">BMW Serie F</option>
+                      <option value="audi-sline">Audi S-Line</option>
+                      <option value="amg">Mercedes AMG</option>
+                      <option value="gti">Volkswagen GTI</option>
+                    </select>
+                  </div>
+                  <div class="filter-group">
+                    <span class="filter-label">Material</span>
+                    <label class="filter-check"><input type="checkbox" name="material" value="cuero"> Cuero</label>
+                    <label class="filter-check"><input type="checkbox" name="material" value="alcantara"> Alcantara</label>
+                    <label class="filter-check"><input type="checkbox" name="material" value="carbono"> Carbono</label>
+                  </div>
+                  <div class="filter-group">
+                    <span class="filter-label">Color</span>
+                    <label class="filter-check"><input type="checkbox" name="color" value="negro"> Negro</label>
+                    <label class="filter-check"><input type="checkbox" name="color" value="rojo"> Rojo</label>
+                    <label class="filter-check"><input type="checkbox" name="color" value="azul"> Azul</label>
+                    <label class="filter-check"><input type="checkbox" name="color" value="amarillo"> Amarillo</label>
+                  </div>
+                  <div class="filter-group">
+                    <label class="filter-label" for="filterPrice">Precio maximo</label>
+                    <input class="form-range" id="filterPrice" type="range" min="400" max="1300" step="50" value="1300" data-filter-price>
+                    <div class="price-output"><span>400 EUR</span><span data-price-output>Hasta 1300 EUR</span></div>
+                  </div>
+                  <button class="btn btn-outline-primary w-100 mt-3" type="button" data-reset-filters>Restablecer filtros</button>
+                </form>
+              </aside>
 
-              <a class="product-card" href="Volante-single.html?product=e90-alcantara-rpm-amarillo">
-                <div class="product-media">
-                  <span class="product-badge">Top Venta</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.8</span>
-                  <img src="assets/img/gallery/E90/E60_ALCANTARA_PANTALLA_LEVAS_AMARILLO.png" alt="Volante E90 alcantara pantalla levas amarillo" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E90 / E60</div>
-                      <div class="product-name">Alcantara RPM Amarillo</div>
-                      <div class="product-fit">Levas + pantalla · Costura amarilla</div>
+              <div>
+                <div class="product-grid" id="catalogo-grid">
+                  <a class="product-card" href="producto.html?id=e46-carbono-galaxy-rpm" data-brand="bmw" data-model="e46 e39" data-material="carbono cuero" data-color="negro azul" data-price="1200" data-tags="pantalla rpm galaxy m3">
+                    <div class="product-media">
+                      <span class="product-badge">Nuevo</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.9</span>
+                      <img src="assets/img/gallery/E46/E46_pantalla_galaxy_carbono.png" alt="Volante BMW E46 carbono galaxy con pantalla RPM">
                     </div>
-                    <div class="product-price">
-                      <strong>1.000,00 €</strong><br />
-                      <s>1.180,00 €</s><br />
-                      <span class="product-discount">-15%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">BMW E46 / E39</div><div class="product-name">Carbono Galaxy RPM</div><div class="product-fit">Pantalla integrada - cuero perforado</div></div>
+                        <div class="product-price"><strong>1.200 EUR</strong><br><s>1.420 EUR</s><br><span class="product-discount">-15%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=f82-carbono-cuero-m">
-                <div class="product-media">
-                  <span class="product-badge">Carbono</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.7</span>
-                  <img src="assets/img/gallery/F82/F82_Carbono_cuero.png" alt="Volante F82 carbono cuero" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW F82</div>
-                      <div class="product-name">Carbono Cuero M</div>
-                      <div class="product-fit">Aro superior carbono · Grip reforzado</div>
+                  <a class="product-card" href="producto.html?id=e90-alcantara-rpm-amarillo" data-brand="bmw" data-model="e90 e60" data-material="alcantara cuero" data-color="negro amarillo" data-price="1000" data-tags="pantalla rpm levas">
+                    <div class="product-media">
+                      <span class="product-badge">Top venta</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.8</span>
+                      <img src="assets/img/gallery/E90/E60_ALCANTARA_PANTALLA_LEVAS_AMARILLO.png" alt="Volante BMW E90 alcantara con pantalla y levas">
                     </div>
-                    <div class="product-price">
-                      <strong>550,00 €</strong><br />
-                      <s>690,00 €</s><br />
-                      <span class="product-discount">-20%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">BMW E90 / E60</div><div class="product-name">Alcantara RPM Amarillo</div><div class="product-fit">Levas + pantalla - costura amarilla</div></div>
+                        <div class="product-price"><strong>1.000 EUR</strong><br><s>1.180 EUR</s><br><span class="product-discount">-15%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=e46-levas-amarillo">
-                <div class="product-media">
-                  <span class="product-badge">Levas</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.6</span>
-                  <img src="assets/img/gallery/E46/E46_Levas_Amarillo.png" alt="Volante E46 levas amarillo" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Levas Amarillo</div>
-                      <div class="product-fit">Alcantara y cuero · Inserto deportivo</div>
+                  <a class="product-card" href="producto.html?id=f82-carbono-cuero-m" data-brand="bmw" data-model="f82" data-material="carbono cuero" data-color="negro" data-price="550" data-tags="serie f m performance">
+                    <div class="product-media">
+                      <span class="product-badge">Carbono</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.7</span>
+                      <img src="assets/img/gallery/F82/F82_Carbono_cuero.png" alt="Volante BMW F82 carbono cuero M">
                     </div>
-                    <div class="product-price">
-                      <strong>600,00 €</strong><br />
-                      <s>760,00 €</s><br />
-                      <span class="product-discount">-21%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">BMW Serie F</div><div class="product-name">Carbono Cuero M</div><div class="product-fit">Aro superior carbono - grip reforzado</div></div>
+                        <div class="product-price"><strong>550 EUR</strong><br><s>690 EUR</s><br><span class="product-discount">-20%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=e90-alcantara-levas-amarillo">
-                <div class="product-media">
-                  <span class="product-badge">OEM+</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.6</span>
-                  <img src="assets/img/gallery/E90/E60_ALCANTARA_LEVAS_AMARILLO.png" alt="Volante E90 alcantara levas amarillo" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E90 / E60</div>
-                      <div class="product-name">Alcantara Levas Amarillo</div>
-                      <div class="product-fit">Look racing · Marcador superior</div>
+                  <a class="product-card" href="producto.html?id=e46-levas-amarillo" data-brand="bmw" data-model="e46 e39" data-material="alcantara cuero" data-color="negro amarillo" data-price="600" data-tags="levas motorsport">
+                    <div class="product-media">
+                      <span class="product-badge">Levas</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.6</span>
+                      <img src="assets/img/gallery/E46/E46_Levas_Amarillo.png" alt="Volante BMW E46 con levas amarillo">
                     </div>
-                    <div class="product-price">
-                      <strong>500,00 €</strong><br />
-                      <s>640,00 €</s><br />
-                      <span class="product-discount">-22%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">BMW E46 / E39</div><div class="product-name">Levas Amarillo</div><div class="product-fit">Alcantara y cuero - inserto deportivo</div></div>
+                        <div class="product-price"><strong>600 EUR</strong><br><s>760 EUR</s><br><span class="product-discount">-21%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=f82-cuero-metalizado-negro">
-                <div class="product-media">
-                  <span class="product-badge">Metalizado</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.5</span>
-                  <img src="assets/img/gallery/F82/f82_cuero_metalico.png" alt="Volante F82 cuero metalizado negro" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW F82</div>
-                      <div class="product-name">Cuero Metalizado Negro</div>
-                      <div class="product-fit">Acabado negro brillo · Estilo OEM</div>
+                  <a class="product-card" href="producto.html?id=e46-alcantara-cuero-amarillo" data-brand="bmw" data-model="e46 e39" data-material="alcantara cuero" data-color="negro amarillo" data-price="490" data-tags="costura contraste">
+                    <div class="product-media">
+                      <span class="product-badge">Personalizado</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.8</span>
+                      <img src="assets/img/gallery/E46/E46_Alcantara_cuero_amarillo.png" alt="Volante BMW E46 alcantara cuero amarillo">
                     </div>
-                    <div class="product-price">
-                      <strong>470,00 €</strong><br />
-                      <s>620,00 €</s><br />
-                      <span class="product-discount">-24%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">BMW E46 / E39</div><div class="product-name">Alcantara Cuero Amarillo</div><div class="product-fit">Costura contraste - tacto premium</div></div>
+                        <div class="product-price"><strong>490 EUR</strong><br><s>610 EUR</s><br><span class="product-discount">-19%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=e46-alcantara-cuero-amarillo">
-                <div class="product-media">
-                  <span class="product-badge">Personalizado</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.8</span>
-                  <img src="assets/img/gallery/E46/E46_Alcantara_cuero_amarillo.png" alt="Volante E46 alcantara cuero amarillo" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Alcantara Cuero Amarillo</div>
-                      <div class="product-fit">Costura contraste · Tacto premium</div>
+                  <a class="product-card" href="producto.html?id=e46-cuero-liso-rojo" data-brand="bmw" data-model="e46 e39" data-material="cuero" data-color="rojo" data-price="470" data-tags="rojo artesanal">
+                    <div class="product-media">
+                      <span class="product-badge">Cuero</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.4</span>
+                      <img src="assets/img/gallery/E46/e46_Cuero_rojo.png" alt="Volante BMW E46 cuero rojo">
                     </div>
-                    <div class="product-price">
-                      <strong>490,00 €</strong><br />
-                      <s>610,00 €</s><br />
-                      <span class="product-discount">-19%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">BMW E46 / E39</div><div class="product-name">Cuero Liso Rojo</div><div class="product-fit">Estilo limpio - acabado artesanal</div></div>
+                        <div class="product-price"><strong>470 EUR</strong><br><s>590 EUR</s><br><span class="product-discount">-20%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=e46-cuero-liso-rojo">
-                <div class="product-media">
-                  <span class="product-badge">Cuero</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.4</span>
-                  <img src="assets/img/gallery/E46/e46_Cuero_rojo.png" alt="Volante E46 cuero rojo" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Cuero Liso Rojo</div>
-                      <div class="product-fit">Estilo limpio · Acabado artesanal</div>
+                  <a class="product-card" href="producto.html?id=e46-carbono-cuero-m" data-brand="bmw" data-model="e46 e39" data-material="carbono cuero" data-color="negro" data-price="550" data-tags="m style">
+                    <div class="product-media">
+                      <span class="product-badge">M Style</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.6</span>
+                      <img src="assets/img/gallery/E46/E46_Carbono_cuero.png" alt="Volante BMW E46 carbono cuero M">
                     </div>
-                    <div class="product-price">
-                      <strong>470,00 €</strong><br />
-                      <s>590,00 €</s><br />
-                      <span class="product-discount">-20%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">BMW E46 / E39</div><div class="product-name">Carbono Cuero M</div><div class="product-fit">M trim - costura deportiva</div></div>
+                        <div class="product-price"><strong>550 EUR</strong><br><s>690 EUR</s><br><span class="product-discount">-20%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=e46-carbono-rojo-airbag">
-                <div class="product-media">
-                  <span class="product-badge">Edicion M</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.7</span>
-                  <img src="assets/img/gallery/E46/E46_Carbono_Rojo.png" alt="Volante E46 carbono rojo" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Carbono Rojo Airbag</div>
-                      <div class="product-fit">Inserto rojo · Look motorsport</div>
+                  <a class="product-card" href="producto.html?id=e46-rpm-alcantara-carbono-pro" data-brand="bmw" data-model="e46 e39" data-material="alcantara carbono" data-color="negro" data-price="1090" data-tags="pantalla rpm pro">
+                    <div class="product-media">
+                      <span class="product-badge">RPM Pro</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.9</span>
+                      <img src="assets/img/gallery/E46/E46_pantalla_alcantara_carbono.png" alt="Volante BMW E46 alcantara carbono RPM Pro">
                     </div>
-                    <div class="product-price">
-                      <strong>600,00 €</strong><br />
-                      <s>780,00 €</s><br />
-                      <span class="product-discount">-23%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">BMW E46 / E39</div><div class="product-name">RPM Alcantara Carbono Pro</div><div class="product-fit">Pantalla integrada - alcantara premium</div></div>
+                        <div class="product-price"><strong>1.090 EUR</strong><br><s>1.290 EUR</s><br><span class="product-discount">-16%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=e46-carbono-cuero-m">
-                <div class="product-media">
-                  <span class="product-badge">Carbono</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.6</span>
-                  <img src="assets/img/gallery/E46/E46_Carbono_cuero.png" alt="Volante E46 carbono cuero" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Carbono Cuero M</div>
-                      <div class="product-fit">M trim · Costura deportiva</div>
+                  <a class="product-card" href="producto.html?id=f82-cuero-oem-black" data-brand="bmw" data-model="f82" data-material="cuero" data-color="negro" data-price="450" data-tags="serie f oem black">
+                    <div class="product-media">
+                      <span class="product-badge">OEM</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.5</span>
+                      <img src="assets/img/gallery/F82/F82_cuero.png" alt="Volante BMW F82 cuero OEM negro">
                     </div>
-                    <div class="product-price">
-                      <strong>550,00 €</strong><br />
-                      <s>690,00 €</s><br />
-                      <span class="product-discount">-20%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">BMW Serie F</div><div class="product-name">Cuero OEM Black</div><div class="product-fit">Acabado limpio - uso diario premium</div></div>
+                        <div class="product-price"><strong>450 EUR</strong><br><s>560 EUR</s><br><span class="product-discount">-20%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=e46-cuero-m-rpm">
-                <div class="product-media">
-                  <span class="product-badge">Pantalla RPM</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.9</span>
-                  <img src="assets/img/gallery/E46/E46_pantalla_tiraroja.png" alt="Volante E46 pantalla tira roja" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Cuero M RPM</div>
-                      <div class="product-fit">Pantalla + marcador rojo · Plug and play</div>
+                  <a class="product-card" href="producto.html?id=audi-sline-alcantara-rpm" data-brand="audi" data-model="audi-sline" data-material="alcantara" data-color="negro rojo" data-price="790" data-tags="audi s-line rs pantalla rpm demo">
+                    <div class="product-media">
+                      <span class="product-badge">Demo Audi</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.6</span>
+                      <img src="assets/img/gallery/E46/E46_pantalla_alcantara_carbono.png" alt="Volante demo Audi S-Line alcantara RPM">
                     </div>
-                    <div class="product-price">
-                      <strong>1.000,00 €</strong><br />
-                      <s>1.190,00 €</s><br />
-                      <span class="product-discount">-16%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">Audi S-Line</div><div class="product-name">S-Line Alcantara RPM</div><div class="product-fit">Ficha demo - preparada para stock real</div></div>
+                        <div class="product-price"><strong>790 EUR</strong><br><s>940 EUR</s><br><span class="product-discount">-16%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=e46-alcantara-azul-signature">
-                <div class="product-media">
-                  <span class="product-badge">Exclusivo</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">5.0</span>
-                  <img src="assets/img/gallery/E46/E46_Alcantara_Azul.png" alt="Volante E46 alcantara azul" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Alcantara Azul Signature</div>
-                      <div class="product-fit">Acabado artesanal · Centro ergonómico</div>
+                  <a class="product-card" href="producto.html?id=mercedes-amg-carbono-nappa" data-brand="mercedes" data-model="amg" data-material="carbono cuero" data-color="negro" data-price="850" data-tags="mercedes amg nappa demo">
+                    <div class="product-media">
+                      <span class="product-badge">Demo AMG</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.7</span>
+                      <img src="assets/img/gallery/F82/F82_Carbono_cuero.png" alt="Volante demo Mercedes AMG carbono nappa">
                     </div>
-                    <div class="product-price">
-                      <strong>520,00 €</strong><br />
-                      <s>650,00 €</s><br />
-                      <span class="product-discount">-20%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">Mercedes AMG</div><div class="product-name">AMG Carbono Nappa</div><div class="product-fit">Carbono y cuero - ficha preparada</div></div>
+                        <div class="product-price"><strong>850 EUR</strong><br><s>1.020 EUR</s><br><span class="product-discount">-17%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
-                </div>
-              </a>
+                  </a>
 
-              <a class="product-card" href="Volante-single.html?product=e46-alcantara-clasico-negro">
-                <div class="product-media">
-                  <span class="product-badge">Clasico</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.5</span>
-                  <img src="assets/img/gallery/E46/E46_Alcantara.png" alt="Volante E46 alcantara clasico negro" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Alcantara Clasico Negro</div>
-                      <div class="product-fit">Acabado sobrio · Tacto deportivo</div>
+                  <a class="product-card" href="producto.html?id=volkswagen-gti-cuero-rojo" data-brand="volkswagen" data-model="gti" data-material="cuero" data-color="negro rojo" data-price="520" data-tags="volkswagen gti golf r demo">
+                    <div class="product-media">
+                      <span class="product-badge">Demo GTI</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">4.5</span>
+                      <img src="assets/img/gallery/E46/e46_Cuero_rojo.png" alt="Volante demo Volkswagen GTI cuero rojo">
                     </div>
-                    <div class="product-price">
-                      <strong>480,00 €</strong><br />
-                      <s>590,00 €</s><br />
-                      <span class="product-discount">-19%</span>
+                    <div class="product-meta">
+                      <div class="product-topline">
+                        <div><div class="product-brand">Volkswagen GTI</div><div class="product-name">GTI Cuero Rojo</div><div class="product-fit">Estetica GTI - base para stock</div></div>
+                        <div class="product-price"><strong>520 EUR</strong><br><s>650 EUR</s><br><span class="product-discount">-20%</span></div>
+                      </div>
+                      <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
                     </div>
-                  </div>
+                  </a>
                 </div>
-              </a>
 
-              <a class="product-card" href="Volante-single.html?product=e46-alcantara-naranja-gt">
-                <div class="product-media">
-                  <span class="product-badge">GT</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.7</span>
-                  <img src="assets/img/gallery/E46/E46_Alcantara_naranja.png" alt="Volante E46 alcantara naranja gt" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Alcantara Naranja GT</div>
-                      <div class="product-fit">Detalle central naranja · Look circuito</div>
-                    </div>
-                    <div class="product-price">
-                      <strong>510,00 €</strong><br />
-                      <s>640,00 €</s><br />
-                      <span class="product-discount">-20%</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-
-              <a class="product-card" href="Volante-single.html?product=e46-cuero-carbono-azul-m">
-                <div class="product-media">
-                  <span class="product-badge">M Style</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.8</span>
-                  <img src="assets/img/gallery/E46/E46_Cuero_Carbono_Azul.png" alt="Volante E46 cuero carbono azul" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Cuero Carbono Azul M</div>
-                      <div class="product-fit">Inserto azul · Ergonomia reforzada</div>
-                    </div>
-                    <div class="product-price">
-                      <strong>620,00 €</strong><br />
-                      <s>760,00 €</s><br />
-                      <span class="product-discount">-18%</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-
-              <a class="product-card" href="Volante-single.html?product=e46-rpm-alcantara-carbono-pro">
-                <div class="product-media">
-                  <span class="product-badge">RPM Pro</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.9</span>
-                  <img src="assets/img/gallery/E46/E46_pantalla_alcantara_carbono.png" alt="Volante E46 pantalla alcantara carbono" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">RPM Alcantara Carbono Pro</div>
-                      <div class="product-fit">Pantalla integrada · Alcantara premium</div>
-                    </div>
-                    <div class="product-price">
-                      <strong>1.090,00 €</strong><br />
-                      <s>1.290,00 €</s><br />
-                      <span class="product-discount">-16%</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-
-              <a class="product-card" href="Volante-single.html?product=e46-cuero-rojo-club">
-                <div class="product-media">
-                  <span class="product-badge">Club Sport</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.4</span>
-                  <img src="assets/img/gallery/E46/E46_Rojo.png" alt="Volante E46 cuero rojo club sport" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW E46</div>
-                      <div class="product-name">Cuero Rojo Club Sport</div>
-                      <div class="product-fit">Rojo completo · Imagen agresiva</div>
-                    </div>
-                    <div class="product-price">
-                      <strong>460,00 €</strong><br />
-                      <s>580,00 €</s><br />
-                      <span class="product-discount">-21%</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-
-              <a class="product-card" href="Volante-single.html?product=f82-cuero-oem-black">
-                <div class="product-media">
-                  <span class="product-badge">OEM</span>
-                  <span class="product-fav" data-feather="heart"></span>
-                  <span class="product-rating">4.5</span>
-                  <img src="assets/img/gallery/F82/F82_cuero.png" alt="Volante F82 cuero oem black" />
-                </div>
-                <div class="product-meta">
-                  <div class="product-topline">
-                    <div>
-                      <div class="product-brand">BMW F82</div>
-                      <div class="product-name">Cuero OEM Black</div>
-                      <div class="product-fit">Acabado limpio · Uso diario premium</div>
-                    </div>
-                    <div class="product-price">
-                      <strong>450,00 €</strong><br />
-                      <s>560,00 €</s><br />
-                      <span class="product-discount">-20%</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
+                <div class="catalog-empty-state mt-4" hidden data-catalog-empty>No hay volantes que coincidan con esa busqueda.</div>
+              </div>
             </div>
           </div>
         </div>
@@ -544,12 +341,10 @@
     <script src="vendors/@popperjs/popper.min.js"></script>
     <script src="vendors/bootstrap/bootstrap.min.js"></script>
     <script src="vendors/is/is.min.js"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
     <script src="vendors/feather-icons/feather.min.js"></script>
-    <script>
-      feather.replace();
-    </script>
     <script src="assets/js/theme.js"></script>
+    <script src="assets/js/catalog.js"></script>
+    <script>feather.replace();</script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">
   </body>
 

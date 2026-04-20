@@ -1,7 +1,7 @@
 {
-  "name": "watch",
+  "name": "cdp-customs",
   "version": "1.0.0",
-  "description": "Landing, Ecommerce & Business Template",
+  "description": "Proyecto final DAW para catalogo y configurador de volantes personalizados CDP Customs",
   "main": "gulpfile.js",
   "scripts": {
     "start": "gulp",
