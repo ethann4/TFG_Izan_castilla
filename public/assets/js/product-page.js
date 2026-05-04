@@ -6,13 +6,26 @@ const productList = [
     title: "Carbono Galaxy RPM",
     price: "1.200 EUR",
     oldPrice: "1.420 EUR",
-    discount: "-15%",
     rating: "4.9 (18 valoraciones)",
     summary: "Volante de alto impacto visual con pantalla RPM integrada, aro deportivo y mezcla de carbono con cuero perforado.",
     finishes: ["Carbono galaxy", "Cuero perforado", "Pantalla RPM", "Costura negra"],
     fitment: ["BMW E46", "M3 style", "Plug and play"],
     specs: ["Pantalla LED integrada en el aro", "Parte superior en carbono acabado galaxy", "Agarre lateral reforzado", "Marcador central deportivo", "Configuracion artesanal"],
     gallery: ["assets/img/gallery/E46/E46_pantalla_galaxy_carbono.png", "assets/img/gallery/E46/E46_pantalla_tiraroja.png", "assets/img/gallery/E46/E46_Carbono_cuero.png", "assets/img/gallery/E46/E46_Carbono_Rojo.png"],
+  },
+      {
+    id: "e46-cuero-achatado",
+    badge: "Nuevo",
+    brand: "BMW E46",
+    title: "Cuero Achatado",
+    price: "420 EUR",
+    oldPrice: "475 EUR",
+    rating: "4.8 (18 valoraciones)",
+    summary: "Volante de alto impacto visual con pantalla RPM integrada, aro deportivo y mezcla de carbono con cuero perforado.",
+    finishes: ["Carbono galaxy", "Cuero perforado", "Pantalla RPM", "Costura negra"],
+    fitment: ["BMW E46", "M3 style", "Plug and play"],
+    specs: ["Pantalla LED integrada en el aro", "Parte superior en carbono acabado galaxy", "Agarre lateral reforzado", "Marcador central deportivo", "Configuracion artesanal"],
+    gallery: ["assets/img/gallery/E46/cuero_achtadao/portada.jpeg", "assets/img/gallery/E46/cuero_achtadao/inclinada.jpeg", "assets/img/gallery/E46/cuero_achtadao/lateral.jpeg"],
   },
   {
     id: "e90-alcantara-rpm-amarillo",
@@ -21,7 +34,6 @@ const productList = [
     title: "Alcantara RPM Amarillo",
     price: "1.000 EUR",
     oldPrice: "1.180 EUR",
-    discount: "-15%",
     rating: "4.8 (16 valoraciones)",
     summary: "Configuracion completa para quien busca look racing con levas, pantalla RPM y contraste amarillo.",
     finishes: ["Alcantara", "Levas", "Pantalla RPM", "Marcador amarillo"],
@@ -36,7 +48,6 @@ const productList = [
     title: "Carbono Cuero M",
     price: "550 EUR",
     oldPrice: "690 EUR",
-    discount: "-20%",
     rating: "4.7 (11 valoraciones)",
     summary: "Volante con presencia agresiva y tacto equilibrado entre deportividad y uso diario.",
     finishes: ["Carbono", "Cuero liso", "Aro grueso", "Inserto M"],
@@ -51,7 +62,6 @@ const productList = [
     title: "Levas Amarillo",
     price: "600 EUR",
     oldPrice: "760 EUR",
-    discount: "-21%",
     rating: "4.6 (9 valoraciones)",
     summary: "Opcion para mantener la esencia del E46 con un extra visual deportivo y levas integradas.",
     finishes: ["Alcantara", "Cuero", "Levas", "Detalle amarillo"],
@@ -66,7 +76,6 @@ const productList = [
     title: "Alcantara Levas Amarillo",
     price: "500 EUR",
     oldPrice: "640 EUR",
-    discount: "-22%",
     rating: "4.6 (8 valoraciones)",
     summary: "Look OEM+ con personalidad para renovar el interior sin perder elegancia.",
     finishes: ["Alcantara", "Levas", "Costura amarilla"],
@@ -81,7 +90,6 @@ const productList = [
     title: "Cuero Metalizado Negro",
     price: "470 EUR",
     oldPrice: "620 EUR",
-    discount: "-24%",
     rating: "4.5 (7 valoraciones)",
     summary: "Acabado sobrio con presencia premium, ideal para builds oscuros y configuraciones discretas.",
     finishes: ["Cuero negro", "Acabado metalizado", "Estilo OEM"],
@@ -96,7 +104,6 @@ const productList = [
     title: "Alcantara Cuero Amarillo",
     price: "490 EUR",
     oldPrice: "610 EUR",
-    discount: "-19%",
     rating: "4.8 (12 valoraciones)",
     summary: "Equilibrio entre lujo y enfoque deportivo con contraste amarillo para destacar el interior.",
     finishes: ["Alcantara", "Cuero", "Costura amarilla"],
@@ -111,7 +118,6 @@ const productList = [
     title: "Cuero Liso Rojo",
     price: "470 EUR",
     oldPrice: "590 EUR",
-    discount: "-20%",
     rating: "4.4 (6 valoraciones)",
     summary: "Punto de color para interiores oscuros con una presencia limpia y artesanal.",
     finishes: ["Cuero rojo", "Liso", "Acabado artesanal"],
@@ -126,13 +132,12 @@ const productList = [
     title: "Carbono Rojo Airbag",
     price: "600 EUR",
     oldPrice: "780 EUR",
-    discount: "-23%",
     rating: "4.7 (10 valoraciones)",
     summary: "Pieza llamativa para proyectos con enfoque motorsport, contraste rojo y presencia inmediata.",
     finishes: ["Carbono rojo", "Detalle airbag", "Look M"],
     fitment: ["BMW E46", "Build showcar", "Uso sport"],
     specs: ["Carbono en tono rojo", "Zona central agresiva", "Integracion visual del airbag", "Acabado deportivo", "Grip reforzado"],
-    gallery: ["assets/img/gallery/E46/E46_Carbono_Rojo.png", "assets/img/gallery/E46/E46_Rojo.png", "assets/img/gallery/E46/e46_Cuero_rojo.png", "assets/img/gallery/E46/E46_pantalla_tiraroja.png"],
+    gallery: ["assets/img/gallery/E46/carbono_rojo_alcantara_3color/portada.jpeg", "assets/img/gallery/E46/carbono_rojo_alcantara_3color/lateral.jpeg", "assets/img/gallery/E46/carbono_rojo_alcantara_3color/trasera.jpeg", "assets/img/gallery/E46/carbono_rojo_alcantara_3color/vista_x2.jpeg"],
   },
   {
     id: "e46-carbono-cuero-m",
@@ -141,7 +146,6 @@ const productList = [
     title: "Carbono Cuero M",
     price: "550 EUR",
     oldPrice: "690 EUR",
-    discount: "-20%",
     rating: "4.6 (13 valoraciones)",
     summary: "Combinacion equilibrada para E46 con presencia moderna y tacto premium.",
     finishes: ["Carbono", "Cuero", "M style"],
@@ -156,7 +160,6 @@ const productList = [
     title: "Cuero M RPM",
     price: "1.000 EUR",
     oldPrice: "1.190 EUR",
-    discount: "-16%",
     rating: "4.9 (17 valoraciones)",
     summary: "Solucion completa para lectura rapida y un volante protagonista en el interior.",
     finishes: ["Cuero", "Pantalla RPM", "Marcador rojo"],
@@ -171,7 +174,6 @@ const productList = [
     title: "Alcantara Azul Signature",
     price: "520 EUR",
     oldPrice: "650 EUR",
-    discount: "-20%",
     rating: "5.0 (5 valoraciones)",
     summary: "Configuracion exclusiva y visual para builds con personalidad propia.",
     finishes: ["Alcantara azul", "Centro ergonomico", "Acabado artesanal"],
@@ -186,7 +188,6 @@ const productList = [
     title: "Alcantara Clasico Negro",
     price: "480 EUR",
     oldPrice: "590 EUR",
-    discount: "-19%",
     rating: "4.5 (8 valoraciones)",
     summary: "Configuracion sobria para quien quiere tacto de alcantara y estetica deportiva discreta.",
     finishes: ["Alcantara negra", "Look OEM+", "Aro deportivo"],
@@ -201,7 +202,6 @@ const productList = [
     title: "Alcantara Naranja GT",
     price: "510 EUR",
     oldPrice: "640 EUR",
-    discount: "-20%",
     rating: "4.7 (9 valoraciones)",
     summary: "Pieza visual para proyectos con contraste fuerte, buen tacto e imagen racing.",
     finishes: ["Alcantara", "Detalle naranja", "Marcador deportivo"],
@@ -216,7 +216,6 @@ const productList = [
     title: "Cuero Carbono Azul M",
     price: "620 EUR",
     oldPrice: "760 EUR",
-    discount: "-18%",
     rating: "4.8 (11 valoraciones)",
     summary: "Carbono, cuero y acento azul para interiores con identidad.",
     finishes: ["Cuero", "Carbono", "Detalle azul"],
@@ -231,7 +230,6 @@ const productList = [
     title: "RPM Alcantara Carbono Pro",
     price: "1.090 EUR",
     oldPrice: "1.290 EUR",
-    discount: "-16%",
     rating: "4.9 (14 valoraciones)",
     summary: "Pantalla integrada y acabado premium con mezcla de alcantara y carbono.",
     finishes: ["Pantalla RPM", "Alcantara", "Carbono"],
@@ -246,7 +244,6 @@ const productList = [
     title: "Cuero Rojo Club Sport",
     price: "460 EUR",
     oldPrice: "580 EUR",
-    discount: "-21%",
     rating: "4.4 (7 valoraciones)",
     summary: "Volante rojo para interiores oscuros que necesitan un punto visual marcado.",
     finishes: ["Cuero rojo", "Look club sport", "Acabado artesanal"],
@@ -261,7 +258,6 @@ const productList = [
     title: "Cuero OEM Black",
     price: "450 EUR",
     oldPrice: "560 EUR",
-    discount: "-20%",
     rating: "4.5 (8 valoraciones)",
     summary: "La opcion mas sobria del F82 para mantener linea OEM con mejor tacto.",
     finishes: ["Cuero negro", "OEM", "Estilo limpio"],
@@ -276,13 +272,26 @@ const productList = [
     title: "S-Line Alcantara RPM",
     price: "790 EUR",
     oldPrice: "940 EUR",
-    discount: "-16%",
     rating: "4.6 (demo)",
-    summary: "Ficha preparada para catalogo Audi cuando se incorporen fotografias finales del producto.",
-    finishes: ["Alcantara", "Pantalla RPM", "Costura roja"],
+    summary: "Volante Audi S-Line con acabado Alcantara y cuero RS blanco, catálogo actualizado con fotos reales.",
+    finishes: ["Alcantara", "Pantalla RPM", "Costura blanca"],
     fitment: ["Audi A3", "Audi A4", "Audi S-Line"],
     specs: ["Estructura lista para stock real", "Campos compatibles con base de datos", "Imagen demo temporal", "CTA preparado para pedido", "Datos editables desde futuro panel admin"],
-    gallery: ["assets/img/gallery/E46/E46_pantalla_alcantara_carbono.png", "assets/img/gallery/AUDI.png", "assets/img/gallery/E46/E46_Alcantara.png", "assets/img/gallery/E46/E46_pantalla_tiraroja.png"],
+    gallery: ["assets/img/gallery/RS3/cuero rs blanco/foto principal.png", "assets/img/gallery/E46/E46_pantalla_alcantara_carbono.png", "assets/img/gallery/E46/E46_Alcantara.png", "assets/img/gallery/E46/E46_pantalla_tiraroja.png"],
+  },
+  {
+    id: "audi-rs3-carbono-alcantara",
+    badge: "RS Carbono",
+    brand: "Audi RS",
+    title: "RS Carbono Alcantara",
+    price: "560 EUR",
+    oldPrice: "700 EUR",
+    rating: "4.8 (10 valoraciones)",
+    summary: "Volante RS con acabado carbono y alcantara premium, costuras blancas y diseño deportivo.",
+    finishes: ["Carbono", "Alcantara", "Costuras blancas"],
+    fitment: ["Audi RS3", "Audi S3", "Audi TT", "Audi R8", "Audi A4", "Audi S4", "Audi RS4", "Audi A5", "Audi S5", "Audi RS5"], 
+    specs: ["Acabado carbono premium", "Tapizado alcantara", "Costuras blancas contrastadas", "Diseño RS3 autentico", "Preparado para pedido personalizado"],
+    gallery: ["assets/img/gallery/RS3/carbono rs blanco/volante_rs_carbono_alcantara_costurasblancas.png", "assets/img/gallery/RS3/carbono rs blanco/foto 2.png", "assets/img/gallery/RS3/carbono rs blanco/foto 3.png", "assets/img/gallery/RS3/carbono rs blanco/foto 4.png",],
   },
   {
     id: "mercedes-amg-carbono-nappa",
@@ -291,7 +300,6 @@ const productList = [
     title: "AMG Carbono Nappa",
     price: "850 EUR",
     oldPrice: "1.020 EUR",
-    discount: "-17%",
     rating: "4.7 (demo)",
     summary: "Base de producto Mercedes con acabado carbono y cuero nappa para evolucionar a stock real.",
     finishes: ["Carbono", "Cuero nappa", "Costura negra"],
@@ -306,7 +314,6 @@ const productList = [
     title: "GTI Cuero Rojo",
     price: "520 EUR",
     oldPrice: "650 EUR",
-    discount: "-20%",
     rating: "4.5 (demo)",
     summary: "Configuracion base para Volkswagen con estetica GTI y filtros preparados.",
     finishes: ["Cuero", "Costura roja", "OEM+"],
@@ -320,6 +327,26 @@ const productData = Object.fromEntries(productList.map((product) => [product.id,
 const params = new URLSearchParams(window.location.search);
 const slug = params.get("id") || params.get("product") || "e46-carbono-galaxy-rpm";
 const product = productData[slug] || productData["e46-carbono-galaxy-rpm"];
+
+const normalizePrice = (value) => {
+  if (!value) return 0;
+  return Number(
+    value
+      .replace(/\s|EUR|€/gi, "")
+      .replace(/\.(?=\d{3}(?:[^\d]|$))/g, "")
+      .replace(/,/g, ".")
+  );
+};
+
+const calculateDiscount = (price, oldPrice) => {
+  const current = normalizePrice(price);
+  const previous = normalizePrice(oldPrice);
+  if (!previous || !current || previous <= current) return "";
+  const percent = Math.round(((previous - current) / previous) * 100);
+  return `-${percent}%`;
+};
+
+product.discount = calculateDiscount(product.price, product.oldPrice) || product.discount;
 
 const setText = (id, value) => {
   const node = document.getElementById(id);
@@ -386,3 +413,4 @@ if (whatsappCta) {
 }
 
 if (window.feather) feather.replace();
+

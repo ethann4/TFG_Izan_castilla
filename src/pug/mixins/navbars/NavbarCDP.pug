@@ -15,6 +15,11 @@ mixin NavbarCDP
             a.nav-link.fw-bold(href='Creacionvirtual.html') CONFIGURADOR
           li.nav-item.fs-3.px-2
             a.nav-link.fw-bold(href='contacto.html') CONTACTO
-        a.cdp-phone-link(href='tel:+34676525005')
-          span(data-feather='phone-call')
-          span (+34) 676 525 005
+        .d-flex.gap-3.align-items-center
+          a.cdp-phone-link(href='tel:+34676525005')
+            span(data-feather='phone-call')
+            span (+34) 676 525 005
+          a(href='https://instagram.com/cdp.performanceparts' target='_blank' rel='noreferrer').cdp-social-link
+            span(data-feather='instagram')
+          a(href='https://es.wallapop.com/user/izanc-448493585' target='_blank' rel='noreferrer').cdp-social-link
+            span(data-feather='shopping-cart')

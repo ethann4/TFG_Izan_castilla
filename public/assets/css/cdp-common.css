@@ -93,6 +93,18 @@ body {
   color: var(--cdp-red);
 }
 
+.cdp-social-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--cdp-light);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cdp-social-link svg {
+  color: var(--cdp-light);
+}
+
 .cdp-section-kicker {
   color: var(--cdp-red);
   font-size: 0.78rem;

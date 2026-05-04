@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Configurador visual | CDP Customs</title>
-    <meta name="description" content="Base de configurador visual de volantes personalizados CDP Customs.">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicons/favicon-16x16.png">
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicons/favicon.ico">
+    <meta name="description" content="Configurador visual premium de volantes personalizados CDP Customs con Babylon.js, GLB y materiales PBR.">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/logo_cdp_transparente.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo_cdp_transparente.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/logo_cdp_transparente.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/logo_cdp_transparente.png">
     <link rel="manifest" href="assets/img/favicons/manifest.json">
-    <meta name="msapplication-TileImage" content="assets/img/favicons/mstile-150x150.png">
+    <meta name="msapplication-TileImage" content="assets/img/logo_cdp_transparente.png">
     <meta name="theme-color" content="#000000">
     <link href="assets/css/theme.css" rel="stylesheet">
     <link href="assets/css/cdp-common.css" rel="stylesheet">
@@ -46,7 +46,12 @@
               <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="index.html#nosotros">NOSOTROS</a></li>
               <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="contacto.html">CONTACTO</a></li>
             </ul>
-            <a class="cdp-phone-link" href="tel:+34676525005"><span data-feather="phone-call"></span><span>(+34) 676 525 005</span></a>
+            <div class="d-flex gap-3 align-items-center">
+              <a class="cdp-phone-link" href="tel:+34676525005"><span data-feather="phone-call"></span><span>(+34) 676 525 005</span></a>
+              <a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer" class="cdp-social-link"><span data-feather="instagram"></span></a>
+              <a class="cdp-social-link"><span data-feather="music"></span></a>
+              <a href="https://es.wallapop.com/user/izanc-448493585" target="_blank" rel="noreferrer" class="cdp-social-link"><span data-feather="shopping-cart"></span></a>
+            </div>
           </div>
         </div>
       </nav>
@@ -56,94 +61,119 @@
           <div class="row mb-5">
             <div class="col-lg-8">
               <div class="cdp-section-kicker">Configurador visual</div>
-              <h1 class="cdp-section-title">Disena tu volante</h1>
-              <p class="cdp-section-copy">Primera version funcional preparada para evolucionar a pedido real con PHP y MySQL. La demo cambia material, color, costuras, marcador, levas y extras sin necesitar 3D.</p>
+              <h1 class="cdp-section-title">Disena tu volante CDP</h1>
+              <p class="cdp-section-copy">Configurador modular con visor 3D Babylon.js, materiales PBR, piezas sustituibles por GLB/GLTF y calculo de precio en tiempo real.</p>
             </div>
           </div>
 
           <div class="configurator-layout">
             <section class="configurator-preview" aria-label="Vista previa del volante">
-              <div class="preview-stage">
-                <div class="config-paddle config-paddle--left is-visible" data-paddle></div>
-                <div class="config-paddle config-paddle--right is-visible" data-paddle></div>
-                <img class="config-wheel" src="assets/img/gallery/E46/E46_Carbono_cuero.png" alt="Vista previa del volante personalizado" data-wheel-image>
-                <div class="config-marker" data-marker></div>
-                <div class="config-screen is-visible" data-screen>RPM READY</div>
+              <div class="preview-header">
+                <div>
+                  <div class="cdp-section-kicker">Vista en directo</div>
+                  <h2>Volante configurado</h2>
+                </div>
+                <div class="preview-compatibility" data-compatibility-status>Compatible</div>
+              </div>
+
+              <div class="preview-stage preview-stage--babylon" data-preview-stage data-babylon-stage>
+                <canvas class="configurator-canvas" data-babylon-canvas aria-label="Vista 3D del volante personalizado"></canvas>
+                <div class="viewer-loader" data-babylon-loader>
+                  <span></span>
+                  Cargando visor 3D
+                </div>
+                <div class="config-brand-chip">
+                  <img src="assets/img/gallery/bmw.png" alt="Marca seleccionada" data-brand-logo>
+                  <span data-brand-badge>BMW E46</span>
+                </div>
+                <div class="config-view-actions" aria-label="Controles del visor">
+                  <button type="button" data-camera-reset><span data-feather="rotate-ccw"></span>Recentrar</button>
+                </div>
               </div>
               <div class="preview-meta">
-                <div class="preview-meta-item"><span>Base</span><strong>BMW E46 / universal demo</strong></div>
-                <div class="preview-meta-item"><span>Arquitectura</span><strong>Capas HTML/CSS + JS</strong></div>
-                <div class="preview-meta-item"><span>Backend futuro</span><strong>tabla pedidos_config</strong></div>
+                <div class="preview-meta-item"><span>Base</span><strong data-preview-base>BMW E46</strong></div>
+                <div class="preview-meta-item"><span>Arquitectura</span><strong>Babylon.js + GLB/PBR</strong></div>
+                <div class="preview-meta-item"><span>Backend futuro</span><strong data-preview-backend>JSON listo para pedido</strong></div>
               </div>
             </section>
 
-            <aside>
+            <aside class="configurator-controls">
               <div class="configurator-panel">
-                <div class="config-control">
-                  <span class="config-label">Material</span>
-                  <div class="option-row">
-                    <button class="option-btn" type="button" data-config-material data-value="cuero">Cuero</button>
-                    <button class="option-btn" type="button" data-config-material data-value="alcantara">Alcantara</button>
-                    <button class="option-btn is-active" type="button" data-config-material data-value="carbono">Carbono</button>
+                <div class="config-stepper" aria-label="Pasos del configurador">
+                  <button class="is-active" type="button" data-step-target="base">1. Base</button>
+                  <button type="button" data-step-target="materiales">2. Materiales</button>
+                  <button type="button" data-step-target="extras">3. Extras</button>
+                </div>
+
+                <div class="config-step-panel is-active" data-step-panel="base">
+                  <div class="config-control">
+                    <label class="config-label" for="configBrand">Marca</label>
+                    <select class="form-select cdp-form-select" id="configBrand" data-config-select="marca"></select>
+                  </div>
+
+                  <div class="config-control">
+                    <label class="config-label" for="configModel">Modelo</label>
+                    <select class="form-select cdp-form-select" id="configModel" data-config-select="modelo"></select>
+                  </div>
+
+                  <div class="config-control">
+                    <label class="config-label" for="configLogo">Logo / emblema</label>
+                    <select class="form-select cdp-form-select" id="configLogo" data-config-select="logo"></select>
                   </div>
                 </div>
 
-                <div class="config-control">
-                  <span class="config-label">Color del aro</span>
-                  <div class="color-row">
-                    <button class="color-btn is-active" type="button" data-config-rim data-value="#d62828" data-label="Rojo motorsport" aria-label="Aro rojo"><span style="background:#d62828"></span></button>
-                    <button class="color-btn" type="button" data-config-rim data-value="#f5f5f5" data-label="Blanco performance" aria-label="Aro blanco"><span style="background:#f5f5f5"></span></button>
-                    <button class="color-btn" type="button" data-config-rim data-value="#1b61ff" data-label="Azul M" aria-label="Aro azul"><span style="background:#1b61ff"></span></button>
-                    <button class="color-btn" type="button" data-config-rim data-value="#f2c94c" data-label="Amarillo racing" aria-label="Aro amarillo"><span style="background:#f2c94c"></span></button>
+                <div class="config-step-panel" data-step-panel="materiales">
+                  <div class="config-control">
+                    <span class="config-label">Aro</span>
+                    <div class="option-row" data-option-group="aro"></div>
+                  </div>
+
+                  <div class="config-control">
+                    <span class="config-label">Agarres laterales</span>
+                    <div class="option-row" data-option-group="agarres"></div>
+                  </div>
+
+                  <div class="config-control">
+                    <span class="config-label">Costuras</span>
+                    <div class="option-row" data-option-group="costuras"></div>
+                  </div>
+
+                  <div class="config-control">
+                    <span class="config-label">Marcador superior</span>
+                    <div class="option-row" data-option-group="marcador"></div>
                   </div>
                 </div>
 
-                <div class="config-control">
-                  <span class="config-label">Costuras</span>
-                  <div class="color-row">
-                    <button class="color-btn is-active" type="button" data-config-stitching data-value="#ffffff" data-label="Blanca" aria-label="Costura blanca"><span style="background:#ffffff"></span></button>
-                    <button class="color-btn" type="button" data-config-stitching data-value="#d62828" data-label="Roja" aria-label="Costura roja"><span style="background:#d62828"></span></button>
-                    <button class="color-btn" type="button" data-config-stitching data-value="#f2c94c" data-label="Amarilla" aria-label="Costura amarilla"><span style="background:#f2c94c"></span></button>
+                <div class="config-step-panel" data-step-panel="extras">
+                  <div class="config-control">
+                    <span class="config-label">Pantalla RPM</span>
+                    <div class="option-row" data-option-group="pantallaRpm"></div>
                   </div>
-                </div>
 
-                <div class="config-control">
-                  <span class="config-label">Marcador central</span>
-                  <div class="color-row">
-                    <button class="color-btn is-active" type="button" data-config-marker data-value="#d62828" data-label="Rojo" aria-label="Marcador rojo"><span style="background:#d62828"></span></button>
-                    <button class="color-btn" type="button" data-config-marker data-value="#ffffff" data-label="Blanco" aria-label="Marcador blanco"><span style="background:#ffffff"></span></button>
-                    <button class="color-btn" type="button" data-config-marker data-value="#1b61ff" data-label="Azul" aria-label="Marcador azul"><span style="background:#1b61ff"></span></button>
+                  <div class="config-control">
+                    <span class="config-label">Levas</span>
+                    <div class="option-row" data-option-group="levas"></div>
                   </div>
-                </div>
-
-                <div class="config-control">
-                  <span class="config-label">Levas</span>
-                  <div class="option-row">
-                    <button class="option-btn" type="button" data-config-paddles data-value="sin">Sin levas</button>
-                    <button class="option-btn" type="button" data-config-paddles data-value="aluminio">Aluminio</button>
-                    <button class="option-btn is-active" type="button" data-config-paddles data-value="carbono">Carbono</button>
-                  </div>
-                </div>
-
-                <div class="config-control">
-                  <span class="config-label">Extras</span>
-                  <label class="filter-check"><input type="checkbox" value="pantalla" data-config-extra checked> Pantalla RPM</label>
-                  <label class="filter-check"><input type="checkbox" value="carbono" data-config-extra> Molduras carbono</label>
                 </div>
               </div>
 
               <div class="configurator-summary">
                 <div class="cdp-section-kicker">Resumen del pedido</div>
                 <ul class="summary-list">
-                  <li><span>Material</span><strong data-summary-material>carbono</strong></li>
-                  <li><span>Aro</span><strong data-summary-rim>Rojo motorsport</strong></li>
-                  <li><span>Costuras</span><strong data-summary-stitching>Blanca</strong></li>
-                  <li><span>Marcador</span><strong data-summary-marker>Rojo</strong></li>
-                  <li><span>Levas</span><strong data-summary-paddles>carbono</strong></li>
-                  <li><span>Extras</span><strong data-summary-extras>Pantalla RPM</strong></li>
+                  <li><span>Marca</span><strong data-summary="marca">BMW</strong></li>
+                  <li><span>Modelo</span><strong data-summary="modelo">E46</strong></li>
+                  <li><span>Aro</span><strong data-summary="aro">Alcantara</strong></li>
+                  <li><span>Agarres</span><strong data-summary="agarres">Alcantara</strong></li>
+                  <li><span>Costuras</span><strong data-summary="costuras">Blanco</strong></li>
+                  <li><span>Logo</span><strong data-summary="logo">M</strong></li>
+                  <li><span>Pantalla RPM</span><strong data-summary="pantallaRpm">No</strong></li>
+                  <li><span>Levas</span><strong data-summary="levas">Sin levas</strong></li>
+                  <li><span>Marcador</span><strong data-summary="marcador">OEM negro</strong></li>
                 </ul>
+                <div class="price-breakdown" data-price-breakdown></div>
                 <div class="summary-price" data-summary-price>0 EUR</div>
-                <a class="btn btn-primary w-100 mt-3" href="contacto.html">Solicitar esta configuracion</a>
+                <textarea class="visually-hidden" data-config-json aria-hidden="true" tabindex="-1"></textarea>
+                <a class="btn btn-primary w-100 mt-3" href="contacto.html" data-config-request>Solicitar esta configuracion</a>
               </div>
             </aside>
           </div>
@@ -156,7 +186,13 @@
     <script src="vendors/is/is.min.js"></script>
     <script src="vendors/feather-icons/feather.min.js"></script>
     <script src="assets/js/theme.js"></script>
-    <script src="assets/js/configurator.js"></script>
+    <!-- Babylon.js Core -->
+    <script src="https://cdn.jsdelivr.net/npm/babylonjs@6.0.0/babylon.js"></script>
+    <!-- Babylon.js Materials Library -->
+    <script src="https://cdn.jsdelivr.net/npm/babylonjs@6.0.0/materialsLibrary/babylonjs.materials.min.js"></script>
+    <!-- Babylon.js Loaders for GLB/GLTF -->
+    <script src="https://cdn.jsdelivr.net/npm/babylonjs-loaders@6.0.0/babylonjs.loaders.min.js"></script>
+    <script src="assets/js/configurator.js?v=20260505-audi-rs"></script>
     <script>feather.replace();</script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">
   </body>
