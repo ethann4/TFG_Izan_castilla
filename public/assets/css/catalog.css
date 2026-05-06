@@ -246,6 +246,7 @@ body.catalog-page {
 }
 
 .product-card {
+  position: relative;
   color: inherit;
   text-decoration: none;
 }

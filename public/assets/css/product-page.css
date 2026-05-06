@@ -29,6 +29,22 @@ body.product-page {
   padding: 1.5rem;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(16px);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.product-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95));
+  pointer-events: none;
+}
+
+.product-wrap > * {
+  position: relative;
+  z-index: 1;
 }
 
 .product-breadcrumb {
@@ -231,6 +247,82 @@ body.product-page {
   grid-template-columns: 1fr 1fr;
   gap: 0.85rem;
   margin-top: 1.5rem;
+}
+
+.product-timeline {
+  margin-top: 1.2rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+}
+
+.product-timeline-copy {
+  color: #fff;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.timeline {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 0;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-50%);
+}
+
+.timeline-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.timeline-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #d7b219;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.08);
+}
+
+.timeline-icon svg {
+  width: 24px;
+  height: 24px;
+  color: #111;
+}
+
+.timeline-step strong {
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.timeline-step span {
+  color: #d6d6d6;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
 }
 
 .product-info-boxes {

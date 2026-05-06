@@ -137,7 +137,7 @@ const productList = [
     finishes: ["Carbono rojo", "Detalle airbag", "Look M"],
     fitment: ["BMW E46", "Build showcar", "Uso sport"],
     specs: ["Carbono en tono rojo", "Zona central agresiva", "Integracion visual del airbag", "Acabado deportivo", "Grip reforzado"],
-    gallery: ["assets/img/gallery/E46/carbono_rojo_alcantara_3color/portada.jpeg", "assets/img/gallery/E46/carbono_rojo_alcantara_3color/lateral.jpeg", "assets/img/gallery/E46/carbono_rojo_alcantara_3color/trasera.jpeg", "assets/img/gallery/E46/carbono_rojo_alcantara_3color/vista_x2.jpeg"],
+    gallery: ["assets/img/gallery/E46/carbono_rojo_alcantara_3color/portada.png", "assets/img/gallery/E46/carbono_rojo_alcantara_3color/inclinada.png", "assets/img/gallery/E46/carbono_rojo_alcantara_3color/atras.png", "assets/img/gallery/E46/carbono_rojo_alcantara_3color/vista_x2.png"],
   },
   {
     id: "e46-carbono-cuero-m",
@@ -374,8 +374,12 @@ document.title = `${product.title} | CDP Customs`;
 
 const mainImage = document.getElementById("mainProductImage");
 const secondaryImage = document.getElementById("secondaryProductImage");
+const productWrap = document.querySelector(".product-wrap");
 if (mainImage) mainImage.src = product.gallery[0];
 if (secondaryImage) secondaryImage.src = product.gallery[1] || product.gallery[0];
+if (productWrap) {
+  productWrap.style.backgroundImage = `url('${product.gallery[0]}')`;
+}
 
 product.finishes.forEach((finish) => appendChip(document.getElementById("finishChips"), finish));
 product.fitment.forEach((fitment) => appendChip(document.getElementById("fitmentChips"), fitment));
