@@ -45,11 +45,32 @@
               <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="Creacionvirtual.html">CONFIGURADOR</a></li>
               <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold active" href="contacto.html">CONTACTO</a></li>
             </ul>
-            <div class="d-flex gap-3 align-items-center">
-              <a class="cdp-phone-link" href="tel:+34676525005"><span data-feather="phone-call"></span><span>(+34) 676 525 005</span></a>
-              <a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer" class="cdp-social-link"><span data-feather="instagram"></span></a>
-              <a class="cdp-social-link"><span data-feather="music"></span></a>
-              <a href="https://es.wallapop.com/user/izanc-448493585" target="_blank" rel="noreferrer" class="cdp-social-link"><span data-feather="shopping-cart"></span></a>
+            <div class="cdp-navbar-actions d-flex gap-3 align-items-center">
+              <div class="cdp-header-tools" aria-label="Preferencias y cuenta">
+                <div class="dropdown">
+                  <button class="cdp-tool-select dropdown-toggle" id="cdpRegionDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="region"><span data-cdp-label>España | EUR €</span><span data-feather="chevron-down"></span></button>
+                  <ul class="cdp-tools-menu dropdown-menu" aria-labelledby="cdpRegionDropdown">
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="España | EUR €">España | EUR €</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="Portugal | EUR €">Portugal | EUR €</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="Francia | EUR €">Francia | EUR €</button></li>
+                  </ul>
+                </div>
+                <div class="dropdown">
+                  <button class="cdp-tool-select dropdown-toggle" id="cdpLanguageDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="language"><span data-cdp-label>Español</span><span data-feather="chevron-down"></span></button>
+                  <ul class="cdp-tools-menu dropdown-menu" aria-labelledby="cdpLanguageDropdown">
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="Español">Español</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="English">English</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="Français">Français</button></li>
+                  </ul>
+                </div>
+                <a class="cdp-header-icon" href="Catalogo.html#catalogo" aria-label="Buscar productos"><span data-feather="search"></span></a>
+                <a class="cdp-header-icon" href="admin/index.html" aria-label="Usuario"><span data-feather="user"></span></a>
+                <a class="cdp-header-icon" href="Catalogo.html" aria-label="Carrito"><span data-feather="shopping-bag"></span><span class="cdp-cart-count">1</span></a>
+              </div>
+              <a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer" class="cdp-social-link" aria-label="Instagram"><span data-feather="instagram"></span></a>
+              <a href="https://www.tiktok.com/@cdp.performanceparts?lang=es-419" target="_blank" rel="noreferrer" class="cdp-social-link" aria-label="TikTok"><span data-feather="music"></span></a>
+              <a href="https://es.wallapop.com/user/izanc-448493585" target="_blank" rel="noreferrer" class="cdp-social-link" aria-label="Wallapop"><span data-feather="shopping-cart"></span></a>
+              <a href="https://wa.me/34676525005" target="_blank" rel="noreferrer" class="cdp-social-link" aria-label="WhatsApp"><span data-feather="message-circle"></span></a>
             </div>
           </div>
         </div>
@@ -125,11 +146,52 @@
       </section>
     </main>
 
+    <section class="py-7 cdp-footer" id="contact">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <img class="footer-logo mb-3" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs">
+            <p>Personalizacion y venta de volantes premium para proyectos de automocion.</p>
+          </div>
+          <div class="col-md-2">
+            <div class="cdp-footer-title mb-3">Menu</div>
+            <ul class="list-unstyled">
+              <li><a href="Catalogo.html">Catalogo</a></li>
+              <li><a href="Creacionvirtual.html">Configurador</a></li>
+              <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3">
+            <div class="cdp-footer-title mb-3">Proyecto DAW</div>
+            <ul class="list-unstyled">
+              <li>Frontend HTML, CSS y JS</li>
+              <li>Base PHP/MySQL</li>
+              <li>CRUD futuro</li>
+            </ul>
+          </div>
+          <div class="col-md-3">
+            <div class="cdp-footer-title mb-3">Contacto</div>
+            <p class="mb-1">Vizcaya, Espana</p>
+            <p class="mb-1">
+              <a href="tel:+34676525005">(+34) 676 525 005</a>
+            </p>
+            <p class="mb-0">
+              <a href="mailto:info@cdpcustoms.local">info@cdpcustoms.local</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <script src="vendors/@popperjs/popper.min.js"></script>
     <script src="vendors/bootstrap/bootstrap.min.js"></script>
     <script src="vendors/is/is.min.js"></script>
     <script src="vendors/feather-icons/feather.min.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script src="assets/js/cdp-header.js"></script>
+    <script src="assets/js/supabase-config.js"></script>
+    <script src="assets/js/supabase-client.js"></script>
+    <script src="assets/js/contact.js"></script>
     <script>feather.replace();</script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">
   </body>

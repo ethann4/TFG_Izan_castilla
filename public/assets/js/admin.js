@@ -1,0 +1,314 @@
+(function () {
+  const supabase = window.CDPSupabase;
+  const loginPanel = document.querySelector("[data-admin-login]");
+  const dashboard = document.querySelector("[data-admin-dashboard]");
+  const loginForm = document.querySelector("[data-login-form]");
+  const logoutButton = document.querySelector("[data-admin-logout]");
+  const sessionChip = document.querySelector("[data-admin-session]");
+  const productForm = document.querySelector("[data-product-form]");
+  const productStatus = document.querySelector("[data-product-status]");
+  const loginStatus = document.querySelector("[data-login-status]");
+  const productsTable = document.querySelector("[data-products-table]");
+  const requestsTable = document.querySelector("[data-requests-table]");
+  const productCount = document.querySelector("[data-products-count]");
+  const requestCount = document.querySelector("[data-requests-count]");
+  const adminState = document.querySelector("[data-admin-state]");
+  const productFormTitle = document.querySelector("[data-product-form-title]");
+
+  let products = [];
+
+  const setStatus = (node, message, type = "info") => {
+    if (!node) return;
+    node.hidden = false;
+    node.className = `admin-status is-${type}`;
+    node.textContent = message;
+  };
+
+  const hideStatus = (node) => {
+    if (node) node.hidden = true;
+  };
+
+  const escapeHtml = (value) => supabase?.escapeHtml(value) || "";
+
+  const slugify = (value) =>
+    (value || "")
+      .toString()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+  const parseList = (value) =>
+    (value || "")
+      .split(/\n|,/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+  const formatMoney = (value) => {
+    const number = Number.parseFloat(value);
+    if (!Number.isFinite(number)) return "";
+    return `${new Intl.NumberFormat("es-ES").format(number)} EUR`;
+  };
+
+  const getSession = () => supabase?.getSession();
+
+  const updateSessionUi = () => {
+    const session = getSession();
+    const isLogged = Boolean(session);
+
+    if (loginPanel) loginPanel.hidden = isLogged;
+    if (dashboard) dashboard.hidden = !isLogged;
+    if (logoutButton) logoutButton.hidden = !isLogged;
+    if (sessionChip) sessionChip.textContent = isLogged ? `Admin: ${session.user?.email || "sesion activa"}` : "Sesion no iniciada";
+
+    if (isLogged) {
+      loadAdminData();
+    }
+  };
+
+  const activateTab = (tabName) => {
+    document.querySelectorAll("[data-admin-tab]").forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.adminTab === tabName);
+    });
+
+    document.querySelectorAll("[data-admin-panel]").forEach((panel) => {
+      panel.classList.toggle("is-active", panel.dataset.adminPanel === tabName);
+    });
+  };
+
+  const getPayload = () => {
+    const formData = new FormData(productForm);
+    const get = (name) => formData.get(name)?.toString().trim() || "";
+    const numberOrNull = (name) => {
+      const value = get(name);
+      return value ? Number.parseFloat(value) : null;
+    };
+
+    return {
+      slug: get("slug"),
+      marca: get("marca"),
+      marca_filtro: get("marca_filtro"),
+      modelo: get("modelo"),
+      modelo_filtro: get("modelo_filtro"),
+      nombre: get("nombre"),
+      descripcion: get("descripcion"),
+      descripcion_corta: get("descripcion_corta"),
+      material: get("material"),
+      color: get("color"),
+      precio: Number.parseFloat(get("precio")) || 0,
+      precio_anterior: numberOrNull("precio_anterior"),
+      etiqueta: get("etiqueta") || "Nuevo",
+      valoracion: get("valoracion") || "4.8",
+      imagen_principal: get("imagen_principal"),
+      galeria: parseList(get("galeria")),
+      acabados: parseList(get("acabados")),
+      compatibilidad: parseList(get("compatibilidad")),
+      especificaciones: parseList(get("especificaciones")),
+      tags: get("tags"),
+      stock: Number.parseInt(get("stock") || "0", 10),
+      activo: formData.has("activo"),
+      actualizado_en: new Date().toISOString(),
+    };
+  };
+
+  const fillProductForm = (product) => {
+    if (!productForm) return;
+    const set = (name, value) => {
+      const input = productForm.elements[name];
+      if (!input) return;
+      if (input.type === "checkbox") input.checked = Boolean(value);
+      else input.value = value ?? "";
+    };
+
+    set("id", product.id);
+    set("slug", product.slug);
+    set("marca", product.marca);
+    set("marca_filtro", product.marca_filtro);
+    set("modelo", product.modelo);
+    set("modelo_filtro", product.modelo_filtro);
+    set("nombre", product.nombre);
+    set("descripcion", product.descripcion);
+    set("descripcion_corta", product.descripcion_corta);
+    set("material", product.material);
+    set("color", product.color);
+    set("precio", product.precio);
+    set("precio_anterior", product.precio_anterior);
+    set("etiqueta", product.etiqueta);
+    set("valoracion", product.valoracion);
+    set("imagen_principal", product.imagen_principal);
+    set("galeria", (product.galeria || []).join("\n"));
+    set("acabados", (product.acabados || []).join("\n"));
+    set("compatibilidad", (product.compatibilidad || []).join("\n"));
+    set("especificaciones", (product.especificaciones || []).join("\n"));
+    set("tags", product.tags);
+    set("stock", product.stock);
+    set("activo", product.activo);
+
+    if (productFormTitle) productFormTitle.textContent = "Editar producto";
+    activateTab("producto");
+    hideStatus(productStatus);
+  };
+
+  const resetProductForm = () => {
+    productForm?.reset();
+    if (productForm?.elements.id) productForm.elements.id.value = "";
+    if (productForm?.elements.activo) productForm.elements.activo.checked = true;
+    if (productForm?.elements.stock) productForm.elements.stock.value = "1";
+    if (productFormTitle) productFormTitle.textContent = "Crear producto";
+    hideStatus(productStatus);
+  };
+
+  const renderProducts = () => {
+    if (!productsTable) return;
+    if (!products.length) {
+      productsTable.innerHTML = '<tr><td colspan="6">No hay productos guardados.</td></tr>';
+      return;
+    }
+
+    productsTable.innerHTML = products
+      .map(
+        (product) => `
+          <tr>
+            <td><strong>${escapeHtml(product.nombre)}</strong><br><small>${escapeHtml(product.slug)}</small></td>
+            <td>${escapeHtml(product.marca)}<br><small>${escapeHtml(product.modelo || "")}</small></td>
+            <td>${escapeHtml(formatMoney(product.precio))}</td>
+            <td>${escapeHtml(product.stock)}</td>
+            <td><span class="badge ${product.activo ? "bg-success" : "bg-secondary"}">${product.activo ? "Activo" : "Inactivo"}</span></td>
+            <td>
+              <div class="admin-table-actions">
+                <button class="admin-mini-btn" type="button" data-edit-product="${escapeHtml(product.id)}">Editar</button>
+                <button class="admin-mini-btn" type="button" data-toggle-product="${escapeHtml(product.id)}">${product.activo ? "Desactivar" : "Activar"}</button>
+              </div>
+            </td>
+          </tr>
+        `
+      )
+      .join("");
+  };
+
+  const renderRequests = (requests) => {
+    if (!requestsTable) return;
+    if (!requests.length) {
+      requestsTable.innerHTML = '<tr><td colspan="6">No hay solicitudes todavia.</td></tr>';
+      return;
+    }
+
+    requestsTable.innerHTML = requests
+      .map(
+        (request) => `
+          <tr>
+            <td><strong>${escapeHtml(request.nombre)}</strong><br><small>${new Date(request.creado_en).toLocaleDateString("es-ES")}</small></td>
+            <td>${escapeHtml(request.email)}<br><small>${escapeHtml(request.telefono || "")}</small></td>
+            <td>${escapeHtml(request.modelo_coche || "")}<br><small>${escapeHtml(request.material || "")}</small></td>
+            <td>${escapeHtml(request.presupuesto || "")}</td>
+            <td>${escapeHtml(request.mensaje || "")}</td>
+            <td><span class="badge bg-warning text-dark">${escapeHtml(request.estado || "pendiente")}</span></td>
+          </tr>
+        `
+      )
+      .join("");
+  };
+
+  const loadProducts = async () => {
+    products = await supabase.listProductsAdmin();
+    renderProducts();
+    if (productCount) productCount.textContent = products.length;
+  };
+
+  const loadRequests = async () => {
+    const requests = await supabase.listSolicitudes();
+    renderRequests(requests);
+    if (requestCount) requestCount.textContent = requests.length;
+  };
+
+  const loadAdminData = async () => {
+    try {
+      if (adminState) adminState.textContent = "OK";
+      await Promise.all([loadProducts(), loadRequests()]);
+      if (window.feather) feather.replace();
+    } catch (error) {
+      console.warn("No se pudieron cargar los datos admin.", error);
+      if (adminState) adminState.textContent = "ERROR";
+      setStatus(productStatus, "No se pudieron cargar los datos. Comprueba que tu usuario esta en perfiles_admin.", "error");
+    }
+  };
+
+  loginForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(loginForm);
+    try {
+      setStatus(loginStatus, "Iniciando sesion...", "info");
+      await supabase.login(data.get("email"), data.get("password"));
+      hideStatus(loginStatus);
+      updateSessionUi();
+    } catch (error) {
+      console.warn("Error de login.", error);
+      setStatus(loginStatus, "No se pudo iniciar sesion. Revisa email, contrasena y usuario admin.", "error");
+    }
+  });
+
+  logoutButton?.addEventListener("click", () => {
+    supabase.logout();
+    updateSessionUi();
+  });
+
+  document.querySelectorAll("[data-admin-tab]").forEach((button) => {
+    button.addEventListener("click", () => activateTab(button.dataset.adminTab));
+  });
+
+  productForm?.elements.nombre?.addEventListener("input", () => {
+    if (!productForm.elements.slug.value) productForm.elements.slug.value = slugify(productForm.elements.nombre.value);
+  });
+
+  productForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!productForm.checkValidity()) {
+      productForm.reportValidity();
+      return;
+    }
+
+    const payload = getPayload();
+    const id = productForm.elements.id.value;
+
+    try {
+      setStatus(productStatus, "Guardando producto...", "info");
+      if (id) await supabase.updateProduct(id, payload);
+      else await supabase.createProduct(payload);
+      setStatus(productStatus, id ? "Producto actualizado correctamente." : "Producto creado correctamente.", "success");
+      resetProductForm();
+      await loadProducts();
+    } catch (error) {
+      console.warn("No se pudo guardar el producto.", error);
+      setStatus(productStatus, "No se pudo guardar. Revisa permisos, slug repetido o campos obligatorios.", "error");
+    }
+  });
+
+  document.querySelector("[data-product-reset]")?.addEventListener("click", resetProductForm);
+  document.querySelector("[data-products-refresh]")?.addEventListener("click", loadProducts);
+  document.querySelector("[data-requests-refresh]")?.addEventListener("click", loadRequests);
+
+  productsTable?.addEventListener("click", async (event) => {
+    const editButton = event.target.closest("[data-edit-product]");
+    const toggleButton = event.target.closest("[data-toggle-product]");
+
+    if (editButton) {
+      const product = products.find((item) => item.id === editButton.dataset.editProduct);
+      if (product) fillProductForm(product);
+      return;
+    }
+
+    if (toggleButton) {
+      const product = products.find((item) => item.id === toggleButton.dataset.toggleProduct);
+      if (!product) return;
+      await supabase.updateProduct(product.id, { activo: !product.activo, actualizado_en: new Date().toISOString() });
+      await loadProducts();
+    }
+  });
+
+  if (!supabase?.isConfigured()) {
+    setStatus(loginStatus, "Falta configurar Supabase en supabase-config.js.", "error");
+  }
+
+  updateSessionUi();
+})();

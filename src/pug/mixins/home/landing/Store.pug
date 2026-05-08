@@ -1,39 +1,13 @@
-append variables
-  -
-    var procesos = [
-      {
-        title: 'Diagnostico',
-        text: 'Se parte del modelo del cliente y de sus necesidades: uso diario, showcar, trackday o restauracion OEM+.'
-      },
-      {
-        title: 'Configuracion',
-        text: 'Se eligen materiales, colores, costuras, marcador, levas y extras. La base queda preparada para guardarse como pedido.'
-      },
-      {
-        title: 'Entrega',
-        text: 'El producto se presenta con ficha, compatibilidad, precio y CTA, listo para evolucionar a compra o solicitud backend.'
-      }
-    ];
-
-mixin Testimonial(config)
-  .col-12
-    h5.fs-3.fs-lg-5.lh-sm.text-uppercase=config.title
-    p.my-4.pe-xl-5=config.text
-
 mixin Testimonials
-  section.bg-black.py-8.pt-0#nosotros
+  section.bg-black.py-8#nosotros
     +Background({ image: `${CWD}assets/img/gallery/bmw_hero_banner.jpg`, attrs: { style: { 'background-position': 'right center', 'background-size': 'cover'} }, className: 'store-bg-holder' })
     .container-lg
-      .row.flex-center
-        .col-sm-10.col-md-6.col-lg-6.text-center.text-md-start.ms-auto
-          #carouselExampleFade.carousel.slide.carousel-fade(data-bs-ride='carousel')
-            .carousel-inner
-              .carousel-item.active
-                .row.h-100
-                  +Testimonial(procesos[0])
-              .carousel-item
-                .row.h-100
-                  +Testimonial(procesos[1])
-              .carousel-item
-                .row.h-100
-                  +Testimonial(procesos[2])
+      .row.align-items-center
+        .col-lg-6.ms-lg-auto
+          .cdp-section-kicker Taller y venta especializada
+          h2.cdp-section-title Volantes con identidad propia
+          p.cdp-section-copy CDP Customs nace en Vizcaya con una idea clara: transformar el punto de contacto mas importante del conductor en una pieza unica, comoda y coherente con el coche.
+          .d-flex.flex-wrap.gap-2.mt-4
+            span.cdp-pill Tapizado artesanal
+            span.cdp-pill Compatibilidad por modelo
+            span.cdp-pill Pedido personalizado

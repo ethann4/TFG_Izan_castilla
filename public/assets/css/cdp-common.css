@@ -93,9 +93,110 @@ body {
   color: var(--cdp-red);
 }
 
+.cdp-navbar-actions {
+  gap: 0.78rem !important;
+  margin-left: auto;
+}
+
+.cdp-header-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.78rem;
+  margin-right: 0.15rem;
+}
+
+.cdp-tool-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  padding: 0.15rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--cdp-light);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.cdp-tool-select::after {
+  display: none;
+}
+
+.cdp-tool-select:hover,
+.cdp-tool-select:focus,
+.cdp-header-icon:hover,
+.cdp-header-icon:focus {
+  color: var(--cdp-red);
+}
+
+.cdp-tool-select svg {
+  width: 14px;
+  height: 14px;
+}
+
+.cdp-tools-menu {
+  min-width: 150px;
+  padding: 0.45rem;
+  background: var(--cdp-surface-strong);
+  border: 1px solid var(--cdp-border);
+  border-radius: 8px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+}
+
+.cdp-tools-menu .dropdown-item {
+  border-radius: 6px;
+  color: var(--cdp-light);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.5rem 0.65rem;
+}
+
+.cdp-tools-menu .dropdown-item:hover,
+.cdp-tools-menu .dropdown-item:focus {
+  background: var(--cdp-red-soft);
+  color: #fff;
+}
+
+.cdp-header-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 28px;
+  color: var(--cdp-light);
+  text-decoration: none;
+}
+
+.cdp-header-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.cdp-cart-count {
+  position: absolute;
+  right: -7px;
+  bottom: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .cdp-social-link {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 28px;
   color: var(--cdp-light);
   text-decoration: none;
   cursor: pointer;
@@ -103,6 +204,13 @@ body {
 
 .cdp-social-link svg {
   color: var(--cdp-light);
+  width: 22px;
+  height: 22px;
+}
+
+.cdp-social-link:hover svg,
+.cdp-social-link:focus svg {
+  color: var(--cdp-red);
 }
 
 .cdp-section-kicker {
@@ -145,7 +253,13 @@ body {
 }
 
 .cdp-footer {
-  background: #050505;
+  background-color: #030303;
+  background-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.44)),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.54), rgba(0, 0, 0, 0.78)),
+    url("../img/gallery/bmw_hero_banner.jpg");
+  background-position: center bottom;
+  background-size: cover;
   border-top: 1px solid var(--cdp-border);
   color: var(--cdp-muted);
 }
@@ -193,8 +307,22 @@ body {
 }
 
 @media (min-width: 992px) {
+  .cdp-navbar > .container {
+    max-width: min(100% - 4rem, 1440px);
+  }
+
   .cdp-shop-dropdown:hover > .dropdown-menu {
     display: block;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .cdp-header-tools {
+    gap: 0.68rem;
+  }
+
+  .cdp-phone-link span:last-child {
+    display: none;
   }
 }
 
@@ -211,5 +339,36 @@ body {
     background: rgba(255, 255, 255, 0.04);
     border-radius: 8px;
     margin-top: 0.5rem;
+  }
+
+  .cdp-navbar-actions {
+    align-items: flex-start !important;
+    flex-wrap: wrap;
+    gap: 0.8rem !important;
+    padding-top: 1rem;
+  }
+
+  .cdp-header-tools {
+    flex-wrap: wrap;
+    gap: 0.68rem;
+    width: 100%;
+  }
+
+  .cdp-tool-select {
+    border: 1px solid var(--cdp-border);
+    border-radius: 6px;
+    padding: 0.5rem 0.62rem;
+  }
+
+  .cdp-header-icon,
+  .cdp-social-link {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--cdp-border);
+    border-radius: 6px;
+  }
+
+  .cdp-phone-link {
+    width: 100%;
   }
 }

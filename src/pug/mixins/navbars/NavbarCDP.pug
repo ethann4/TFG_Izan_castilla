@@ -15,11 +15,42 @@ mixin NavbarCDP
             a.nav-link.fw-bold(href='Creacionvirtual.html') CONFIGURADOR
           li.nav-item.fs-3.px-2
             a.nav-link.fw-bold(href='contacto.html') CONTACTO
-        .d-flex.gap-3.align-items-center
-          a.cdp-phone-link(href='tel:+34676525005')
-            span(data-feather='phone-call')
-            span (+34) 676 525 005
-          a(href='https://instagram.com/cdp.performanceparts' target='_blank' rel='noreferrer').cdp-social-link
+        .cdp-navbar-actions.d-flex.gap-3.align-items-center
+          .cdp-header-tools(aria-label='Preferencias y cuenta')
+            .dropdown
+              button#cdpRegionDropdown.cdp-tool-select.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false' data-cdp-preference='region')
+                span(data-cdp-label) España | EUR €
+                span(data-feather='chevron-down')
+              ul.cdp-tools-menu.dropdown-menu(aria-labelledby='cdpRegionDropdown')
+                li
+                  button.dropdown-item(type='button' data-cdp-preference-target='region' data-cdp-option='España | EUR €') España | EUR €
+                li
+                  button.dropdown-item(type='button' data-cdp-preference-target='region' data-cdp-option='Portugal | EUR €') Portugal | EUR €
+                li
+                  button.dropdown-item(type='button' data-cdp-preference-target='region' data-cdp-option='Francia | EUR €') Francia | EUR €
+            .dropdown
+              button#cdpLanguageDropdown.cdp-tool-select.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false' data-cdp-preference='language')
+                span(data-cdp-label) Español
+                span(data-feather='chevron-down')
+              ul.cdp-tools-menu.dropdown-menu(aria-labelledby='cdpLanguageDropdown')
+                li
+                  button.dropdown-item(type='button' data-cdp-preference-target='language' data-cdp-option='Español') Español
+                li
+                  button.dropdown-item(type='button' data-cdp-preference-target='language' data-cdp-option='English') English
+                li
+                  button.dropdown-item(type='button' data-cdp-preference-target='language' data-cdp-option='Français') Français
+            a.cdp-header-icon(href='Catalogo.html#catalogo' aria-label='Buscar productos')
+              span(data-feather='search')
+            a.cdp-header-icon(href='admin/index.html' aria-label='Usuario')
+              span(data-feather='user')
+            a.cdp-header-icon(href='Catalogo.html' aria-label='Carrito')
+              span(data-feather='shopping-bag')
+              span.cdp-cart-count 1
+          a(href='https://instagram.com/cdp.performanceparts' target='_blank' rel='noreferrer' aria-label='Instagram').cdp-social-link
             span(data-feather='instagram')
-          a(href='https://es.wallapop.com/user/izanc-448493585' target='_blank' rel='noreferrer').cdp-social-link
+          a(href='https://www.tiktok.com/@cdp.performanceparts?lang=es-419' target='_blank' rel='noreferrer' aria-label='TikTok').cdp-social-link
+            span(data-feather='music')
+          a(href='https://es.wallapop.com/user/izanc-448493585' target='_blank' rel='noreferrer' aria-label='Wallapop').cdp-social-link
             span(data-feather='shopping-cart')
+          a(href='https://wa.me/34676525005' target='_blank' rel='noreferrer' aria-label='WhatsApp').cdp-social-link
+            span(data-feather='message-circle')

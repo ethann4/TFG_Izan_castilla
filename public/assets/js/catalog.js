@@ -1,4 +1,4 @@
-(() => {
+;(async () => {
   const normalizeText = (value) =>
     (value || "")
       .toString()
@@ -8,9 +8,54 @@
       .trim();
 
   const toNumber = (value) => Number.parseFloat(value || "0") || 0;
+  const escapeHtml = (value) => window.CDPSupabase?.escapeHtml(value) || "";
 
   const catalog = document.querySelector("[data-catalog]");
   if (!catalog) return;
+
+  const productGrid = catalog.querySelector("#catalogo-grid");
+
+  const renderProductCard = (product) => {
+    const image = product.gallery[0] || "assets/img/logo_cdp_transparente.png";
+    const discount = (() => {
+      const current = toNumber(product.priceNumber);
+      const previous = toNumber((product.oldPrice || "").replace(/\D/g, ""));
+      if (!previous || !current || previous <= current) return "";
+      return `-${Math.round(((previous - current) / previous) * 100)}%`;
+    })();
+
+    return `
+      <a class="product-card" href="producto.html?id=${encodeURIComponent(product.id)}" data-brand="${escapeHtml(product.brandFilter)}" data-model="${escapeHtml(product.modelFilter)}" data-material="${escapeHtml(product.material)}" data-color="${escapeHtml(product.color)}" data-price="${escapeHtml(product.priceNumber)}" data-tags="${escapeHtml(product.tags)}">
+        <div class="product-media">
+          <span class="product-badge">${escapeHtml(product.badge)}</span><span class="product-fav" data-feather="heart"></span><span class="product-rating">${escapeHtml(product.rating)}</span>
+          <img src="${escapeHtml(image)}" alt="${escapeHtml(product.brand + " " + product.title)}">
+        </div>
+        <div class="product-meta">
+          <div class="product-topline">
+            <div><div class="product-brand">${escapeHtml(product.brand)}</div><div class="product-name">${escapeHtml(product.title)}</div><div class="product-fit">${escapeHtml(product.fitSummary)}</div></div>
+            <div class="product-price"><strong>${escapeHtml(product.price)}</strong>${product.oldPrice ? `<br><s>${escapeHtml(product.oldPrice)}</s>` : ""}${discount ? `<br><span class="product-discount">${escapeHtml(discount)}</span>` : ""}</div>
+          </div>
+          <div class="product-actions">Ver ficha <span data-feather="arrow-right"></span></div>
+        </div>
+      </a>
+    `;
+  };
+
+  const loadSupabaseCatalog = async () => {
+    if (!productGrid || !window.CDPSupabase?.isConfigured()) return;
+
+    try {
+      const products = await window.CDPSupabase.listProducts();
+      if (!products.length) return;
+      productGrid.innerHTML = products.map(renderProductCard).join("");
+      catalog.dataset.source = "supabase";
+      if (window.feather) feather.replace();
+    } catch (error) {
+      console.warn("No se pudo cargar el catalogo desde Supabase. Se mantiene el catalogo local.", error);
+    }
+  };
+
+  await loadSupabaseCatalog();
 
   const searchInput = catalog.querySelector("[data-catalog-search]");
   const productCards = Array.from(catalog.querySelectorAll(".product-card"));

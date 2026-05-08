@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin demo | CDP Customs</title>
+    <title>Admin | CDP Customs</title>
     <meta name="robots" content="noindex">
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/logo_cdp_transparente.png">
     <link href="../assets/css/theme.css" rel="stylesheet">
     <link href="../assets/css/cdp-common.css" rel="stylesheet">
     <link href="../assets/css/admin.css" rel="stylesheet">
@@ -27,79 +27,224 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="../index.html">WEB</a></li>
               <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="../Catalogo.html">CATALOGO</a></li>
-              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold active" href="index.html">ADMIN DEMO</a></li>
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold active" href="index.html">ADMIN</a></li>
             </ul>
+            <button class="admin-logout" type="button" data-admin-logout hidden>Cerrar sesion</button>
           </div>
         </div>
       </nav>
 
       <section class="admin-shell">
         <div class="container">
-          <div class="row mb-4">
+          <div class="row align-items-end mb-4">
             <div class="col-lg-8">
-              <div class="cdp-section-kicker">Base futura</div>
+              <div class="cdp-section-kicker">Gestion privada</div>
               <h1 class="cdp-section-title">Panel admin</h1>
-              <p class="cdp-section-copy">Pantalla estatica preparada para explicar el CRUD final: productos, marcas/modelos y pedidos personalizados con PHP, MySQL, sesiones y consultas preparadas.</p>
+              <p class="cdp-section-copy">Crea productos, edita el catalogo y revisa solicitudes guardadas en Supabase.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+              <span class="admin-session-chip" data-admin-session>Sesion no iniciada</span>
             </div>
           </div>
 
-          <div class="admin-grid">
+          <section class="admin-login-card" data-admin-login>
+            <div>
+              <div class="cdp-section-kicker">Acceso admin</div>
+              <h2>Inicia sesion</h2>
+              <p>Usa un usuario creado en Supabase Auth y marcado como admin en la tabla <code>perfiles_admin</code>.</p>
+            </div>
+            <form class="admin-login-form" data-login-form>
+              <label>
+                Email
+                <input class="form-control cdp-form-control" type="email" name="email" required autocomplete="email">
+              </label>
+              <label>
+                Contrasena
+                <input class="form-control cdp-form-control" type="password" name="password" required autocomplete="current-password">
+              </label>
+              <button class="btn btn-primary" type="submit">Entrar</button>
+              <div class="admin-status" data-login-status hidden></div>
+            </form>
+          </section>
+
+          <div class="admin-grid" data-admin-dashboard hidden>
             <aside class="admin-sidebar">
-              <a class="is-active" href="#productos"><span data-feather="package"></span>Productos</a>
-              <a href="#pedidos"><span data-feather="clipboard"></span>Pedidos</a>
-              <a href="#usuarios"><span data-feather="lock"></span>Sesiones</a>
+              <button class="is-active" type="button" data-admin-tab="producto"><span data-feather="plus-circle"></span>Nuevo producto</button>
+              <button type="button" data-admin-tab="productos"><span data-feather="package"></span>Productos</button>
+              <button type="button" data-admin-tab="solicitudes"><span data-feather="clipboard"></span>Solicitudes</button>
             </aside>
 
             <section class="admin-panel">
               <div class="admin-stat-grid">
-                <div class="admin-stat"><span>Productos demo</span><strong>12</strong></div>
-                <div class="admin-stat"><span>Pedidos demo</span><strong>4</strong></div>
-                <div class="admin-stat"><span>Tablas previstas</span><strong>3</strong></div>
+                <div class="admin-stat"><span>Productos</span><strong data-products-count>0</strong></div>
+                <div class="admin-stat"><span>Solicitudes</span><strong data-requests-count>0</strong></div>
+                <div class="admin-stat"><span>Estado</span><strong data-admin-state>OK</strong></div>
               </div>
 
-              <div class="table-responsive" id="productos">
-                <table class="table admin-table align-middle">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Producto</th>
-                      <th>Marca</th>
-                      <th>Material</th>
-                      <th>Precio</th>
-                      <th>Estado</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Carbono Galaxy RPM</td>
-                      <td>BMW E46</td>
-                      <td>Carbono + cuero</td>
-                      <td>1.200 EUR</td>
-                      <td><span class="badge bg-success">Activo</span></td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Alcantara RPM Amarillo</td>
-                      <td>BMW E90</td>
-                      <td>Alcantara</td>
-                      <td>1.000 EUR</td>
-                      <td><span class="badge bg-success">Activo</span></td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>S-Line Alcantara RPM</td>
-                      <td>Audi</td>
-                      <td>Alcantara</td>
-                      <td>790 EUR</td>
-                      <td><span class="badge bg-warning text-dark">Demo</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="admin-tab-panel is-active" data-admin-panel="producto">
+                <div class="admin-panel-heading">
+                  <div>
+                    <div class="cdp-section-kicker">Catalogo</div>
+                    <h2 data-product-form-title>Crear producto</h2>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm" type="button" data-product-reset>Limpiar</button>
+                </div>
+
+                <form class="admin-product-form" data-product-form>
+                  <input type="hidden" name="id">
+                  <label>
+                    Nombre del producto
+                    <input class="form-control cdp-form-control" type="text" name="nombre" placeholder="AMG Carbono Nappa" required>
+                  </label>
+                  <label>
+                    Slug
+                    <input class="form-control cdp-form-control" type="text" name="slug" placeholder="amg-carbono-nappa" required>
+                  </label>
+                  <label>
+                    Marca visible
+                    <input class="form-control cdp-form-control" type="text" name="marca" placeholder="Mercedes AMG" required>
+                  </label>
+                  <label>
+                    Filtro marca
+                    <select class="form-select cdp-form-select" name="marca_filtro">
+                      <option value="bmw">BMW</option>
+                      <option value="audi">Audi</option>
+                      <option value="mercedes">Mercedes</option>
+                      <option value="volkswagen">Volkswagen</option>
+                    </select>
+                  </label>
+                  <label>
+                    Modelo visible
+                    <input class="form-control cdp-form-control" type="text" name="modelo" placeholder="AMG Line">
+                  </label>
+                  <label>
+                    Filtro modelo
+                    <input class="form-control cdp-form-control" type="text" name="modelo_filtro" placeholder="amg">
+                  </label>
+                  <label>
+                    Precio
+                    <input class="form-control cdp-form-control" type="number" name="precio" min="0" step="0.01" placeholder="850" required>
+                  </label>
+                  <label>
+                    Precio anterior
+                    <input class="form-control cdp-form-control" type="number" name="precio_anterior" min="0" step="0.01" placeholder="1020">
+                  </label>
+                  <label>
+                    Etiqueta
+                    <input class="form-control cdp-form-control" type="text" name="etiqueta" placeholder="Nuevo">
+                  </label>
+                  <label>
+                    Valoracion
+                    <input class="form-control cdp-form-control" type="text" name="valoracion" placeholder="4.8">
+                  </label>
+                  <label>
+                    Material
+                    <input class="form-control cdp-form-control" type="text" name="material" placeholder="carbono cuero">
+                  </label>
+                  <label>
+                    Color
+                    <input class="form-control cdp-form-control" type="text" name="color" placeholder="negro rojo">
+                  </label>
+                  <label class="is-wide">
+                    Imagen principal
+                    <input class="form-control cdp-form-control" type="text" name="imagen_principal" placeholder="assets/img/gallery/F82/F82_Carbono_cuero.png">
+                  </label>
+                  <label class="is-wide">
+                    Descripcion corta
+                    <input class="form-control cdp-form-control" type="text" name="descripcion_corta" placeholder="Carbono y cuero - ficha preparada">
+                  </label>
+                  <label class="is-wide">
+                    Descripcion larga
+                    <textarea class="form-control cdp-form-control" name="descripcion" rows="3" placeholder="Texto que aparecera en la ficha del producto"></textarea>
+                  </label>
+                  <label class="is-wide">
+                    Galeria
+                    <textarea class="form-control cdp-form-control" name="galeria" rows="3" placeholder="Una imagen por linea o separadas por comas"></textarea>
+                  </label>
+                  <label>
+                    Acabados
+                    <textarea class="form-control cdp-form-control" name="acabados" rows="3" placeholder="Carbono, Cuero nappa, Costura roja"></textarea>
+                  </label>
+                  <label>
+                    Compatibilidad
+                    <textarea class="form-control cdp-form-control" name="compatibilidad" rows="3" placeholder="BMW E46, M3 style, Plug and play"></textarea>
+                  </label>
+                  <label class="is-wide">
+                    Especificaciones
+                    <textarea class="form-control cdp-form-control" name="especificaciones" rows="3" placeholder="Una especificacion por linea"></textarea>
+                  </label>
+                  <label>
+                    Tags busqueda
+                    <input class="form-control cdp-form-control" type="text" name="tags" placeholder="carbono rpm bmw">
+                  </label>
+                  <label>
+                    Stock
+                    <input class="form-control cdp-form-control" type="number" name="stock" min="0" step="1" value="1">
+                  </label>
+                  <label class="admin-check">
+                    <input type="checkbox" name="activo" checked>
+                    Producto activo
+                  </label>
+                  <div class="admin-actions-row is-wide">
+                    <button class="btn btn-primary" type="submit">Guardar producto</button>
+                    <a class="btn btn-outline-primary" href="../Catalogo.html" target="_blank" rel="noreferrer">Ver catalogo</a>
+                  </div>
+                  <div class="admin-status is-wide" data-product-status hidden></div>
+                </form>
               </div>
 
-              <div class="backend-note mt-4" id="pedidos">
-                CRUD previsto: `productos`, `marcas_modelos` y `pedidos_personalizados`. El login admin debera usar password_hash, password_verify, sesiones seguras y consultas PDO preparadas.
+              <div class="admin-tab-panel" data-admin-panel="productos">
+                <div class="admin-panel-heading">
+                  <div>
+                    <div class="cdp-section-kicker">Catalogo</div>
+                    <h2>Productos guardados</h2>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm" type="button" data-products-refresh>Actualizar</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table admin-table align-middle">
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th>Marca</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody data-products-table>
+                      <tr><td colspan="6">Inicia sesion para cargar productos.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="admin-tab-panel" data-admin-panel="solicitudes">
+                <div class="admin-panel-heading">
+                  <div>
+                    <div class="cdp-section-kicker">Pedidos</div>
+                    <h2>Solicitudes recibidas</h2>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm" type="button" data-requests-refresh>Actualizar</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table admin-table align-middle">
+                    <thead>
+                      <tr>
+                        <th>Cliente</th>
+                        <th>Contacto</th>
+                        <th>Modelo</th>
+                        <th>Presupuesto</th>
+                        <th>Mensaje</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody data-requests-table>
+                      <tr><td colspan="6">Inicia sesion para cargar solicitudes.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </section>
           </div>
@@ -112,6 +257,9 @@
     <script src="../vendors/is/is.min.js"></script>
     <script src="../vendors/feather-icons/feather.min.js"></script>
     <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/supabase-config.js"></script>
+    <script src="../assets/js/supabase-client.js"></script>
+    <script src="../assets/js/admin.js"></script>
     <script>feather.replace();</script>
   </body>
 

@@ -7,12 +7,24 @@ body.admin-page {
   padding: 9.5rem 0 4rem;
 }
 
-.admin-grid {
-  display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
-  gap: 1.25rem;
+.admin-session-chip,
+.admin-logout {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  color: #f5f5f5;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.48rem 0.72rem;
 }
 
+.admin-logout {
+  background: rgba(214, 40, 40, 0.14);
+  cursor: pointer;
+}
+
+.admin-login-card,
 .admin-sidebar,
 .admin-panel {
   background: rgba(10, 10, 10, 0.88);
@@ -20,22 +32,68 @@ body.admin-page {
   border-radius: 8px;
 }
 
+.admin-login-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+  gap: 1.5rem;
+  padding: 1.35rem;
+}
+
+.admin-login-card h2,
+.admin-panel-heading h2 {
+  color: #fff;
+  font-size: 1.7rem;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.admin-login-card p {
+  margin: 0.75rem 0 0;
+}
+
+.admin-login-form,
+.admin-product-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-login-form label,
+.admin-product-form label {
+  color: #f5f5f5;
+  display: grid;
+  font-size: 0.78rem;
+  font-weight: 800;
+  gap: 0.45rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 1.25rem;
+}
+
 .admin-sidebar {
+  align-self: start;
   padding: 1rem;
 }
 
-.admin-sidebar a {
+.admin-sidebar button {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  color: #f5f5f5;
-  text-decoration: none;
+  width: 100%;
+  border: 0;
   border-radius: 6px;
+  background: transparent;
+  color: #f5f5f5;
   padding: 0.75rem;
+  text-align: left;
 }
 
-.admin-sidebar a:hover,
-.admin-sidebar a.is-active {
+.admin-sidebar button:hover,
+.admin-sidebar button.is-active {
   background: rgba(214, 40, 40, 0.18);
   color: #fff;
 }
@@ -73,32 +131,108 @@ body.admin-page {
   margin-top: 0.4rem;
 }
 
+.admin-tab-panel {
+  display: none;
+}
+
+.admin-tab-panel.is-active {
+  display: block;
+}
+
+.admin-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-product-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-product-form .is-wide {
+  grid-column: 1 / -1;
+}
+
+.admin-check {
+  align-items: center;
+  display: flex !important;
+  flex-direction: row;
+  gap: 0.5rem !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.admin-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.admin-status {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  color: #fff;
+  padding: 0.85rem;
+}
+
+.admin-status.is-info {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.admin-status.is-success {
+  background: rgba(28, 140, 76, 0.18);
+  border-color: rgba(28, 140, 76, 0.42);
+}
+
+.admin-status.is-error {
+  background: rgba(214, 40, 40, 0.16);
+  border-color: rgba(214, 40, 40, 0.42);
+}
+
 .admin-table {
   color: #e8e8e8;
 }
 
 .admin-table th {
   color: #fff;
-  text-transform: uppercase;
   font-size: 0.78rem;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .admin-table td,
 .admin-table th {
   border-color: rgba(255, 255, 255, 0.1);
+  vertical-align: middle;
 }
 
-.backend-note {
-  background: rgba(214, 40, 40, 0.1);
-  border: 1px solid rgba(214, 40, 40, 0.24);
-  border-radius: 8px;
-  color: #f1f1f1;
-  padding: 0.85rem;
+.admin-table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.admin-mini-btn {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.42rem 0.58rem;
+}
+
+.admin-mini-btn:hover {
+  border-color: rgba(214, 40, 40, 0.55);
+  color: #fff;
 }
 
 @media (max-width: 991.98px) {
   .admin-grid,
+  .admin-login-card,
+  .admin-product-form,
   .admin-stat-grid {
     grid-template-columns: 1fr;
   }

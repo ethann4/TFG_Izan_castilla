@@ -73,6 +73,28 @@ body.contact-page {
   padding: 0.85rem;
 }
 
+.form-status {
+  grid-column: 1 / -1;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  color: #fff;
+  padding: 0.85rem;
+}
+
+.form-status.is-info {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.form-status.is-success {
+  background: rgba(28, 140, 76, 0.18);
+  border-color: rgba(28, 140, 76, 0.42);
+}
+
+.form-status.is-error {
+  background: rgba(214, 40, 40, 0.16);
+  border-color: rgba(214, 40, 40, 0.42);
+}
+
 @media (max-width: 991.98px) {
   .contact-shell {
     padding-top: 8rem;
