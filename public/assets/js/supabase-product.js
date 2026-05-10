@@ -1,14 +1,31 @@
 (async function () {
-  if (!window.CDPSupabase?.isConfigured()) return;
-
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get("id") || params.get("product");
-  if (!slug) return;
-
   const setText = (id, value) => {
     const node = document.getElementById(id);
     if (node && value !== undefined && value !== null) node.textContent = value;
   };
+
+  const showUnavailableProduct = (message) => {
+    setText("productBadge", "SQL");
+    setText("productBrand", "CDP Customs");
+    setText("productTitle", "Producto no disponible");
+    setText("productPrice", "");
+    setText("productOldPrice", "");
+    setText("productDiscount", "");
+    setText("productRatingText", "");
+    setText("productSummary", message);
+  };
+
+  if (!window.CDPSupabase?.isConfigured()) {
+    showUnavailableProduct("Configura Supabase para cargar esta ficha desde la tabla productos.");
+    return;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get("id") || params.get("product");
+  if (!slug) {
+    showUnavailableProduct("Abre una ficha desde el catalogo para cargar el producto SQL.");
+    return;
+  }
 
   const appendChip = (container, value) => {
     if (!container || !value) return;
@@ -37,7 +54,10 @@
 
   try {
     const product = await window.CDPSupabase.getProductBySlug(slug);
-    if (!product) return;
+    if (!product) {
+      showUnavailableProduct("Este producto no existe en Supabase. Ejecuta database/supabase_seed.sql para rellenar la tabla productos.");
+      return;
+    }
 
     const discount = calculateDiscount(product.price, product.oldPrice);
 
@@ -106,5 +126,6 @@
     if (window.feather) feather.replace();
   } catch (error) {
     console.warn("No se pudo cargar el producto desde Supabase.", error);
+    showUnavailableProduct("No se pudo cargar el producto desde Supabase. Revisa la conexion y las claves del proyecto.");
   }
 })();

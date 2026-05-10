@@ -127,62 +127,9 @@
           </div>
 
           <div class="carousel slide" id="carouselDestacados" data-bs-ride="carousel">
-            <div class="carousel-inner">
+            <div class="carousel-inner" data-home-products>
               <div class="carousel-item active">
-                <div class="row g-4">
-                  <div class="col-md-4">
-                    <a class="home-product-card" href="producto.html?id=e46-carbono-galaxy-rpm">
-                      <img src="assets/img/gallery/E46/E46_pantalla_galaxy_carbono.png" alt="Volante BMW E46 carbono galaxy RPM">
-                      <span>BMW E46 / E39</span>
-                      <strong>Carbono Galaxy RPM</strong>
-                      <em>1.200 EUR</em>
-                    </a>
-                  </div>
-                  <div class="col-md-4">
-                    <a class="home-product-card" href="producto.html?id=e90-alcantara-rpm-amarillo">
-                      <img src="assets/img/gallery/E90/E60_ALCANTARA_PANTALLA_LEVAS_AMARILLO.png" alt="Volante BMW E90 alcantara RPM">
-                      <span>BMW E90 / E60</span>
-                      <strong>Alcantara RPM Amarillo</strong>
-                      <em>1.000 EUR</em>
-                    </a>
-                  </div>
-                  <div class="col-md-4">
-                    <a class="home-product-card" href="producto.html?id=f82-carbono-cuero-m">
-                      <img src="assets/img/gallery/F82/F82_Carbono_cuero.png" alt="Volante BMW F82 carbono cuero">
-                      <span>BMW Serie F</span>
-                      <strong>Carbono Cuero M</strong>
-                      <em>550 EUR</em>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="row g-4">
-                  <div class="col-md-4">
-                    <a class="home-product-card" href="producto.html?id=e46-levas-amarillo">
-                      <img src="assets/img/gallery/E46/E46_Levas_Amarillo.png" alt="Volante BMW E46 levas amarillo">
-                      <span>BMW E46 / E39</span>
-                      <strong>Levas Amarillo</strong>
-                      <em>600 EUR</em>
-                    </a>
-                  </div>
-                  <div class="col-md-4">
-                    <a class="home-product-card" href="producto.html?id=audi-sline-alcantara-rpm">
-                      <img src="assets/img/gallery/RS3/cuero rs blanco/foto principal.png" alt="Volante Audi S-Line Cuero RS Blanco">
-                      <span>Audi S-Line</span>
-                      <strong>S-Line Alcantara RPM</strong>
-                      <em>790 EUR</em>
-                    </a>
-                  </div>
-                  <div class="col-md-4">
-                    <a class="home-product-card" href="producto.html?id=mercedes-amg-carbono-nappa">
-                      <img src="assets/img/gallery/F82/F82_Carbono_cuero.png" alt="Volante demo Mercedes AMG">
-                      <span>Mercedes AMG</span>
-                      <strong>AMG Carbono Nappa</strong>
-                      <em>850 EUR</em>
-                    </a>
-                  </div>
-                </div>
+                <div class="home-products-message">Cargando productos destacados desde Supabase...</div>
               </div>
             </div>
             <button class="carousel-control-prev home-carousel-control" type="button" data-bs-target="#carouselDestacados" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Anterior</span></button>
@@ -199,7 +146,7 @@
               <h2 class="h1 text-light text-uppercase mb-0">Marcas preparadas</h2>
             </div>
             <div class="col-lg-5 mt-3 mt-lg-0">
-              <p class="mb-0 text-500">La estructura ya separa marca, modelo, material, color y precio para poder conectarlo despues con una base de datos.</p>
+              <p class="mb-0 text-500">La estructura separa marca, modelo, material, color y precio para filtrar productos cargados desde SQL.</p>
             </div>
           </div>
           <div class="row g-4">
@@ -257,6 +204,9 @@
     <script src="vendors/feather-icons/feather.min.js"></script>
     <script src="assets/js/theme.js"></script>
     <script src="assets/js/cdp-header.js"></script>
+    <script src="assets/js/supabase-config.js"></script>
+    <script src="assets/js/supabase-client.js"></script>
+    <script src="assets/js/home-products.js"></script>
     <script>feather.replace();</script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">
   </body>

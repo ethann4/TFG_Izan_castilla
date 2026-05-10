@@ -25,7 +25,7 @@ const productList = [
     finishes: ["Carbono galaxy", "Cuero perforado", "Pantalla RPM", "Costura negra"],
     fitment: ["BMW E46", "M3 style", "Plug and play"],
     specs: ["Pantalla LED integrada en el aro", "Parte superior en carbono acabado galaxy", "Agarre lateral reforzado", "Marcador central deportivo", "Configuracion artesanal"],
-    gallery: ["assets/img/gallery/E46/cuero_achtadao/portada.jpeg", "assets/img/gallery/E46/cuero_achtadao/inclinada.jpeg", "assets/img/gallery/E46/cuero_achtadao/lateral.jpeg"],
+    gallery: ["assets/img/gallery/E46/cuero_achtadao/portada.jpeg", "assets/img/gallery/E46/cuero_achtadao/inclinada.jpeg", "assets/img/gallery/E46/cuero_achtadao/vista_x2.jpeg"],
   },
   {
     id: "e90-alcantara-rpm-amarillo",
@@ -305,7 +305,7 @@ const productList = [
     finishes: ["Carbono", "Cuero nappa", "Costura negra"],
     fitment: ["Clase A", "Clase C", "AMG Line"],
     specs: ["Compatibilidad por modelo", "Galeria demo reemplazable", "Preparado para ficha dinamica PHP", "Campos de acabado normalizados", "CTA listo para consulta"],
-    gallery: ["assets/img/gallery/F82/F82_Carbono_cuero.png", "assets/img/gallery/MERCEDES.png", "assets/img/gallery/F82/F82_cuero.png", "assets/img/gallery/F82/f82_cuero_metalico.png"],
+    gallery: ["assets/img/gallery/AMG/cortada.jpeg", "assets/img/gallery/AMG/centrada.jpeg", "assets/img/gallery/AMG/LATERAL.jpeg", "assets/img/gallery/MERCEDES.png"],
   },
   {
     id: "volkswagen-gti-cuero-rojo",
@@ -417,4 +417,3 @@ if (whatsappCta) {
 }
 
 if (window.feather) feather.replace();
-

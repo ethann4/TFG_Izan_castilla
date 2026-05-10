@@ -14,6 +14,9 @@
   const requestCount = document.querySelector("[data-requests-count]");
   const adminState = document.querySelector("[data-admin-state]");
   const productFormTitle = document.querySelector("[data-product-form-title]");
+  const importProductsButton = document.querySelector("[data-import-photo-products]");
+  const importProductsStatus = document.querySelector("[data-import-products-status]");
+  const productSeed = Array.isArray(window.CDP_PRODUCT_SEED) ? window.CDP_PRODUCT_SEED : [];
 
   let products = [];
 
@@ -52,6 +55,12 @@
   };
 
   const getSession = () => supabase?.getSession();
+  const normalizeSlug = (value) => (value || "").toString().toLowerCase();
+
+  const findExistingProduct = (seedProduct) => {
+    const slug = normalizeSlug(seedProduct.slug);
+    return products.find((product) => product.slug === seedProduct.slug) || products.find((product) => normalizeSlug(product.slug) === slug);
+  };
 
   const updateSessionUi = () => {
     const session = getSession();
@@ -179,6 +188,7 @@
               <div class="admin-table-actions">
                 <button class="admin-mini-btn" type="button" data-edit-product="${escapeHtml(product.id)}">Editar</button>
                 <button class="admin-mini-btn" type="button" data-toggle-product="${escapeHtml(product.id)}">${product.activo ? "Desactivar" : "Activar"}</button>
+                <button class="admin-mini-btn is-danger" type="button" data-delete-product="${escapeHtml(product.id)}">Eliminar</button>
               </div>
             </td>
           </tr>
@@ -234,6 +244,60 @@
     }
   };
 
+  const importPhotoProducts = async () => {
+    if (!productSeed.length) {
+      setStatus(importProductsStatus, "No hay productos de fotos preparados para importar.", "error");
+      return;
+    }
+
+    if (!getSession()) {
+      setStatus(importProductsStatus, "Inicia sesion como admin antes de importar productos.", "error");
+      return;
+    }
+
+    if (!products.length) await loadProducts();
+
+    let created = 0;
+    let updated = 0;
+    const failures = [];
+
+    if (importProductsButton) importProductsButton.disabled = true;
+
+    for (const [index, seedProduct] of productSeed.entries()) {
+      const position = `${index + 1}/${productSeed.length}`;
+      const existingProduct = findExistingProduct(seedProduct);
+      const payload = {
+        ...seedProduct,
+        slug: existingProduct?.slug || seedProduct.slug,
+        actualizado_en: new Date().toISOString(),
+      };
+
+      try {
+        setStatus(importProductsStatus, `Importando ${position}: ${seedProduct.nombre}`, "info");
+        if (existingProduct) {
+          await supabase.updateProduct(existingProduct.id, payload);
+          updated += 1;
+        } else {
+          await supabase.createProduct(payload);
+          created += 1;
+        }
+      } catch (error) {
+        console.warn(`No se pudo importar ${seedProduct.slug}.`, error);
+        failures.push(seedProduct.nombre);
+      }
+    }
+
+    await loadProducts();
+    if (importProductsButton) importProductsButton.disabled = false;
+
+    if (failures.length) {
+      setStatus(importProductsStatus, `Importacion parcial: ${created} nuevos, ${updated} actualizados, ${failures.length} con error. Revisa permisos o slugs repetidos.`, "error");
+      return;
+    }
+
+    setStatus(importProductsStatus, `Importacion completada: ${created} productos nuevos y ${updated} actualizados desde fotos.`, "success");
+  };
+
   loginForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const data = new FormData(loginForm);
@@ -287,10 +351,12 @@
   document.querySelector("[data-product-reset]")?.addEventListener("click", resetProductForm);
   document.querySelector("[data-products-refresh]")?.addEventListener("click", loadProducts);
   document.querySelector("[data-requests-refresh]")?.addEventListener("click", loadRequests);
+  importProductsButton?.addEventListener("click", importPhotoProducts);
 
   productsTable?.addEventListener("click", async (event) => {
     const editButton = event.target.closest("[data-edit-product]");
     const toggleButton = event.target.closest("[data-toggle-product]");
+    const deleteButton = event.target.closest("[data-delete-product]");
 
     if (editButton) {
       const product = products.find((item) => item.id === editButton.dataset.editProduct);
@@ -303,6 +369,24 @@
       if (!product) return;
       await supabase.updateProduct(product.id, { activo: !product.activo, actualizado_en: new Date().toISOString() });
       await loadProducts();
+      return;
+    }
+
+    if (deleteButton) {
+      const product = products.find((item) => item.id === deleteButton.dataset.deleteProduct);
+      if (!product) return;
+      const confirmed = window.confirm(`Eliminar definitivamente "${product.nombre}" de Supabase?`);
+      if (!confirmed) return;
+
+      try {
+        setStatus(importProductsStatus || productStatus, `Eliminando ${product.nombre}...`, "info");
+        await supabase.deleteProduct(product.id);
+        await loadProducts();
+        setStatus(importProductsStatus || productStatus, `Producto eliminado: ${product.nombre}.`, "success");
+      } catch (error) {
+        console.warn("No se pudo eliminar el producto.", error);
+        setStatus(importProductsStatus || productStatus, "No se pudo eliminar. Revisa permisos admin o politicas RLS.", "error");
+      }
     }
   });
 

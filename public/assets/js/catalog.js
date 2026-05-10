@@ -14,6 +14,11 @@
   if (!catalog) return;
 
   const productGrid = catalog.querySelector("#catalogo-grid");
+  if (!productGrid) return;
+
+  const renderCatalogMessage = (message) => {
+    productGrid.innerHTML = `<div class="catalog-grid-message">${escapeHtml(message)}</div>`;
+  };
 
   const renderProductCard = (product) => {
     const image = product.gallery[0] || "assets/img/logo_cdp_transparente.png";
@@ -42,16 +47,23 @@
   };
 
   const loadSupabaseCatalog = async () => {
-    if (!productGrid || !window.CDPSupabase?.isConfigured()) return;
+    if (!window.CDPSupabase?.isConfigured()) {
+      renderCatalogMessage("Configura Supabase para cargar los productos del catalogo.");
+      return;
+    }
 
     try {
       const products = await window.CDPSupabase.listProducts();
-      if (!products.length) return;
+      if (!products.length) {
+        renderCatalogMessage("No hay productos guardados en Supabase. Ejecuta database/supabase_seed.sql para rellenar el catalogo.");
+        return;
+      }
       productGrid.innerHTML = products.map(renderProductCard).join("");
       catalog.dataset.source = "supabase";
       if (window.feather) feather.replace();
     } catch (error) {
-      console.warn("No se pudo cargar el catalogo desde Supabase. Se mantiene el catalogo local.", error);
+      console.warn("No se pudo cargar el catalogo desde Supabase.", error);
+      renderCatalogMessage("No se pudo cargar el catalogo desde Supabase. Revisa la conexion y las claves del proyecto.");
     }
   };
 
@@ -66,6 +78,19 @@
   const resetButtons = Array.from(catalog.querySelectorAll("[data-reset-filters]"));
   const priceRange = catalog.querySelector("[data-filter-price]");
   const priceOutput = catalog.querySelector("[data-price-output]");
+  const productsPerPage = 6;
+  let currentPage = 1;
+  const paginationControls = document.createElement("nav");
+  paginationControls.className = "catalog-pagination";
+  paginationControls.setAttribute("aria-label", "Paginacion de productos");
+  paginationControls.hidden = true;
+  productGrid.insertAdjacentElement("afterend", paginationControls);
+
+  if (!productCards.length) {
+    if (resultsCounter) resultsCounter.textContent = "0 resultado(s)";
+    if (emptyState) emptyState.hidden = true;
+    return;
+  }
 
   const cardData = productCards.map((card) => {
     const dataset = card.dataset;
@@ -125,40 +150,96 @@
     });
   };
 
-  const applyFilters = () => {
-    const state = getState();
-    let visibleCount = 0;
+  const renderPagination = (totalItems, totalPages) => {
+    if (!paginationControls) return;
 
-    cardData.forEach((item) => {
-      const visible =
+    if (totalItems <= productsPerPage) {
+      paginationControls.hidden = true;
+      paginationControls.innerHTML = "";
+      return;
+    }
+
+    const pageButtons = Array.from({ length: totalPages }, (_, index) => {
+      const page = index + 1;
+      const isActive = page === currentPage;
+      return `<button class="catalog-page-btn${isActive ? " is-active" : ""}" type="button" data-catalog-page="${page}" aria-label="Ir a pagina ${page}"${isActive ? ' aria-current="page"' : ""}>${page}</button>`;
+    }).join("");
+
+    paginationControls.hidden = false;
+    paginationControls.innerHTML = `
+      <button class="catalog-page-btn catalog-page-step" type="button" data-catalog-page="prev"${currentPage === 1 ? " disabled" : ""}>
+        <span data-feather="chevron-left"></span>
+        Anterior
+      </button>
+      <div class="catalog-page-numbers">${pageButtons}</div>
+      <button class="catalog-page-btn catalog-page-step" type="button" data-catalog-page="next"${currentPage === totalPages ? " disabled" : ""}>
+        Siguiente
+        <span data-feather="chevron-right"></span>
+      </button>
+    `;
+
+    if (window.feather) feather.replace();
+  };
+
+  const applyFilters = ({ resetPage = false } = {}) => {
+    const state = getState();
+    if (resetPage) currentPage = 1;
+
+    const filteredItems = cardData.filter(
+      (item) =>
         matchesSearch(item, state.search) &&
         (!state.brand || item.brand === state.brand) &&
         (!state.model || item.model.includes(state.model)) &&
         matchesMulti(item.material, state.materials) &&
         matchesMulti(item.color, state.colors) &&
-        item.price <= state.maxPrice;
+        item.price <= state.maxPrice
+    );
 
-      item.card.hidden = !visible;
-      if (visible) visibleCount += 1;
+    const visibleCount = filteredItems.length;
+    const totalPages = Math.max(1, Math.ceil(visibleCount / productsPerPage));
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const pageStart = (currentPage - 1) * productsPerPage;
+    const visiblePageItems = new Set(filteredItems.slice(pageStart, pageStart + productsPerPage));
+
+    cardData.forEach((item) => {
+      item.card.hidden = !visiblePageItems.has(item);
     });
 
-    if (resultsCounter) resultsCounter.textContent = `${visibleCount} resultado(s)`;
+    if (resultsCounter) {
+      resultsCounter.textContent = visibleCount
+        ? `${visibleCount} resultado(s) - Pagina ${currentPage} de ${totalPages}`
+        : "0 resultado(s)";
+    }
     if (emptyState) emptyState.hidden = visibleCount > 0;
     setActiveQuickFilters(state);
     updatePriceOutput();
+    renderPagination(visibleCount, totalPages);
   };
 
   const resetFilters = () => {
     if (searchInput) searchInput.value = "";
     if (filterForm) filterForm.reset();
     if (priceRange) priceRange.value = priceRange.max;
-    applyFilters();
+    applyFilters({ resetPage: true });
   };
 
-  searchInput?.addEventListener("input", applyFilters);
-  filterForm?.addEventListener("input", applyFilters);
-  filterForm?.addEventListener("change", applyFilters);
+  searchInput?.addEventListener("input", () => applyFilters({ resetPage: true }));
+  filterForm?.addEventListener("input", () => applyFilters({ resetPage: true }));
+  filterForm?.addEventListener("change", () => applyFilters({ resetPage: true }));
   resetButtons.forEach((button) => button.addEventListener("click", resetFilters));
+  paginationControls.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-catalog-page]");
+    if (!button || button.disabled) return;
+
+    const action = button.dataset.catalogPage;
+    if (action === "prev") currentPage -= 1;
+    else if (action === "next") currentPage += 1;
+    else currentPage = toNumber(action);
+
+    applyFilters();
+    productGrid.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 
   quickFilters.forEach((button) => {
     button.addEventListener("click", () => {
@@ -178,7 +259,7 @@
       }
       if (type === "search" && searchInput) searchInput.value = value;
 
-      applyFilters();
+      applyFilters({ resetPage: true });
     });
   });
 
@@ -188,5 +269,5 @@
   if (query.has("q") && searchInput) searchInput.value = query.get("q");
 
   if (priceRange) priceRange.value = priceRange.max;
-  applyFilters();
+  applyFilters({ resetPage: true });
 })();

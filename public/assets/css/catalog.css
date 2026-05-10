@@ -255,6 +255,15 @@ body.catalog-page {
   display: none;
 }
 
+.catalog-grid-message {
+  grid-column: 1 / -1;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
 .product-media {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
   border-radius: 8px;
@@ -389,6 +398,59 @@ body.catalog-page {
   padding: 1rem;
 }
 
+.catalog-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.catalog-page-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.catalog-page-btn {
+  min-width: 2.75rem;
+  height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.055);
+  color: #f5f5f5;
+  border-radius: 8px;
+  font-weight: 800;
+  line-height: 1;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.catalog-page-btn:hover,
+.catalog-page-btn.is-active {
+  background: #d62828;
+  border-color: #d62828;
+  color: #fff;
+}
+
+.catalog-page-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.catalog-page-btn:disabled:hover {
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.catalog-page-step {
+  min-width: 7.5rem;
+  padding: 0 0.9rem;
+}
+
 @media (max-width: 1199.98px) {
   .product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -442,5 +504,14 @@ body.catalog-page {
 
   .product-price {
     text-align: left;
+  }
+
+  .catalog-pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .catalog-page-step {
+    width: 100%;
   }
 }

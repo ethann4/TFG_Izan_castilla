@@ -199,8 +199,12 @@
                     <div class="cdp-section-kicker">Catalogo</div>
                     <h2>Productos guardados</h2>
                   </div>
-                  <button class="btn btn-outline-primary btn-sm" type="button" data-products-refresh>Actualizar</button>
+                  <div class="admin-heading-actions">
+                    <button class="btn btn-primary btn-sm" type="button" data-import-photo-products>Importar fotos</button>
+                    <button class="btn btn-outline-primary btn-sm" type="button" data-products-refresh>Actualizar</button>
+                  </div>
                 </div>
+                <div class="admin-status admin-import-status" data-import-products-status hidden></div>
                 <div class="table-responsive">
                   <table class="table admin-table align-middle">
                     <thead>
@@ -259,6 +263,7 @@
     <script src="../assets/js/theme.js"></script>
     <script src="../assets/js/supabase-config.js"></script>
     <script src="../assets/js/supabase-client.js"></script>
+    <script src="../assets/js/product-seed-data.js"></script>
     <script src="../assets/js/admin.js"></script>
     <script>feather.replace();</script>
   </body>

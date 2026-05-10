@@ -195,9 +195,16 @@
       useSession: true,
     });
 
+  const deleteProduct = async (id) =>
+    request(`/rest/v1/productos?id=eq.${encodeURIComponent(id)}`, {
+      method: "DELETE",
+      useSession: true,
+    });
+
   window.CDPSupabase = {
     createSolicitud,
     createProduct,
+    deleteProduct,
     escapeHtml,
     getProductBySlug,
     getSession,

@@ -255,13 +255,43 @@ body {
 .cdp-footer {
   background-color: #030303;
   background-image:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.44)),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.54), rgba(0, 0, 0, 0.78)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.52) 48%, rgba(0, 0, 0, 0.8) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.68) 0%, rgba(0, 0, 0, 0.42) 45%, rgba(0, 0, 0, 0.84) 100%),
     url("../img/gallery/bmw_hero_banner.jpg");
-  background-position: center bottom;
+  background-position: center 56%;
   background-size: cover;
   border-top: 1px solid var(--cdp-border);
   color: var(--cdp-muted);
+}
+
+.cdp-footer.py-7 {
+  padding-bottom: 4.4rem !important;
+  padding-top: 5.1rem !important;
+}
+
+.cdp-footer .container {
+  max-width: min(100% - 3rem, 1448px);
+}
+
+.cdp-footer .row {
+  align-items: flex-start;
+}
+
+.cdp-footer .footer-logo {
+  display: block;
+  height: 54px;
+  width: auto;
+}
+
+.cdp-footer .footer-logo.mb-3 {
+  margin-bottom: 2rem !important;
+}
+
+.cdp-footer p,
+.cdp-footer li,
+.cdp-footer span {
+  color: rgba(235, 235, 235, 0.68);
+  line-height: 1.55;
 }
 
 .cdp-footer a {
@@ -279,6 +309,12 @@ body {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.cdp-footer .border-bottom {
+  border-color: rgba(255, 255, 255, 0.34) !important;
+  margin-bottom: 1.75rem !important;
+  margin-top: 2.85rem !important;
 }
 
 .cdp-form-control,

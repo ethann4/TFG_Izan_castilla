@@ -147,6 +147,13 @@ body.admin-page {
   margin-bottom: 1rem;
 }
 
+.admin-heading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
 .admin-product-form {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -191,6 +198,10 @@ body.admin-page {
   border-color: rgba(214, 40, 40, 0.42);
 }
 
+.admin-import-status {
+  margin-bottom: 1rem;
+}
+
 .admin-table {
   color: #e8e8e8;
 }
@@ -226,6 +237,16 @@ body.admin-page {
 
 .admin-mini-btn:hover {
   border-color: rgba(214, 40, 40, 0.55);
+  color: #fff;
+}
+
+.admin-mini-btn.is-danger {
+  border-color: rgba(214, 40, 40, 0.55);
+  color: #ff7a7a;
+}
+
+.admin-mini-btn.is-danger:hover {
+  background: rgba(214, 40, 40, 0.18);
   color: #fff;
 }
 
