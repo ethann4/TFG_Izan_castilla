@@ -1,5 +1,5 @@
 (function () {
-  const supabase = window.CDPSupabase;
+  const backend = window.CDPBackend;
   const loginPanel = document.querySelector("[data-admin-login]");
   const dashboard = document.querySelector("[data-admin-dashboard]");
   const loginForm = document.querySelector("[data-login-form]");
@@ -31,7 +31,7 @@
     if (node) node.hidden = true;
   };
 
-  const escapeHtml = (value) => supabase?.escapeHtml(value) || "";
+  const escapeHtml = (value) => backend?.escapeHtml(value) || "";
 
   const slugify = (value) =>
     (value || "")
@@ -54,7 +54,7 @@
     return `${new Intl.NumberFormat("es-ES").format(number)} EUR`;
   };
 
-  const getSession = () => supabase?.getSession();
+  const getSession = () => backend?.getSession();
   const normalizeSlug = (value) => (value || "").toString().toLowerCase();
 
   const findExistingProduct = (seedProduct) => {
@@ -221,13 +221,13 @@
   };
 
   const loadProducts = async () => {
-    products = await supabase.listProductsAdmin();
+    products = await backend.listProductsAdmin();
     renderProducts();
     if (productCount) productCount.textContent = products.length;
   };
 
   const loadRequests = async () => {
-    const requests = await supabase.listSolicitudes();
+    const requests = await backend.listSolicitudes();
     renderRequests(requests);
     if (requestCount) requestCount.textContent = requests.length;
   };
@@ -240,7 +240,7 @@
     } catch (error) {
       console.warn("No se pudieron cargar los datos admin.", error);
       if (adminState) adminState.textContent = "ERROR";
-      setStatus(productStatus, "No se pudieron cargar los datos. Comprueba que tu usuario esta en perfiles_admin.", "error");
+      setStatus(productStatus, "No se pudieron cargar los datos. Comprueba tu sesion admin y las tablas MySQL.", "error");
     }
   };
 
@@ -275,10 +275,10 @@
       try {
         setStatus(importProductsStatus, `Importando ${position}: ${seedProduct.nombre}`, "info");
         if (existingProduct) {
-          await supabase.updateProduct(existingProduct.id, payload);
+          await backend.updateProduct(existingProduct.id, payload);
           updated += 1;
         } else {
-          await supabase.createProduct(payload);
+          await backend.createProduct(payload);
           created += 1;
         }
       } catch (error) {
@@ -303,7 +303,7 @@
     const data = new FormData(loginForm);
     try {
       setStatus(loginStatus, "Iniciando sesion...", "info");
-      await supabase.login(data.get("email"), data.get("password"));
+      await backend.login(data.get("email"), data.get("password"));
       hideStatus(loginStatus);
       updateSessionUi();
     } catch (error) {
@@ -313,7 +313,7 @@
   });
 
   logoutButton?.addEventListener("click", () => {
-    supabase.logout();
+    backend.logout();
     updateSessionUi();
   });
 
@@ -337,8 +337,8 @@
 
     try {
       setStatus(productStatus, "Guardando producto...", "info");
-      if (id) await supabase.updateProduct(id, payload);
-      else await supabase.createProduct(payload);
+      if (id) await backend.updateProduct(id, payload);
+      else await backend.createProduct(payload);
       setStatus(productStatus, id ? "Producto actualizado correctamente." : "Producto creado correctamente.", "success");
       resetProductForm();
       await loadProducts();
@@ -367,7 +367,7 @@
     if (toggleButton) {
       const product = products.find((item) => item.id === toggleButton.dataset.toggleProduct);
       if (!product) return;
-      await supabase.updateProduct(product.id, { activo: !product.activo, actualizado_en: new Date().toISOString() });
+      await backend.updateProduct(product.id, { activo: !product.activo, actualizado_en: new Date().toISOString() });
       await loadProducts();
       return;
     }
@@ -375,23 +375,23 @@
     if (deleteButton) {
       const product = products.find((item) => item.id === deleteButton.dataset.deleteProduct);
       if (!product) return;
-      const confirmed = window.confirm(`Eliminar definitivamente "${product.nombre}" de Supabase?`);
+      const confirmed = window.confirm(`Eliminar definitivamente "${product.nombre}" de MySQL?`);
       if (!confirmed) return;
 
       try {
         setStatus(importProductsStatus || productStatus, `Eliminando ${product.nombre}...`, "info");
-        await supabase.deleteProduct(product.id);
+        await backend.deleteProduct(product.id);
         await loadProducts();
         setStatus(importProductsStatus || productStatus, `Producto eliminado: ${product.nombre}.`, "success");
       } catch (error) {
         console.warn("No se pudo eliminar el producto.", error);
-        setStatus(importProductsStatus || productStatus, "No se pudo eliminar. Revisa permisos admin o politicas RLS.", "error");
+        setStatus(importProductsStatus || productStatus, "No se pudo eliminar. Revisa la sesion admin o la base de datos.", "error");
       }
     }
   });
 
-  if (!supabase?.isConfigured()) {
-    setStatus(loginStatus, "Falta configurar Supabase en supabase-config.js.", "error");
+  if (!backend?.isConfigured()) {
+    setStatus(loginStatus, "Abre la web desde XAMPP para usar el backend PHP/MySQL.", "error");
   }
 
   updateSessionUi();

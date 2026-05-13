@@ -15,8 +15,8 @@
     setText("productSummary", message);
   };
 
-  if (!window.CDPSupabase?.isConfigured()) {
-    showUnavailableProduct("Configura Supabase para cargar esta ficha desde la tabla productos.");
+  if (!window.CDPBackend?.isConfigured()) {
+    showUnavailableProduct("Abre la web desde XAMPP para cargar esta ficha desde MySQL.");
     return;
   }
 
@@ -39,7 +39,7 @@
     if (!value) return 0;
     return Number(
       value
-        .replace(/\s|EUR|€/gi, "")
+        .replace(/\s|EUR|â‚¬/gi, "")
         .replace(/\.(?=\d{3}(?:[^\d]|$))/g, "")
         .replace(/,/g, ".")
     );
@@ -53,9 +53,9 @@
   };
 
   try {
-    const product = await window.CDPSupabase.getProductBySlug(slug);
+    const product = await window.CDPBackend.getProductBySlug(slug);
     if (!product) {
-      showUnavailableProduct("Este producto no existe en Supabase. Ejecuta database/supabase_seed.sql para rellenar la tabla productos.");
+      showUnavailableProduct("Este producto no existe en MySQL. Importa productos desde el panel admin.");
       return;
     }
 
@@ -125,7 +125,7 @@
 
     if (window.feather) feather.replace();
   } catch (error) {
-    console.warn("No se pudo cargar el producto desde Supabase.", error);
-    showUnavailableProduct("No se pudo cargar el producto desde Supabase. Revisa la conexion y las claves del proyecto.");
+    console.warn("No se pudo cargar el producto desde MySQL.", error);
+    showUnavailableProduct("No se pudo cargar el producto desde MySQL. Revisa XAMPP, la base de datos y las tablas.");
   }
 })();

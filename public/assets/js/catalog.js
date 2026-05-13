@@ -8,7 +8,7 @@
       .trim();
 
   const toNumber = (value) => Number.parseFloat(value || "0") || 0;
-  const escapeHtml = (value) => window.CDPSupabase?.escapeHtml(value) || "";
+  const escapeHtml = (value) => window.CDPBackend?.escapeHtml(value) || "";
 
   const catalog = document.querySelector("[data-catalog]");
   if (!catalog) return;
@@ -46,28 +46,28 @@
     `;
   };
 
-  const loadSupabaseCatalog = async () => {
-    if (!window.CDPSupabase?.isConfigured()) {
-      renderCatalogMessage("Configura Supabase para cargar los productos del catalogo.");
+  const loadBackendCatalog = async () => {
+    if (!window.CDPBackend?.isConfigured()) {
+      renderCatalogMessage("Abre la web desde XAMPP para cargar los productos del catalogo.");
       return;
     }
 
     try {
-      const products = await window.CDPSupabase.listProducts();
+      const products = await window.CDPBackend.listProducts();
       if (!products.length) {
-        renderCatalogMessage("No hay productos guardados en Supabase. Ejecuta database/supabase_seed.sql para rellenar el catalogo.");
+        renderCatalogMessage("No hay productos guardados en MySQL. Importa productos desde el panel admin.");
         return;
       }
       productGrid.innerHTML = products.map(renderProductCard).join("");
-      catalog.dataset.source = "supabase";
+      catalog.dataset.source = "mysql";
       if (window.feather) feather.replace();
     } catch (error) {
-      console.warn("No se pudo cargar el catalogo desde Supabase.", error);
-      renderCatalogMessage("No se pudo cargar el catalogo desde Supabase. Revisa la conexion y las claves del proyecto.");
+      console.warn("No se pudo cargar el catalogo desde MySQL.", error);
+      renderCatalogMessage("No se pudo cargar el catalogo desde MySQL. Revisa XAMPP, la base de datos y las tablas.");
     }
   };
 
-  await loadSupabaseCatalog();
+  await loadBackendCatalog();
 
   const searchInput = catalog.querySelector("[data-catalog-search]");
   const productCards = Array.from(catalog.querySelectorAll(".product-card"));

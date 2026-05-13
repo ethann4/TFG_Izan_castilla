@@ -40,7 +40,7 @@
             <div class="col-lg-8">
               <div class="cdp-section-kicker">Gestion privada</div>
               <h1 class="cdp-section-title">Panel admin</h1>
-              <p class="cdp-section-copy">Crea productos, edita el catalogo y revisa solicitudes guardadas en Supabase.</p>
+              <p class="cdp-section-copy">Crea productos, edita el catalogo y revisa solicitudes guardadas en MySQL.</p>
             </div>
             <div class="col-lg-4 text-lg-end">
               <span class="admin-session-chip" data-admin-session>Sesion no iniciada</span>
@@ -51,7 +51,7 @@
             <div>
               <div class="cdp-section-kicker">Acceso admin</div>
               <h2>Inicia sesion</h2>
-              <p>Usa un usuario creado en Supabase Auth y marcado como admin en la tabla <code>perfiles_admin</code>.</p>
+              <p>Usa un usuario creado en la tabla <code>admin_users</code> de MySQL.</p>
             </div>
             <form class="admin-login-form" data-login-form>
               <label>
@@ -261,8 +261,7 @@
     <script src="../vendors/is/is.min.js"></script>
     <script src="../vendors/feather-icons/feather.min.js"></script>
     <script src="../assets/js/theme.js"></script>
-    <script src="../assets/js/supabase-config.js"></script>
-    <script src="../assets/js/supabase-client.js"></script>
+    <script src="../assets/js/backend-client.js"></script>
     <script src="../assets/js/product-seed-data.js"></script>
     <script src="../assets/js/admin.js"></script>
     <script>feather.replace();</script>

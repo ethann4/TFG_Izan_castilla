@@ -2,7 +2,7 @@
   const carouselInner = document.querySelector("[data-home-products]");
   if (!carouselInner) return;
 
-  const escapeHtml = (value) => window.CDPSupabase?.escapeHtml(value) || "";
+  const escapeHtml = (value) => window.CDPBackend?.escapeHtml(value) || "";
 
   const renderMessage = (message) => {
     carouselInner.innerHTML = `
@@ -34,15 +34,15 @@
     return chunks;
   };
 
-  if (!window.CDPSupabase?.isConfigured()) {
-    renderMessage("Configura Supabase para mostrar los productos destacados.");
+  if (!window.CDPBackend?.isConfigured()) {
+    renderMessage("Abre la web desde XAMPP para mostrar los productos destacados.");
     return;
   }
 
   try {
-    const products = await window.CDPSupabase.listProducts();
+    const products = await window.CDPBackend.listProducts();
     if (!products.length) {
-      renderMessage("Ejecuta database/supabase_seed.sql para cargar los productos destacados.");
+      renderMessage("Importa productos desde el panel admin para mostrar destacados.");
       return;
     }
 
@@ -59,6 +59,6 @@
       .join("");
   } catch (error) {
     console.warn("No se pudieron cargar los productos destacados.", error);
-    renderMessage("No se pudieron cargar los productos destacados desde Supabase.");
+    renderMessage("No se pudieron cargar los productos destacados desde MySQL.");
   }
 })();

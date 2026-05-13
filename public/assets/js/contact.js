@@ -22,8 +22,8 @@
       return;
     }
 
-    if (!window.CDPSupabase?.isConfigured()) {
-      setStatus("Faltan las claves de Supabase en assets/js/supabase-config.js.", "error");
+    if (!window.CDPBackend?.isConfigured()) {
+      setStatus("Abre la web desde XAMPP para guardar solicitudes en MySQL.", "error");
       return;
     }
 
@@ -42,12 +42,12 @@
 
     try {
       setStatus("Enviando solicitud...", "info");
-      await window.CDPSupabase.createSolicitud(payload);
+      await window.CDPBackend.createSolicitud(payload);
       form.reset();
-      setStatus("Solicitud guardada correctamente en Supabase.", "success");
+      setStatus("Solicitud guardada correctamente en MySQL.", "success");
     } catch (error) {
-      console.warn("Error guardando solicitud en Supabase.", error);
-      setStatus("No se pudo guardar la solicitud. Revisa la tabla y las politicas RLS.", "error");
+      console.warn("Error guardando solicitud en MySQL.", error);
+      setStatus("No se pudo guardar la solicitud. Revisa XAMPP, la tabla solicitudes y la conexion.", "error");
     }
   });
 })();
