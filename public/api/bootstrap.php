@@ -4,7 +4,19 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../config/database.php';
 
+ini_set('session.use_strict_mode', '1');
+ini_set('session.cookie_httponly', '1');
+ini_set('session.cookie_samesite', 'Lax');
+
 session_name('cdp_wheels_admin');
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'domain' => '',
+    'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on',
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
 session_start();
 
 header('Content-Type: application/json; charset=utf-8');
@@ -50,9 +62,37 @@ function require_method(array $allowed): void
 
 function current_admin(): ?array
 {
-    return isset($_SESSION['admin_user']) && is_array($_SESSION['admin_user'])
-        ? $_SESSION['admin_user']
+    if (!isset($_SESSION['admin_user']) || !is_array($_SESSION['admin_user'])) {
+        return null;
+    }
+
+    $admin = $_SESSION['admin_user'];
+    $customer = isset($_SESSION['cliente_user']) && is_array($_SESSION['cliente_user'])
+        ? $_SESSION['cliente_user']
         : null;
+
+    if (
+        $customer
+        && mb_strtolower((string) ($admin['email'] ?? '')) !== mb_strtolower((string) ($customer['email'] ?? ''))
+    ) {
+        unset($_SESSION['admin_user']);
+        return null;
+    }
+
+    return $admin;
+}
+
+function admin_email_matches_customer(?array $admin, string $customerEmail): bool
+{
+    return $admin
+        && mb_strtolower((string) ($admin['email'] ?? '')) === mb_strtolower($customerEmail);
+}
+
+function clear_mismatched_admin_session(string $customerEmail): void
+{
+    if (!admin_email_matches_customer(current_admin(), $customerEmail)) {
+        unset($_SESSION['admin_user']);
+    }
 }
 
 function require_admin(): array
@@ -64,6 +104,59 @@ function require_admin(): array
     }
 
     return $admin;
+}
+
+function current_customer(): ?array
+{
+    return isset($_SESSION['cliente_user']) && is_array($_SESSION['cliente_user'])
+        ? $_SESSION['cliente_user']
+        : null;
+}
+
+function require_customer(): array
+{
+    $customer = current_customer();
+
+    if (!$customer) {
+        send_json(['error' => 'Sesion de cliente requerida.'], 401);
+    }
+
+    return $customer;
+}
+
+function normalize_customer_record(array $record): array
+{
+    return [
+        'id' => (string) $record['id'],
+        'nombre' => (string) $record['nombre'],
+        'email' => (string) $record['email'],
+        'telefono' => $record['telefono'] ?? '',
+    ];
+}
+
+function validate_slug(string $slug): void
+{
+    if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $slug)) {
+        send_json(['error' => 'El slug solo puede contener minusculas, numeros y guiones.'], 422);
+    }
+}
+
+function validate_email(string $email): void
+{
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        send_json(['error' => 'Email no valido.'], 422);
+    }
+}
+
+function validate_password(string $password): void
+{
+    if (mb_strlen($password) < 8) {
+        send_json(['error' => 'La contrasena debe tener al menos 8 caracteres.'], 422);
+    }
+
+    if (mb_strlen($password) > 120) {
+        send_json(['error' => 'La contrasena es demasiado larga.'], 422);
+    }
 }
 
 function clean_string(mixed $value, int $maxLength = 255): string
@@ -218,4 +311,33 @@ function product_payload(array $data, bool $creating): array
     }
 
     return $payload;
+}
+
+function validate_product_payload(array $payload, bool $creating): void
+{
+    if (($creating || array_key_exists('slug', $payload)) && clean_string($payload['slug'] ?? '') === '') {
+        send_json(['error' => 'El slug es obligatorio.'], 422);
+    }
+
+    if (isset($payload['slug'])) {
+        validate_slug((string) $payload['slug']);
+    }
+
+    foreach (['marca', 'nombre'] as $requiredField) {
+        if (($creating || array_key_exists($requiredField, $payload)) && clean_string($payload[$requiredField] ?? '') === '') {
+            send_json(['error' => "El campo {$requiredField} es obligatorio."], 422);
+        }
+    }
+
+    if (array_key_exists('precio', $payload) && (float) $payload['precio'] < 0) {
+        send_json(['error' => 'El precio no puede ser negativo.'], 422);
+    }
+
+    if (array_key_exists('precio_anterior', $payload) && $payload['precio_anterior'] !== null && (float) $payload['precio_anterior'] < 0) {
+        send_json(['error' => 'El precio anterior no puede ser negativo.'], 422);
+    }
+
+    if (array_key_exists('stock', $payload) && (int) $payload['stock'] < 0) {
+        send_json(['error' => 'El stock no puede ser negativo.'], 422);
+    }
 }

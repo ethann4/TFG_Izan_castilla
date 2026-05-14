@@ -14,6 +14,10 @@ if (!$email || $password === '') {
     send_json(['error' => 'Email y contrasena son obligatorios.'], 422);
 }
 
+if (mb_strlen($password) > 120) {
+    send_json(['error' => 'Credenciales incorrectas.'], 401);
+}
+
 $pdo = get_pdo();
 $stmt = $pdo->prepare('SELECT id, email, nombre, password_hash, activo FROM admin_users WHERE email = :email LIMIT 1');
 $stmt->execute(['email' => $email]);
@@ -29,6 +33,8 @@ $user = [
     'nombre' => $admin['nombre'],
 ];
 
+session_regenerate_id(true);
+unset($_SESSION['cliente_user']);
 $_SESSION['admin_user'] = $user;
 
 $update = $pdo->prepare('UPDATE admin_users SET ultimo_acceso = NOW() WHERE id = :id');

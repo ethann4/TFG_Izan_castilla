@@ -61,6 +61,40 @@ CREATE TABLE IF NOT EXISTS solicitudes (
   INDEX idx_solicitudes_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS clientes (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(120) NOT NULL,
+  email VARCHAR(160) NOT NULL UNIQUE,
+  telefono VARCHAR(30) NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  activo TINYINT(1) NOT NULL DEFAULT 1,
+  creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  ultimo_acceso DATETIME NULL,
+  INDEX idx_clientes_email (email),
+  INDEX idx_clientes_activo (activo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS carrito_items (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  cliente_id INT UNSIGNED NOT NULL,
+  producto_id INT UNSIGNED NOT NULL,
+  cantidad INT UNSIGNED NOT NULL DEFAULT 1,
+  creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  actualizado_en DATETIME NULL,
+  UNIQUE KEY uniq_carrito_cliente_producto (cliente_id, producto_id),
+  INDEX idx_carrito_cliente (cliente_id),
+  INDEX idx_carrito_producto (producto_id),
+  CONSTRAINT fk_carrito_cliente
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+    ON DELETE CASCADE,
+  CONSTRAINT fk_carrito_producto
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 INSERT INTO admin_users (email, nombre, password_hash)
-VALUES ('admin@cdp.local', 'Administrador CDP', '$2y$10$ab9Uve3Ve.hIkszyw37jJeLyhkDsqMpcGVN0vXCO.R92n8aS.Q7xC')
-ON DUPLICATE KEY UPDATE email = VALUES(email);
+VALUES ('volantescas@gmail.com', 'Administrador CDP', '$2y$10$w3nQCBxf3qHNRMPju8nRxexi4o0Q7NMojnYUXMuDv3U3d0nSYqPpi')
+ON DUPLICATE KEY UPDATE
+  nombre = VALUES(nombre),
+  password_hash = VALUES(password_hash),
+  activo = 1;

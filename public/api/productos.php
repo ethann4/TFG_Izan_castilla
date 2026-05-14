@@ -28,7 +28,9 @@ if ($method === 'GET') {
     $sql = $isAdmin
         ? 'SELECT * FROM productos ORDER BY creado_en DESC'
         : 'SELECT * FROM productos WHERE activo = 1 ORDER BY creado_en DESC';
-    $records = array_map('normalize_product_record', $pdo->query($sql)->fetchAll());
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $records = array_map('normalize_product_record', $stmt->fetchAll());
 
     send_json(['data' => $records]);
 }
@@ -44,6 +46,7 @@ if ($method === 'POST') {
     }
 
     $payload = product_payload($data, true);
+    validate_product_payload($payload, true);
     $columns = array_keys($payload);
     $placeholders = array_map(static fn ($column) => ':' . $column, $columns);
 
@@ -69,6 +72,7 @@ if ($method === 'PATCH' || $method === 'PUT') {
 
     $payload = product_payload($data, false);
     unset($payload['id']);
+    validate_product_payload($payload, false);
 
     if (!$payload) {
         send_json(['error' => 'No hay campos para actualizar.'], 422);

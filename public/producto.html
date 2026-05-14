@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" dir="ltr">
 
   <head>
@@ -16,7 +16,7 @@
     <meta name="theme-color" content="#000000">
     <link href="assets/css/theme.css" rel="stylesheet">
     <link href="assets/css/cdp-common.css" rel="stylesheet">
-    <link href="assets/css/product-page.css" rel="stylesheet">
+    <link href="assets/css/product-page.css?v=cart-1" rel="stylesheet">
   </head>
 
   <body class="product-page">
@@ -48,24 +48,24 @@
             <div class="cdp-navbar-actions d-flex gap-3 align-items-center">
               <div class="cdp-header-tools" aria-label="Preferencias y cuenta">
                 <div class="dropdown">
-                  <button class="cdp-tool-select dropdown-toggle" id="cdpRegionDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="region"><span data-cdp-label>España | EUR €</span><span data-feather="chevron-down"></span></button>
+                  <button class="cdp-tool-select dropdown-toggle" id="cdpRegionDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="region"><span data-cdp-label>EspaÃ±a | EUR â‚¬</span><span data-feather="chevron-down"></span></button>
                   <ul class="cdp-tools-menu dropdown-menu" aria-labelledby="cdpRegionDropdown">
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="España | EUR €">España | EUR €</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="Portugal | EUR €">Portugal | EUR €</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="Francia | EUR €">Francia | EUR €</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="EspaÃ±a | EUR â‚¬">EspaÃ±a | EUR â‚¬</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="Portugal | EUR â‚¬">Portugal | EUR â‚¬</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="Francia | EUR â‚¬">Francia | EUR â‚¬</button></li>
                   </ul>
                 </div>
                 <div class="dropdown">
-                  <button class="cdp-tool-select dropdown-toggle" id="cdpLanguageDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="language"><span data-cdp-label>Español</span><span data-feather="chevron-down"></span></button>
+                  <button class="cdp-tool-select dropdown-toggle" id="cdpLanguageDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="language"><span data-cdp-label>EspaÃ±ol</span><span data-feather="chevron-down"></span></button>
                   <ul class="cdp-tools-menu dropdown-menu" aria-labelledby="cdpLanguageDropdown">
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="Español">Español</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="EspaÃ±ol">EspaÃ±ol</button></li>
                     <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="English">English</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="Français">Français</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="FranÃ§ais">FranÃ§ais</button></li>
                   </ul>
                 </div>
                 <a class="cdp-header-icon" href="Catalogo.html#catalogo" aria-label="Buscar productos"><span data-feather="search"></span></a>
-                <a class="cdp-header-icon" href="admin/index.html" aria-label="Usuario"><span data-feather="user"></span></a>
-                <a class="cdp-header-icon" href="Catalogo.html" aria-label="Carrito"><span data-feather="shopping-bag"></span><span class="cdp-cart-count">1</span></a>
+                <a class="cdp-header-icon" href="cuenta.html" aria-label="Usuario" data-customer-link><span data-feather="user"></span></a>
+                <a class="cdp-header-icon" href="carrito.html" aria-label="Carrito"><span data-feather="shopping-bag"></span><span class="cdp-cart-count">0</span></a>
               </div>
               <a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer" class="cdp-social-link" aria-label="Instagram"><span data-feather="instagram"></span></a>
               <a href="https://www.tiktok.com/@cdp.performanceparts?lang=es-419" target="_blank" rel="noreferrer" class="cdp-social-link" aria-label="TikTok"><span data-feather="music"></span></a>
@@ -85,10 +85,16 @@
               <div>
                 <div class="product-gallery">
                   <div class="product-gallery-main">
-                    <img id="mainProductImage" src="assets/img/gallery/E46/E46_pantalla_galaxy_carbono.png" alt="Volante principal">
+                    <button class="product-image-zoom" type="button" data-product-zoom="main" aria-label="Ampliar imagen principal">
+                      <img id="mainProductImage" src="assets/img/gallery/E46/E46_pantalla_galaxy_carbono.png" alt="Volante principal">
+                      <span class="product-zoom-badge" title="Ampliar imagen"><span data-feather="zoom-in"></span></span>
+                    </button>
                   </div>
                   <div class="product-gallery-alt">
-                    <img id="secondaryProductImage" src="assets/img/gallery/E46/E46_pantalla_tiraroja.png" alt="Vista secundaria del volante">
+                    <button class="product-image-zoom" type="button" data-product-zoom="secondary" aria-label="Ampliar imagen secundaria">
+                      <img id="secondaryProductImage" src="assets/img/gallery/E46/E46_pantalla_tiraroja.png" alt="Vista secundaria del volante">
+                      <span class="product-zoom-badge" title="Ampliar imagen"><span data-feather="zoom-in"></span></span>
+                    </button>
                   </div>
                 </div>
 
@@ -132,9 +138,14 @@
                 </div>
 
                 <div class="product-cta-row">
-                  <a class="btn btn-primary btn-lg" id="productWhatsapp" href="https://wa.me/34676525005" target="_blank" rel="noreferrer">Pedir por WhatsApp</a>
+                  <button class="btn btn-primary btn-lg" id="productAddCart" type="button">
+                    <span data-feather="shopping-bag"></span>
+                    AÃ±adir a la cesta
+                  </button>
+                  <a class="btn btn-outline-primary btn-lg" id="productWhatsapp" href="https://wa.me/34676525005" target="_blank" rel="noreferrer">Pedir por WhatsApp</a>
                   <a class="btn btn-outline-primary btn-lg" href="Catalogo.html">Volver al catalogo</a>
                 </div>
+                <div class="product-cart-status" id="productCartStatus" hidden></div>
 
                 <div class="product-timeline">
                   <p class="product-timeline-copy">Cada volante se fabrica individualmente para tu pedido.</p>
@@ -147,7 +158,7 @@
                     <div class="timeline-step">
                       <span class="timeline-icon"><span data-feather="truck"></span></span>
                       <strong>Jun 18 - Jul 09</strong>
-                      <span>Envío estimado</span>
+                      <span>EnvÃ­o estimado</span>
                     </div>
                     <div class="timeline-step">
                       <span class="timeline-icon"><span data-feather="map-pin"></span></span>
@@ -179,6 +190,39 @@
           </div>
         </div>
       </section>
+
+      <div class="product-lightbox" id="productLightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada del producto" aria-hidden="true" hidden>
+        <div class="product-lightbox-panel">
+          <button class="product-lightbox-close" type="button" data-lightbox-close aria-label="Cerrar imagen ampliada" title="Cerrar">
+            <span data-feather="x"></span>
+          </button>
+
+          <div class="product-lightbox-stage">
+            <button class="product-lightbox-nav" type="button" data-lightbox-prev aria-label="Imagen anterior" title="Imagen anterior">
+              <span data-feather="chevron-left"></span>
+            </button>
+            <div class="product-lightbox-frame">
+              <img id="productLightboxImage" src="assets/img/gallery/E46/E46_pantalla_galaxy_carbono.png" alt="Imagen ampliada del volante">
+            </div>
+            <button class="product-lightbox-nav" type="button" data-lightbox-next aria-label="Imagen siguiente" title="Imagen siguiente">
+              <span data-feather="chevron-right"></span>
+            </button>
+          </div>
+
+          <div class="product-lightbox-toolbar" aria-label="Controles de zoom">
+            <button type="button" data-lightbox-zoom-out aria-label="Reducir imagen" title="Reducir">
+              <span data-feather="zoom-out"></span>
+            </button>
+            <span id="productZoomLevel">100%</span>
+            <button type="button" data-lightbox-zoom-in aria-label="Ampliar imagen" title="Ampliar">
+              <span data-feather="zoom-in"></span>
+            </button>
+            <button type="button" data-lightbox-reset aria-label="Restablecer zoom" title="Restablecer">
+              <span data-feather="rotate-ccw"></span>
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
 
     <section class="py-7 cdp-footer" id="contact">
@@ -233,8 +277,11 @@
     <script src="assets/js/theme.js"></script>
     <script src="assets/js/cdp-header.js"></script>
     <script src="assets/js/backend-client.js"></script>
-    <script src="assets/js/backend-product.js"></script>
+    <script src="assets/js/shop.js"></script>
+    <script src="assets/js/backend-product.js?v=cart-1"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">
   </body>
 
 </html>
+
+

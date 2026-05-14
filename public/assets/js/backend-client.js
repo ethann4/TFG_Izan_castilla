@@ -155,10 +155,117 @@
     body: JSON.stringify({ email, password }),
   }));
 
-  const logout = () => {
+  const getAdminSession = () =>
+    request("session.php")
+      .then((data) => {
+        if (data.authenticated) {
+          return saveSession(data);
+        }
+
+        localStorage.removeItem("cdp.admin.session");
+        return null;
+      })
+      .catch(() => {
+        localStorage.removeItem("cdp.admin.session");
+        return null;
+      });
+
+  const logout = async () => {
     localStorage.removeItem("cdp.admin.session");
-    request("logout.php", { method: "POST", body: "{}" }).catch(() => {});
+    return request("logout.php", { method: "POST", body: "{}" }).catch(() => ({ ok: true }));
   };
+
+  const getCustomerSession = () =>
+    request("cliente_session.php")
+      .then((data) => {
+        if (data.authenticated) {
+          localStorage.setItem("cdp.customer.session", JSON.stringify({
+            user: data.user,
+            authenticated: true,
+            saved_at: Date.now(),
+          }));
+        } else {
+          localStorage.removeItem("cdp.customer.session");
+        }
+        return data;
+      })
+      .catch(() => {
+        localStorage.removeItem("cdp.customer.session");
+        return { authenticated: false, user: null };
+      });
+
+  const getStoredCustomerSession = () => {
+    try {
+      return JSON.parse(localStorage.getItem("cdp.customer.session") || "null");
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const registerCustomer = async (payload) => {
+    const data = await request("cliente_registro.php", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    localStorage.removeItem("cdp.admin.session");
+    localStorage.setItem("cdp.customer.session", JSON.stringify({
+      user: data.user,
+      authenticated: Boolean(data.authenticated),
+      saved_at: Date.now(),
+    }));
+    return data;
+  };
+
+  const loginCustomer = async (email, password) => {
+    const data = await request("cliente_login.php", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
+    localStorage.removeItem("cdp.admin.session");
+    localStorage.setItem("cdp.customer.session", JSON.stringify({
+      user: data.user,
+      authenticated: Boolean(data.authenticated),
+      saved_at: Date.now(),
+    }));
+    return data;
+  };
+
+  const logoutCustomer = async () => {
+    localStorage.removeItem("cdp.customer.session");
+    return request("cliente_logout.php", { method: "POST", body: "{}" }).catch(() => ({ ok: true }));
+  };
+
+  const getCustomerAdminAccess = async () =>
+    request("cliente_admin.php").catch(() => ({
+      has_admin_access: false,
+      admin_authenticated: false,
+    }));
+
+  const getCart = async () => request("carrito.php");
+
+  const addCartItem = async (slug, cantidad = 1) =>
+    request("carrito.php", {
+      method: "POST",
+      body: JSON.stringify({ slug, cantidad }),
+    });
+
+  const updateCartItem = async (itemId, cantidad) =>
+    request("carrito.php", {
+      method: "PATCH",
+      body: JSON.stringify({ item_id: itemId, cantidad }),
+    });
+
+  const removeCartItem = async (itemId) =>
+    request("carrito.php", {
+      method: "DELETE",
+      body: JSON.stringify({ item_id: itemId }),
+    });
+
+  const clearCart = async () =>
+    request("carrito.php", {
+      method: "DELETE",
+      body: JSON.stringify({ all: true }),
+    });
 
   const listProducts = async () =>
     request("productos.php").then((response) => (response.data || []).map(mapProduct));
@@ -196,19 +303,31 @@
     });
 
   const backend = {
+    addCartItem,
+    clearCart,
     createSolicitud,
     createProduct,
     deleteProduct,
     escapeHtml,
+    getCart,
+    getCustomerAdminAccess,
     getProductBySlug,
+    getAdminSession,
+    getCustomerSession,
     getSession,
+    getStoredCustomerSession,
     isConfigured,
     listProductsAdmin,
     listProducts,
     listSolicitudes,
     login,
+    loginCustomer,
     logout,
+    logoutCustomer,
     mapProduct,
+    registerCustomer,
+    removeCartItem,
+    updateCartItem,
     updateProduct,
   };
 

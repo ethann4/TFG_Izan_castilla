@@ -1,0 +1,268 @@
+body.shop-page {
+  background: #000;
+  color: #d8d8d8;
+}
+
+.shop-shell {
+  padding: 10rem 0 5rem;
+  min-height: 76vh;
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.96)),
+    url("../img/gallery/bmw_hero_banner.jpg");
+  background-position: center top;
+  background-size: cover;
+}
+
+.shop-surface {
+  background: rgba(10, 10, 10, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: clamp(1rem, 3vw, 1.6rem);
+  backdrop-filter: blur(14px);
+}
+
+.shop-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.shop-heading h1 {
+  color: #fff;
+  font-size: clamp(2.2rem, 4vw, 4.6rem);
+  line-height: 0.96;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.shop-card,
+.cart-item,
+.cart-summary {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.shop-card {
+  padding: 1.2rem;
+}
+
+.shop-card h2,
+.cart-item h2 {
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.shop-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.shop-form label {
+  color: #fff;
+  font-weight: 700;
+}
+
+.shop-status,
+.shop-empty {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.8rem 0.95rem;
+  color: #f5f5f5;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.shop-status.is-success {
+  border-color: rgba(25, 204, 97, 0.38);
+  background: rgba(25, 204, 97, 0.1);
+}
+
+.shop-status.is-error {
+  border-color: rgba(214, 40, 40, 0.45);
+  background: rgba(214, 40, 40, 0.12);
+}
+
+.customer-session {
+  display: grid;
+  gap: 1rem;
+}
+
+.customer-session strong {
+  color: #fff;
+  font-size: 1.4rem;
+}
+
+.account-admin-access {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(214, 40, 40, 0.38);
+  border-radius: 8px;
+  background: rgba(214, 40, 40, 0.1);
+}
+
+.account-admin-access[hidden] {
+  display: none;
+}
+
+.account-admin-access p {
+  color: #d8d8d8;
+}
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 1rem;
+}
+
+.cart-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding: 1rem;
+  align-items: center;
+}
+
+.cart-item-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.cart-item-media img {
+  width: 100%;
+  max-height: 118px;
+  object-fit: contain;
+}
+
+.cart-item-info span {
+  color: #d62828;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.cart-item-info p {
+  color: #bdbdbd;
+  margin: 0;
+}
+
+.cart-item-controls {
+  display: grid;
+  justify-items: end;
+  gap: 0.65rem;
+}
+
+.cart-qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cart-qty button,
+.cart-remove {
+  border: 0;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-weight: 700;
+}
+
+.cart-qty button {
+  width: 38px;
+  height: 38px;
+}
+
+.cart-qty strong {
+  min-width: 40px;
+  color: #fff;
+  text-align: center;
+}
+
+.cart-remove {
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+}
+
+.cart-qty button:hover,
+.cart-remove:hover {
+  background: #d62828;
+}
+
+.cart-item-price,
+.cart-summary-total {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.cart-summary {
+  padding: 1.2rem;
+  align-self: start;
+  display: grid;
+  gap: 1rem;
+}
+
+.cart-summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cdp-header-icon.is-authenticated {
+  color: #d62828;
+}
+
+@media (max-width: 991.98px) {
+  .shop-shell {
+    padding-top: 8rem;
+  }
+
+  .shop-grid,
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .account-admin-access {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cart-item {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+
+  .cart-item-controls {
+    grid-column: 1 / -1;
+    justify-items: stretch;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .shop-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cart-item {
+    grid-template-columns: 1fr;
+  }
+}

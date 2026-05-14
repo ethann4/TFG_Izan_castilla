@@ -19,6 +19,7 @@
   const productSeed = Array.isArray(window.CDP_PRODUCT_SEED) ? window.CDP_PRODUCT_SEED : [];
 
   let products = [];
+  let adminSession = null;
 
   const setStatus = (node, message, type = "info") => {
     if (!node) return;
@@ -54,7 +55,7 @@
     return `${new Intl.NumberFormat("es-ES").format(number)} EUR`;
   };
 
-  const getSession = () => backend?.getSession();
+  const getSession = () => adminSession;
   const normalizeSlug = (value) => (value || "").toString().toLowerCase();
 
   const findExistingProduct = (seedProduct) => {
@@ -62,7 +63,8 @@
     return products.find((product) => product.slug === seedProduct.slug) || products.find((product) => normalizeSlug(product.slug) === slug);
   };
 
-  const updateSessionUi = () => {
+  const updateSessionUi = async () => {
+    adminSession = await backend.getAdminSession();
     const session = getSession();
     const isLogged = Boolean(session);
 
@@ -72,7 +74,7 @@
     if (sessionChip) sessionChip.textContent = isLogged ? `Admin: ${session.user?.email || "sesion activa"}` : "Sesion no iniciada";
 
     if (isLogged) {
-      loadAdminData();
+      await loadAdminData();
     }
   };
 
@@ -305,16 +307,17 @@
       setStatus(loginStatus, "Iniciando sesion...", "info");
       await backend.login(data.get("email"), data.get("password"));
       hideStatus(loginStatus);
-      updateSessionUi();
+      await updateSessionUi();
     } catch (error) {
       console.warn("Error de login.", error);
       setStatus(loginStatus, "No se pudo iniciar sesion. Revisa email, contrasena y usuario admin.", "error");
     }
   });
 
-  logoutButton?.addEventListener("click", () => {
-    backend.logout();
-    updateSessionUi();
+  logoutButton?.addEventListener("click", async () => {
+    await backend.logout();
+    adminSession = null;
+    await updateSessionUi();
   });
 
   document.querySelectorAll("[data-admin-tab]").forEach((button) => {
