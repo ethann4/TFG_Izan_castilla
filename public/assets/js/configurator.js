@@ -1,7 +1,7 @@
 /*===============================================
 |  CDP CUSTOMS | CONFIGURADOR VISUAL PREMIUM
-|  Babylon.js + GLB/GLTF + PBR materials
-|  Preparado para backend PHP/MySQL
+|  Babylon.js + modelos GLB/GLTF y materiales PBR
+|  Preparado para servidor PHP/MySQL
 ================================================*/
 
 (function () {
@@ -1817,7 +1817,7 @@
     if (nodes.previewBackend) {
       nodes.previewBackend.textContent = state.loadedFromGlb
         ? "GLB por piezas cargado"
-        : "Demo 3D procedural lista para GLB";
+        : "Vista 3D generada lista para GLB";
     }
     if (nodes.compatibilityStatus) {
       nodes.compatibilityStatus.textContent = model.levasMagneticas

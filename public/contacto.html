@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" dir="ltr">
 
   <head>
@@ -15,7 +15,7 @@
     <meta name="msapplication-TileImage" content="assets/img/logo_cdp_transparente.png">
     <meta name="theme-color" content="#000000">
     <link href="assets/css/theme.css" rel="stylesheet">
-    <link href="assets/css/cdp-common.css" rel="stylesheet">
+    <link href="assets/css/cdp-common.css?v=account-menu-4" rel="stylesheet">
     <link href="assets/css/contact.css" rel="stylesheet">
   </head>
 
@@ -48,19 +48,19 @@
             <div class="cdp-navbar-actions d-flex gap-3 align-items-center">
               <div class="cdp-header-tools" aria-label="Preferencias y cuenta">
                 <div class="dropdown">
-                  <button class="cdp-tool-select dropdown-toggle" id="cdpRegionDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="region"><span data-cdp-label>EspaÃ±a | EUR â‚¬</span><span data-feather="chevron-down"></span></button>
+                  <button class="cdp-tool-select dropdown-toggle" id="cdpRegionDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="region"><span data-cdp-label>Espa&ntilde;a | EUR &euro;</span><span data-feather="chevron-down"></span></button>
                   <ul class="cdp-tools-menu dropdown-menu" aria-labelledby="cdpRegionDropdown">
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="EspaÃ±a | EUR â‚¬">EspaÃ±a | EUR â‚¬</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="Portugal | EUR â‚¬">Portugal | EUR â‚¬</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="Francia | EUR â‚¬">Francia | EUR â‚¬</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="es">Espa&ntilde;a | EUR &euro;</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="pt">Portugal | EUR &euro;</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="fr">Francia | EUR &euro;</button></li>
                   </ul>
                 </div>
                 <div class="dropdown">
-                  <button class="cdp-tool-select dropdown-toggle" id="cdpLanguageDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="language"><span data-cdp-label>EspaÃ±ol</span><span data-feather="chevron-down"></span></button>
+                  <button class="cdp-tool-select dropdown-toggle" id="cdpLanguageDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="language"><span data-cdp-label>Espa&ntilde;ol</span><span data-feather="chevron-down"></span></button>
                   <ul class="cdp-tools-menu dropdown-menu" aria-labelledby="cdpLanguageDropdown">
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="EspaÃ±ol">EspaÃ±ol</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="es">Espa&ntilde;ol</button></li>
                     <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="English">English</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="FranÃ§ais">FranÃ§ais</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="fr">Fran&ccedil;ais</button></li>
                   </ul>
                 </div>
                 <a class="cdp-header-icon" href="Catalogo.html#catalogo" aria-label="Buscar productos"><span data-feather="search"></span></a>
@@ -86,7 +86,7 @@
               <ul class="contact-list">
                 <li><span data-feather="map-pin"></span><div><strong>Ubicacion</strong><br>Vizcaya, Espana</div></li>
                 <li><span data-feather="phone"></span><div><strong>Telefono</strong><br><a href="tel:+34676525005">(+34) 676 525 005</a></div></li>
-                <li><span data-feather="mail"></span><div><strong>Email demo</strong><br><a href="mailto:info@cdpcustoms.local">info@cdpcustoms.local</a></div></li>
+                <li><span data-feather="mail"></span><div><strong>Correo de contacto</strong><br><a href="mailto:info@cdpcustoms.local">info@cdpcustoms.local</a></div></li>
               </ul>
             </aside>
 
@@ -132,7 +132,7 @@
                     <textarea class="form-control cdp-form-control" id="mensaje" name="mensaje" rows="5" placeholder="Cuero negro, costura roja, marcador central, pantalla RPM..." required maxlength="1000"></textarea>
                   </div>
                   <div class="is-wide backend-note">
-                    Backend previsto: validar servidor, usar consultas preparadas PDO, guardar en tabla `pedidos_personalizados` y proteger zona admin con sesiones.
+                    Servidor previsto: validar datos, usar consultas preparadas PDO, guardar solicitudes y proteger la zona de administrador con sesiones.
                   </div>
                   <div class="is-wide d-flex flex-column flex-sm-row gap-3">
                     <button class="btn btn-primary" type="submit">Enviar solicitud</button>
@@ -164,8 +164,8 @@
           <div class="col-md-3">
             <div class="cdp-footer-title mb-3">Proyecto DAW</div>
             <ul class="list-unstyled">
-              <li>Frontend HTML, CSS y JS</li>
-              <li>Backend PHP/MySQL</li>
+              <li>Interfaz HTML, CSS y JS</li>
+                <li>Servidor PHP/MySQL</li>
               <li>CRUD de productos y pedidos</li>
             </ul>
           </div>
@@ -196,9 +196,9 @@
     <script src="vendors/is/is.min.js"></script>
     <script src="vendors/feather-icons/feather.min.js"></script>
     <script src="assets/js/theme.js"></script>
-    <script src="assets/js/cdp-header.js"></script>
-    <script src="assets/js/backend-client.js"></script>
-    <script src="assets/js/shop.js"></script>
+    <script src="assets/js/cdp-header.js?v=idioma-2"></script>
+    <script src="assets/js/cliente-servidor.js?v=php-url-2"></script>
+    <script src="assets/js/shop.js?v=account-menu-4"></script>
     <script src="assets/js/contact.js"></script>
     <script>feather.replace();</script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">

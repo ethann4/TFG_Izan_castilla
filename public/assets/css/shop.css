@@ -231,9 +231,322 @@ body.shop-page {
   color: #d62828;
 }
 
+.account-page .cdp-navbar {
+  display: block !important;
+}
+
+.account-page .main {
+  min-height: 100vh;
+}
+
+.account-shell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: clamp(5.4rem, 12vh, 7rem) 0 clamp(1.5rem, 5vh, 2.8rem);
+  background: #070707;
+}
+
+.account-wrap {
+  width: min(calc(100% - 2rem), 400px);
+}
+
+.account-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 1.35rem;
+  color: #8d8f94;
+  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.account-back-link svg {
+  width: 17px;
+  height: 17px;
+}
+
+.account-back-link:hover,
+.account-back-link:focus {
+  color: var(--cdp-red, #d62828);
+}
+
+.customer-auth-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.customer-auth-card,
+.account-session-card {
+  background: rgba(15, 15, 15, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.34);
+}
+
+.customer-auth-card {
+  padding: clamp(1.2rem, 4vw, 1.55rem);
+}
+
+.customer-auth-logo {
+  display: block;
+  width: 92px;
+  height: auto;
+  margin: 0 auto 0.85rem;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.34));
+}
+
+.customer-auth-heading {
+  margin-bottom: 1.1rem;
+  text-align: center;
+}
+
+.customer-auth-heading h1,
+.customer-auth-heading h2 {
+  margin: 0;
+  color: #fff;
+  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-size: clamp(1.45rem, 4vw, 1.72rem);
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.customer-auth-heading p {
+  margin: 0.55rem 0 0;
+  color: #92949a;
+  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.customer-auth-form {
+  gap: 0.78rem;
+}
+
+.customer-field {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.customer-field label {
+  color: #f4f4f4;
+  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.customer-input {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  background: #0b0b0b;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.customer-input svg {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin-left: 0.7rem;
+  color: #9b9da2;
+}
+
+.customer-input .cdp-form-control {
+  min-width: 0;
+  height: 36px;
+  padding: 0 0.72rem;
+  color: #fff;
+  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: none;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.customer-input .cdp-form-control:focus {
+  background: transparent;
+  box-shadow: none;
+}
+
+.customer-input:focus-within {
+  border-color: rgba(214, 40, 40, 0.72);
+  box-shadow: 0 0 0 0.14rem rgba(214, 40, 40, 0.14);
+}
+
+.customer-input .cdp-form-control::placeholder {
+  color: #8f8f8f;
+  opacity: 1;
+  text-transform: uppercase;
+}
+
+.customer-input .cdp-form-control:-webkit-autofill,
+.customer-input .cdp-form-control:-webkit-autofill:hover,
+.customer-input .cdp-form-control:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #0b0b0b inset;
+  -webkit-text-fill-color: #fff;
+  caret-color: #fff;
+  transition: background-color 9999s ease-out;
+}
+
+.customer-forgot-link {
+  justify-self: end;
+  margin-top: 0.2rem;
+  color: #8f9196;
+  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.customer-forgot-link:hover,
+.customer-forgot-link:focus,
+.customer-register-prompt button:hover,
+.customer-register-prompt button:focus {
+  color: #f04444;
+}
+
+.account-page .customer-auth-submit {
+  min-height: 40px;
+  margin-top: 0.25rem;
+  color: #fff;
+  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--cdp-red, #d62828);
+  border-color: var(--cdp-red, #d62828);
+  border-radius: 8px;
+  box-shadow: 0 14px 32px rgba(214, 40, 40, 0.2);
+}
+
+.account-page .customer-auth-submit:hover,
+.account-page .customer-auth-submit:focus {
+  color: #fff;
+  background: #ef2f2f;
+  border-color: #ef2f2f;
+}
+
+.customer-auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1.35rem 0 0.95rem;
+  color: #8f9196;
+  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.customer-auth-divider::before,
+.customer-auth-divider::after {
+  content: "";
+  flex: 1 1 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.customer-social-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.customer-social-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.72rem;
+  min-height: 40px;
+  color: #f5f5f5;
+  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  background: #0b0b0b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.customer-social-button:hover,
+.customer-social-button:focus {
+  color: #fff;
+  border-color: rgba(214, 40, 40, 0.7);
+  background: rgba(214, 40, 40, 0.1);
+  transform: translateY(-1px);
+}
+
+.customer-social-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.customer-social-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.customer-social-icon--apple {
+  color: #fff;
+}
+
+.customer-register-prompt {
+  margin: 1.25rem 0 0;
+  color: var(--cdp-red, #d62828);
+  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.account-page .shop-status {
+  padding: 0.65rem 0.8rem;
+  font-size: 0.86rem;
+}
+
+.customer-register-prompt button {
+  padding: 0;
+  color: var(--cdp-red, #d62828);
+  font: inherit;
+  text-transform: uppercase;
+  background: transparent;
+  border: 0;
+}
+
 @media (max-width: 991.98px) {
   .shop-shell {
     padding-top: 8rem;
+  }
+
+  .account-shell {
+    padding-top: clamp(5rem, 16vw, 6rem);
   }
 
   .shop-grid,
@@ -260,6 +573,14 @@ body.shop-page {
   .shop-heading {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .customer-auth-card {
+    padding: 1.25rem;
+  }
+
+  .customer-social-grid {
+    grid-template-columns: 1fr;
   }
 
   .cart-item {

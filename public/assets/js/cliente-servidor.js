@@ -1,6 +1,9 @@
 (function () {
-  const script = document.currentScript || document.querySelector('script[src$="backend-client.js"]');
-  const apiBase = new URL("../../api/", script?.src || window.location.href).toString();
+  const scripts = Array.from(document.scripts || []);
+  const script = document.currentScript || scripts.find((node) => node.src.includes("assets/js/cliente-servidor.js"));
+  const apiBase = script?.src
+    ? new URL("../../api/", script.src).toString()
+    : new URL("api/", window.location.href).toString();
 
   const isConfigured = () => window.location.protocol.startsWith("http");
 
@@ -125,14 +128,25 @@
   };
 
   const request = async (path, options = {}) => {
-    const response = await fetch(new URL(path.replace(/^\//, ""), apiBase), {
-      credentials: "same-origin",
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...(options.headers || {}),
-      },
-    });
+    if (!window.location.protocol.startsWith("http")) {
+      throw new Error("Abre la web desde XAMPP con http://localhost/CDP-Wheels/public/cuenta.html. Si abres el HTML como archivo, PHP no puede funcionar.");
+    }
+
+    const endpoint = new URL(path.replace(/^\//, ""), apiBase);
+    let response = null;
+
+    try {
+      response = await fetch(endpoint, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          ...(options.headers || {}),
+        },
+      });
+    } catch (error) {
+      throw new Error(`No se pudo conectar con el servidor PHP en ${endpoint.href}. Abre la web desde http://localhost/CDP-Wheels/public/ y revisa Apache en XAMPP.`);
+    }
 
     const text = await response.text();
     let data = null;
@@ -140,7 +154,11 @@
     try {
       data = text ? JSON.parse(text) : null;
     } catch (error) {
-      data = { error: text || "Respuesta no valida del servidor PHP." };
+      data = {
+        error: text.trim().startsWith("<")
+          ? `No se encontro el endpoint PHP: ${endpoint.pathname}`
+          : text || "Respuesta no valida del servidor PHP.",
+      };
     }
 
     if (!response.ok) {

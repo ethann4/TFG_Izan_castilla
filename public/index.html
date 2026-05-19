@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" dir="ltr">
 
   <head>
@@ -15,7 +15,7 @@
     <meta name="msapplication-TileImage" content="assets/img/logo_cdp_transparente.png">
     <meta name="theme-color" content="#000000">
     <link href="assets/css/theme.css" rel="stylesheet">
-    <link href="assets/css/cdp-common.css" rel="stylesheet">
+    <link href="assets/css/cdp-common.css?v=account-menu-4" rel="stylesheet">
     <link href="assets/css/index.css" rel="stylesheet">
   </head>
 
@@ -51,19 +51,19 @@
             <div class="cdp-navbar-actions d-flex gap-3 align-items-center">
               <div class="cdp-header-tools" aria-label="Preferencias y cuenta">
                 <div class="dropdown">
-                  <button class="cdp-tool-select dropdown-toggle" id="cdpRegionDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="region"><span data-cdp-label>EspaÃ±a | EUR â‚¬</span><span data-feather="chevron-down"></span></button>
+                  <button class="cdp-tool-select dropdown-toggle" id="cdpRegionDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="region"><span data-cdp-label>Espa&ntilde;a | EUR &euro;</span><span data-feather="chevron-down"></span></button>
                   <ul class="cdp-tools-menu dropdown-menu" aria-labelledby="cdpRegionDropdown">
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="EspaÃ±a | EUR â‚¬">EspaÃ±a | EUR â‚¬</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="Portugal | EUR â‚¬">Portugal | EUR â‚¬</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="Francia | EUR â‚¬">Francia | EUR â‚¬</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="es">Espa&ntilde;a | EUR &euro;</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="pt">Portugal | EUR &euro;</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="fr">Francia | EUR &euro;</button></li>
                   </ul>
                 </div>
                 <div class="dropdown">
-                  <button class="cdp-tool-select dropdown-toggle" id="cdpLanguageDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="language"><span data-cdp-label>EspaÃ±ol</span><span data-feather="chevron-down"></span></button>
+                  <button class="cdp-tool-select dropdown-toggle" id="cdpLanguageDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="language"><span data-cdp-label>Espa&ntilde;ol</span><span data-feather="chevron-down"></span></button>
                   <ul class="cdp-tools-menu dropdown-menu" aria-labelledby="cdpLanguageDropdown">
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="EspaÃ±ol">EspaÃ±ol</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="es">Espa&ntilde;ol</button></li>
                     <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="English">English</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="FranÃ§ais">FranÃ§ais</button></li>
+                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="fr">Fran&ccedil;ais</button></li>
                   </ul>
                 </div>
                 <a class="cdp-header-icon" href="Catalogo.html#catalogo" aria-label="Buscar productos"><span data-feather="search"></span></a>
@@ -85,7 +85,7 @@
           <div class="row align-items-center justify-content-end min-vh-75 min-vh-xl-100">
             <div class="col-md-8 col-lg-6 text-md-end text-center">
               <div class="cdp-section-kicker mb-3">CDP Customs</div>
-              <h1 class="display-1 lh-sm text-uppercase text-light">Disena tu volante<br class="d-none d-xxl-block">a medida</h1>
+              <h1 class="display-1 lh-sm text-uppercase text-light" data-cdp-i18n="home-hero-title">Disena tu volante<br class="d-none d-xxl-block">a medida</h1>
               <p class="cdp-section-copy hero-copy ms-md-auto">Personalizacion premium para interiores deportivos: cuero, alcantara, carbono, costuras, levas y pantallas RPM.</p>
               <div class="pt-4">
                 <a class="btn btn-sm btn-primary me-3" href="Catalogo.html">Ver catalogo</a>
@@ -127,13 +127,13 @@
           </div>
 
           <div class="carousel slide" id="carouselDestacados" data-bs-ride="carousel">
-            <div class="carousel-inner" data-home-products>
+            <div class="carousel-inner" data-productos-inicio>
               <div class="carousel-item active">
-                <div class="home-products-message">Cargando productos destacados desde MySQL...</div>
+                <div class="mensaje-productos-inicio">Cargando productos destacados desde MySQL...</div>
               </div>
             </div>
-            <button class="carousel-control-prev home-carousel-control" type="button" data-bs-target="#carouselDestacados" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Anterior</span></button>
-            <button class="carousel-control-next home-carousel-control" type="button" data-bs-target="#carouselDestacados" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Siguiente</span></button>
+            <button class="carousel-control-prev control-carrusel-inicio" type="button" data-bs-target="#carouselDestacados" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Anterior</span></button>
+            <button class="carousel-control-next control-carrusel-inicio" type="button" data-bs-target="#carouselDestacados" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Siguiente</span></button>
           </div>
         </div>
       </section>
@@ -176,8 +176,8 @@
             <div class="col-md-3">
               <div class="cdp-footer-title mb-3">Proyecto DAW</div>
               <ul class="list-unstyled">
-                <li>Frontend HTML, CSS y JS</li>
-                <li>Backend PHP/MySQL</li>
+                <li>Interfaz HTML, CSS y JS</li>
+                <li>Servidor PHP/MySQL</li>
                 <li>CRUD de productos y pedidos</li>
               </ul>
             </div>
@@ -203,10 +203,10 @@
     <script src="vendors/is/is.min.js"></script>
     <script src="vendors/feather-icons/feather.min.js"></script>
     <script src="assets/js/theme.js"></script>
-    <script src="assets/js/cdp-header.js"></script>
-    <script src="assets/js/backend-client.js"></script>
-    <script src="assets/js/shop.js"></script>
-    <script src="assets/js/home-products.js"></script>
+    <script src="assets/js/cdp-header.js?v=idioma-2"></script>
+    <script src="assets/js/cliente-servidor.js?v=php-url-2"></script>
+    <script src="assets/js/shop.js?v=account-menu-4"></script>
+    <script src="assets/js/productos-inicio.js?v=productos-inicio-1"></script>
     <script>feather.replace();</script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">
   </body>

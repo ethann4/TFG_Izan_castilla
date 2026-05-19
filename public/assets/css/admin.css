@@ -24,7 +24,6 @@ body.admin-page {
   cursor: pointer;
 }
 
-.admin-login-card,
 .admin-sidebar,
 .admin-panel {
   background: rgba(10, 10, 10, 0.88);
@@ -32,14 +31,6 @@ body.admin-page {
   border-radius: 8px;
 }
 
-.admin-login-card {
-  display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
-  gap: 1.5rem;
-  padding: 1.35rem;
-}
-
-.admin-login-card h2,
 .admin-panel-heading h2 {
   color: #fff;
   font-size: 1.7rem;
@@ -47,17 +38,11 @@ body.admin-page {
   text-transform: uppercase;
 }
 
-.admin-login-card p {
-  margin: 0.75rem 0 0;
-}
-
-.admin-login-form,
 .admin-product-form {
   display: grid;
   gap: 1rem;
 }
 
-.admin-login-form label,
 .admin-product-form label {
   color: #f5f5f5;
   display: grid;
@@ -252,7 +237,6 @@ body.admin-page {
 
 @media (max-width: 991.98px) {
   .admin-grid,
-  .admin-login-card,
   .admin-product-form,
   .admin-stat-grid {
     grid-template-columns: 1fr;

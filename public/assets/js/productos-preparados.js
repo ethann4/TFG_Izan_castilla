@@ -1,4 +1,4 @@
-window.CDP_PRODUCT_SEED = [
+window.CDP_PRODUCTOS_PREPARADOS = [
   {
     "slug": "e46-carbono-galaxy-rpm",
     "marca": "BMW E46",
@@ -1068,7 +1068,7 @@ window.CDP_PRODUCT_SEED = [
     "color": "negro rojo",
     "precio": 599.99,
     "precio_anterior": 750,
-    "etiqueta": "Demo AMG",
+    "etiqueta": "AMG Nappa",
     "valoracion": "4.7",
     "imagen_principal": "assets/img/gallery/AMG/cortada.jpeg",
     "galeria": [
@@ -1106,8 +1106,8 @@ window.CDP_PRODUCT_SEED = [
     "modelo": "Golf GTI / R",
     "modelo_filtro": "gti golf r volkswagen",
     "nombre": "GTI Cuero Rojo",
-    "descripcion": "Configuracion preparada para Volkswagen con estetica GTI, costura roja y filtros listos para stock real.",
-    "descripcion_corta": "Estetica GTI - base para stock",
+    "descripcion": "Configuracion Volkswagen con estetica GTI, costura roja y filtros preparados.",
+    "descripcion_corta": "Estetica GTI - catalogo Volkswagen",
     "material": "cuero",
     "color": "negro rojo",
     "precio": 520,
@@ -1130,11 +1130,11 @@ window.CDP_PRODUCT_SEED = [
       "Scirocco"
     ],
     "especificaciones": [
-      "Preparado para stock Volkswagen",
+      "Preparado para catalogo Volkswagen",
       "Material y color filtrables",
       "Ficha lista para importacion",
       "Consulta directa por WhatsApp",
-      "Base editable desde admin"
+      "Base editable desde administrador"
     ],
     "tags": "volkswagen gti golf r cuero rojo",
     "stock": 1,

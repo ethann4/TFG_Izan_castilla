@@ -1,13 +1,10 @@
 (function () {
   const backend = window.CDPBackend;
-  const loginPanel = document.querySelector("[data-admin-login]");
   const dashboard = document.querySelector("[data-admin-dashboard]");
-  const loginForm = document.querySelector("[data-login-form]");
   const logoutButton = document.querySelector("[data-admin-logout]");
   const sessionChip = document.querySelector("[data-admin-session]");
   const productForm = document.querySelector("[data-product-form]");
   const productStatus = document.querySelector("[data-product-status]");
-  const loginStatus = document.querySelector("[data-login-status]");
   const productsTable = document.querySelector("[data-products-table]");
   const requestsTable = document.querySelector("[data-requests-table]");
   const productCount = document.querySelector("[data-products-count]");
@@ -16,7 +13,8 @@
   const productFormTitle = document.querySelector("[data-product-form-title]");
   const importProductsButton = document.querySelector("[data-import-photo-products]");
   const importProductsStatus = document.querySelector("[data-import-products-status]");
-  const productSeed = Array.isArray(window.CDP_PRODUCT_SEED) ? window.CDP_PRODUCT_SEED : [];
+  const productosPreparados = Array.isArray(window.CDP_PRODUCTOS_PREPARADOS) ? window.CDP_PRODUCTOS_PREPARADOS : [];
+  const accountLoginUrl = "../cuenta.html?admin=1";
 
   let products = [];
   let adminSession = null;
@@ -58,9 +56,9 @@
   const getSession = () => adminSession;
   const normalizeSlug = (value) => (value || "").toString().toLowerCase();
 
-  const findExistingProduct = (seedProduct) => {
-    const slug = normalizeSlug(seedProduct.slug);
-    return products.find((product) => product.slug === seedProduct.slug) || products.find((product) => normalizeSlug(product.slug) === slug);
+  const findExistingProduct = (productoPreparado) => {
+    const slug = normalizeSlug(productoPreparado.slug);
+    return products.find((product) => product.slug === productoPreparado.slug) || products.find((product) => normalizeSlug(product.slug) === slug);
   };
 
   const updateSessionUi = async () => {
@@ -68,14 +66,16 @@
     const session = getSession();
     const isLogged = Boolean(session);
 
-    if (loginPanel) loginPanel.hidden = isLogged;
     if (dashboard) dashboard.hidden = !isLogged;
     if (logoutButton) logoutButton.hidden = !isLogged;
-    if (sessionChip) sessionChip.textContent = isLogged ? `Admin: ${session.user?.email || "sesion activa"}` : "Sesion no iniciada";
+    if (sessionChip) sessionChip.textContent = isLogged ? `Administrador: ${session.user?.email || "sesion activa"}` : "Redirigiendo a cuenta";
 
     if (isLogged) {
       await loadAdminData();
+      return;
     }
+
+    window.location.replace(accountLoginUrl);
   };
 
   const activateTab = (tabName) => {
@@ -240,20 +240,20 @@
       await Promise.all([loadProducts(), loadRequests()]);
       if (window.feather) feather.replace();
     } catch (error) {
-      console.warn("No se pudieron cargar los datos admin.", error);
+      console.warn("No se pudieron cargar los datos de administrador.", error);
       if (adminState) adminState.textContent = "ERROR";
-      setStatus(productStatus, "No se pudieron cargar los datos. Comprueba tu sesion admin y las tablas MySQL.", "error");
+      setStatus(productStatus, "No se pudieron cargar los datos. Comprueba tu sesion de administrador y las tablas MySQL.", "error");
     }
   };
 
   const importPhotoProducts = async () => {
-    if (!productSeed.length) {
+    if (!productosPreparados.length) {
       setStatus(importProductsStatus, "No hay productos de fotos preparados para importar.", "error");
       return;
     }
 
     if (!getSession()) {
-      setStatus(importProductsStatus, "Inicia sesion como admin antes de importar productos.", "error");
+      setStatus(importProductsStatus, "Inicia sesion como administrador antes de importar productos.", "error");
       return;
     }
 
@@ -265,17 +265,17 @@
 
     if (importProductsButton) importProductsButton.disabled = true;
 
-    for (const [index, seedProduct] of productSeed.entries()) {
-      const position = `${index + 1}/${productSeed.length}`;
-      const existingProduct = findExistingProduct(seedProduct);
+    for (const [index, productoPreparado] of productosPreparados.entries()) {
+      const position = `${index + 1}/${productosPreparados.length}`;
+      const existingProduct = findExistingProduct(productoPreparado);
       const payload = {
-        ...seedProduct,
-        slug: existingProduct?.slug || seedProduct.slug,
+        ...productoPreparado,
+        slug: existingProduct?.slug || productoPreparado.slug,
         actualizado_en: new Date().toISOString(),
       };
 
       try {
-        setStatus(importProductsStatus, `Importando ${position}: ${seedProduct.nombre}`, "info");
+        setStatus(importProductsStatus, `Importando ${position}: ${productoPreparado.nombre}`, "info");
         if (existingProduct) {
           await backend.updateProduct(existingProduct.id, payload);
           updated += 1;
@@ -284,8 +284,8 @@
           created += 1;
         }
       } catch (error) {
-        console.warn(`No se pudo importar ${seedProduct.slug}.`, error);
-        failures.push(seedProduct.nombre);
+        console.warn(`No se pudo importar ${productoPreparado.slug}.`, error);
+        failures.push(productoPreparado.nombre);
       }
     }
 
@@ -299,20 +299,6 @@
 
     setStatus(importProductsStatus, `Importacion completada: ${created} productos nuevos y ${updated} actualizados desde fotos.`, "success");
   };
-
-  loginForm?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const data = new FormData(loginForm);
-    try {
-      setStatus(loginStatus, "Iniciando sesion...", "info");
-      await backend.login(data.get("email"), data.get("password"));
-      hideStatus(loginStatus);
-      await updateSessionUi();
-    } catch (error) {
-      console.warn("Error de login.", error);
-      setStatus(loginStatus, "No se pudo iniciar sesion. Revisa email, contrasena y usuario admin.", "error");
-    }
-  });
 
   logoutButton?.addEventListener("click", async () => {
     await backend.logout();
@@ -388,13 +374,15 @@
         setStatus(importProductsStatus || productStatus, `Producto eliminado: ${product.nombre}.`, "success");
       } catch (error) {
         console.warn("No se pudo eliminar el producto.", error);
-        setStatus(importProductsStatus || productStatus, "No se pudo eliminar. Revisa la sesion admin o la base de datos.", "error");
+        setStatus(importProductsStatus || productStatus, "No se pudo eliminar. Revisa la sesion de administrador o la base de datos.", "error");
       }
     }
   });
 
   if (!backend?.isConfigured()) {
-    setStatus(loginStatus, "Abre la web desde XAMPP para usar el backend PHP/MySQL.", "error");
+    if (sessionChip) sessionChip.textContent = "Abre la web desde XAMPP";
+    if (dashboard) dashboard.hidden = true;
+    return;
   }
 
   updateSessionUi();

@@ -5,12 +5,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin | CDP Customs</title>
+    <title>Administrador | CDP Customs</title>
     <meta name="robots" content="noindex">
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/logo_cdp_transparente.png">
     <link href="../assets/css/theme.css" rel="stylesheet">
-    <link href="../assets/css/cdp-common.css" rel="stylesheet">
-    <link href="../assets/css/admin.css" rel="stylesheet">
+    <link href="../assets/css/cdp-common.css?v=account-menu-4" rel="stylesheet">
+    <link href="../assets/css/admin.css?v=admin-no-login-1" rel="stylesheet">
   </head>
 
   <body class="admin-page">
@@ -27,7 +27,7 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="../index.html">WEB</a></li>
               <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold" href="../Catalogo.html">CATALOGO</a></li>
-              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold active" href="index.html">ADMIN</a></li>
+              <li class="nav-item fs-3 px-2"><a class="nav-link fw-bold active" href="index.html">ADMINISTRADOR</a></li>
             </ul>
             <button class="admin-logout" type="button" data-admin-logout hidden>Cerrar sesion</button>
           </div>
@@ -39,33 +39,13 @@
           <div class="row align-items-end mb-4">
             <div class="col-lg-8">
               <div class="cdp-section-kicker">Gestion privada</div>
-              <h1 class="cdp-section-title">Panel admin</h1>
+              <h1 class="cdp-section-title">Panel administrador</h1>
               <p class="cdp-section-copy">Crea productos, edita el catalogo y revisa solicitudes guardadas en MySQL.</p>
             </div>
             <div class="col-lg-4 text-lg-end">
-              <span class="admin-session-chip" data-admin-session>Sesion no iniciada</span>
+              <span class="admin-session-chip" data-admin-session>Comprobando sesion</span>
             </div>
           </div>
-
-          <section class="admin-login-card" data-admin-login>
-            <div>
-              <div class="cdp-section-kicker">Acceso admin</div>
-              <h2>Inicia sesion</h2>
-              <p>Usa un usuario creado en la tabla <code>admin_users</code> de MySQL.</p>
-            </div>
-            <form class="admin-login-form" data-login-form>
-              <label>
-                Email
-                <input class="form-control cdp-form-control" type="email" name="email" required autocomplete="email">
-              </label>
-              <label>
-                Contrasena
-                <input class="form-control cdp-form-control" type="password" name="password" required autocomplete="current-password">
-              </label>
-              <button class="btn btn-primary" type="submit">Entrar</button>
-              <div class="admin-status" data-login-status hidden></div>
-            </form>
-          </section>
 
           <div class="admin-grid" data-admin-dashboard hidden>
             <aside class="admin-sidebar">
@@ -261,9 +241,9 @@
     <script src="../vendors/is/is.min.js"></script>
     <script src="../vendors/feather-icons/feather.min.js"></script>
     <script src="../assets/js/theme.js"></script>
-    <script src="../assets/js/backend-client.js?v=admin-guard-2"></script>
-    <script src="../assets/js/product-seed-data.js"></script>
-    <script src="../assets/js/admin.js?v=admin-guard-2"></script>
+    <script src="../assets/js/cliente-servidor.js?v=php-url-2"></script>
+    <script src="../assets/js/productos-preparados.js?v=productos-preparados-1"></script>
+    <script src="../assets/js/admin.js?v=admin-guard-3"></script>
     <script>feather.replace();</script>
   </body>
 

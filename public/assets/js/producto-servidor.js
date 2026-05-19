@@ -39,7 +39,7 @@
     if (!value) return 0;
     return Number(
       value
-        .replace(/\s|EUR|â‚¬/gi, "")
+        .replace(/\s|EUR|\u20ac/gi, "")
         .replace(/\.(?=\d{3}(?:[^\d]|$))/g, "")
         .replace(/,/g, ".")
     );
@@ -55,7 +55,7 @@
   try {
     const product = await window.CDPBackend.getProductBySlug(slug);
     if (!product) {
-      showUnavailableProduct("Este producto no existe en MySQL. Importa productos desde el panel admin.");
+      showUnavailableProduct("Este producto no existe en MySQL. Importa productos desde el panel de administrador.");
       return;
     }
 

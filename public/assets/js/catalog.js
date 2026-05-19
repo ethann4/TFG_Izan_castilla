@@ -55,7 +55,7 @@
     try {
       const products = await window.CDPBackend.listProducts();
       if (!products.length) {
-        renderCatalogMessage("No hay productos guardados en MySQL. Importa productos desde el panel admin.");
+        renderCatalogMessage("No hay productos guardados en MySQL. Importa productos desde el panel de administrador.");
         return;
       }
       productGrid.innerHTML = products.map(renderProductCard).join("");

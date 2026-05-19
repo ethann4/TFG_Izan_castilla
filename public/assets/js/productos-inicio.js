@@ -1,5 +1,5 @@
 ;(async () => {
-  const carouselInner = document.querySelector("[data-home-products]");
+  const carouselInner = document.querySelector("[data-productos-inicio]");
   if (!carouselInner) return;
 
   const escapeHtml = (value) => window.CDPBackend?.escapeHtml(value) || "";
@@ -7,7 +7,7 @@
   const renderMessage = (message) => {
     carouselInner.innerHTML = `
       <div class="carousel-item active">
-        <div class="home-products-message">${escapeHtml(message)}</div>
+        <div class="mensaje-productos-inicio">${escapeHtml(message)}</div>
       </div>
     `;
   };
@@ -16,7 +16,7 @@
     const image = product.gallery[0] || "assets/img/logo_cdp_transparente.png";
     return `
       <div class="col-md-4">
-        <a class="home-product-card" href="producto.html?id=${encodeURIComponent(product.id)}">
+        <a class="tarjeta-producto-inicio" href="producto.html?id=${encodeURIComponent(product.id)}">
           <img src="${escapeHtml(image)}" alt="${escapeHtml(product.brand + " " + product.title)}">
           <span>${escapeHtml(product.brand)}</span>
           <strong>${escapeHtml(product.title)}</strong>
@@ -42,7 +42,7 @@
   try {
     const products = await window.CDPBackend.listProducts();
     if (!products.length) {
-      renderMessage("Importa productos desde el panel admin para mostrar destacados.");
+      renderMessage("Importa productos desde el panel de administrador para mostrar destacados.");
       return;
     }
 
