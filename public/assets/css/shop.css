@@ -296,9 +296,9 @@ body.shop-page {
 
 .customer-auth-logo {
   display: block;
-  width: 92px;
+  width: min(180px, 62%);
   height: auto;
-  margin: 0 auto 0.85rem;
+  margin: 0 auto 0.45rem;
   object-fit: contain;
   filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.34));
 }
@@ -540,6 +540,101 @@ body.shop-page {
   border: 0;
 }
 
+.account-social-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  margin-top: 1.2rem;
+  padding: 1rem;
+  background: #000;
+  border: 0;
+  border-radius: 8px;
+}
+
+.account-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 58px;
+  height: 58px;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.account-social-link svg {
+  width: 34px;
+  height: 34px;
+  stroke-width: 2.2;
+}
+
+.account-social-logo {
+  display: block;
+  object-fit: contain;
+}
+
+.account-social-logo--icon {
+  width: 48px;
+  height: 48px;
+}
+
+.account-social-logo--wallapop {
+  width: 56px;
+  height: auto;
+}
+
+.account-social-link--tiktok {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.account-social-link--instagram {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.account-social-link--wallapop {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.account-social-link--whatsapp {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.account-social-link:hover,
+.account-social-link:focus {
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.account-social-link--tiktok:hover,
+.account-social-link--tiktok:focus,
+.account-social-link--instagram:hover,
+.account-social-link--instagram:focus,
+.account-social-link--wallapop:hover,
+.account-social-link--wallapop:focus {
+  background: transparent;
+  border-color: transparent;
+}
+
+.account-social-link--whatsapp:hover,
+.account-social-link--whatsapp:focus {
+  background: transparent;
+  border-color: transparent;
+}
+
 @media (max-width: 991.98px) {
   .shop-shell {
     padding-top: 8rem;
@@ -581,6 +676,30 @@ body.shop-page {
 
   .customer-social-grid {
     grid-template-columns: 1fr;
+  }
+
+  .account-social-panel {
+    gap: 0.55rem;
+    padding: 0.8rem;
+  }
+
+  .account-social-link {
+    width: 48px;
+    height: 48px;
+  }
+
+  .account-social-link svg {
+    width: 29px;
+    height: 29px;
+  }
+
+  .account-social-logo--icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .account-social-logo--wallapop {
+    width: 47px;
   }
 
   .cart-item {

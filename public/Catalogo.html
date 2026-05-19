@@ -15,8 +15,8 @@
     <meta name="msapplication-TileImage" content="assets/img/logo_cdp_transparente.png">
     <meta name="theme-color" content="#000000">
     <link href="assets/css/theme.css" rel="stylesheet">
-    <link href="assets/css/cdp-common.css?v=account-menu-4" rel="stylesheet">
-    <link href="assets/css/catalog.css" rel="stylesheet">
+    <link href="assets/css/cdp-common.css?v=aviso-cookies-1" rel="stylesheet">
+    <link href="assets/css/catalog.css?v=confianza-catalogo-2" rel="stylesheet">
   </head>
 
   <body class="catalog-page">
@@ -51,14 +51,6 @@
             <div class="cdp-navbar-actions d-flex gap-3 align-items-center">
               <div class="cdp-header-tools" aria-label="Preferencias y cuenta">
                 <div class="dropdown">
-                  <button class="cdp-tool-select dropdown-toggle" id="cdpRegionDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="region"><span data-cdp-label>Espa&ntilde;a | EUR &euro;</span><span data-feather="chevron-down"></span></button>
-                  <ul class="cdp-tools-menu dropdown-menu" aria-labelledby="cdpRegionDropdown">
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="es">Espa&ntilde;a | EUR &euro;</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="pt">Portugal | EUR &euro;</button></li>
-                    <li><button class="dropdown-item" type="button" data-cdp-preference-target="region" data-cdp-option="fr">Francia | EUR &euro;</button></li>
-                  </ul>
-                </div>
-                <div class="dropdown">
                   <button class="cdp-tool-select dropdown-toggle" id="cdpLanguageDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-cdp-preference="language"><span data-cdp-label>Espa&ntilde;ol</span><span data-feather="chevron-down"></span></button>
                   <ul class="cdp-tools-menu dropdown-menu" aria-labelledby="cdpLanguageDropdown">
                     <li><button class="dropdown-item" type="button" data-cdp-preference-target="language" data-cdp-option="es">Espa&ntilde;ol</button></li>
@@ -70,10 +62,6 @@
                 <a class="cdp-header-icon" href="cuenta.html" aria-label="Usuario" data-customer-link><span data-feather="user"></span></a>
                 <a class="cdp-header-icon" href="carrito.html" aria-label="Carrito"><span data-feather="shopping-bag"></span><span class="cdp-cart-count">0</span></a>
               </div>
-              <a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer" class="cdp-social-link" aria-label="Instagram"><span data-feather="instagram"></span></a>
-              <a href="https://www.tiktok.com/@cdp.performanceparts?lang=es-419" target="_blank" rel="noreferrer" class="cdp-social-link" aria-label="TikTok"><span data-feather="music"></span></a>
-              <a href="https://es.wallapop.com/user/izanc-448493585" target="_blank" rel="noreferrer" class="cdp-social-link" aria-label="Wallapop"><span data-feather="shopping-cart"></span></a>
-              <a href="https://wa.me/34676525005" target="_blank" rel="noreferrer" class="cdp-social-link" aria-label="WhatsApp"><span data-feather="message-circle"></span></a>
             </div>
           </div>
         </div>
@@ -177,59 +165,120 @@
           </div>
         </div>
       </section>
+      <section class="catalogo-confianza" aria-label="Ventajas de compra">
+        <div class="catalogo-confianza__contenedor">
+          <article class="catalogo-confianza__item">
+            <div class="catalogo-confianza__icono catalogo-confianza__icono--pago">
+              <span data-feather="credit-card"></span>
+              <span data-feather="shield"></span>
+            </div>
+            <h2>Pago seguro</h2>
+            <p>Soluciones de pago seguras para comprar tu volante con total tranquilidad.</p>
+            <p>Elige protecci&oacute;n 3D Secure, PayPal o Bizum y completa tu pedido con confianza.</p>
+          </article>
+          <article class="catalogo-confianza__item">
+            <div class="catalogo-confianza__icono catalogo-confianza__icono--entrega">
+              <span data-feather="truck"></span>
+              <span data-feather="check-circle"></span>
+            </div>
+            <h2>Servicio de entrega de calidad</h2>
+            <p>Seguimiento del pedido y preparaci&oacute;n cuidada desde el taller hasta la entrega.</p>
+            <p>Cada volante se revisa antes del env&iacute;o para mantener el acabado en perfecto estado.</p>
+          </article>
+          <article class="catalogo-confianza__item">
+            <div class="catalogo-confianza__icono">
+              <span data-feather="headphones"></span>
+              <span data-feather="message-circle"></span>
+            </div>
+            <h2>Atenci&oacute;n al cliente a tu disposici&oacute;n</h2>
+            <p>Te acompa&ntilde;amos para elegir materiales, colores, costuras, levas y detalles de compatibilidad.</p>
+            <p>Estamos disponibles para resolver dudas antes y despu&eacute;s de tu compra.</p>
+          </article>
+          <article class="catalogo-confianza__item">
+            <div class="catalogo-confianza__icono">
+              <span data-feather="award"></span>
+              <span data-feather="star"></span>
+            </div>
+            <h2>Calidad de fabricaci&oacute;n</h2>
+            <p>Fabricamos volantes personalizados con acabados premium y montaje pensado para cada modelo.</p>
+            <p>Dise&ntilde;os trabajados con detalle para que el interior del coche tenga presencia propia.</p>
+          </article>
+        </div>
+      </section>
     </main>
-
-    <section class="py-7 cdp-footer" id="contact">
+    <footer class="py-7 cdp-footer" id="contact">
       <div class="container">
-        <div class="row g-4">
-          <div class="col-md-4">
-            <img class="footer-logo mb-3" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs">
-            <p>Personalizacion y venta de volantes premium para proyectos de automocion con identidad propia.</p>
+        <div class="cdp-footer-commerce">
+          <div class="cdp-footer-main">
+            <a class="cdp-footer-brand" href="index.html" aria-label="CDP Customs"><img class="footer-logo" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs"></a>
+            <p class="cdp-footer-copy">Tienda online especializada en volantes personalizados: acabados premium, compatibilidad por modelo y pedidos a medida para proyectos de automoci&oacute;n.</p>
+            <div class="cdp-footer-actions">
+              <a class="btn btn-sm btn-primary" href="Catalogo.html">Ver cat&aacute;logo</a>
+              <a class="btn btn-sm btn-outline-primary" href="Creacionvirtual.html">Configurar volante</a>
+            </div>
+            <div class="cdp-footer-trust" aria-label="Ventajas de compra">
+              <span>Pago seguro</span>
+              <span>Asesor&iacute;a personalizada</span>
+              <span>Env&iacute;os en Espa&ntilde;a</span>
+            </div>
           </div>
-          <div class="col-md-2">
-            <div class="cdp-footer-title mb-3">Menu</div>
-            <ul class="list-unstyled">
-              <li><a href="Catalogo.html">Catalogo</a></li>
-              <li><a href="Creacionvirtual.html">Configurador</a></li>
-              <li><a href="contacto.html">Contacto</a></li>
-            </ul>
-          </div>
-          <div class="col-md-3">
-            <div class="cdp-footer-title mb-3">Proyecto DAW</div>
-            <ul class="list-unstyled">
-              <li>Interfaz HTML, CSS y JS</li>
-              <li>Servidor PHP/MySQL</li>
-              <li>CRUD de productos y pedidos</li>
-            </ul>
-          </div>
-          <div class="col-md-3">
-            <div class="cdp-footer-title mb-3">Contacto</div>
-            <p class="mb-1">Vizcaya, Espana</p>
-            <p class="mb-1">
-              <a href="tel:+34676525005">(+34) 676 525 005</a>
-            </p>
-            <p class="mb-1">
-              <a href="mailto:info@cdpcustoms.local">info@cdpcustoms.local</a>
-            </p>
-            <p class="mb-0">
-              <a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer">@cdp.performanceparts</a>
-            </p>
+          <div class="cdp-footer-grid">
+            <div>
+              <div class="cdp-footer-title mb-3">Comprar</div>
+              <ul class="list-unstyled cdp-footer-list">
+                <li><a href="Catalogo.html">Cat&aacute;logo completo</a></li>
+                <li><a href="Creacionvirtual.html">Configurador a medida</a></li>
+                <li><a href="carrito.html">Carrito</a></li>
+                <li><a href="cuenta.html">Cuenta cliente</a></li>
+              </ul>
+            </div>
+            <div>
+              <div class="cdp-footer-title mb-3">Soporte</div>
+              <ul class="list-unstyled cdp-footer-list">
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="https://wa.me/34676525005" target="_blank" rel="noreferrer">WhatsApp</a></li>
+                <li><a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer">Instagram</a></li>
+                <li><a href="https://es.wallapop.com/user/izanc-448493585" target="_blank" rel="noreferrer">Wallapop</a></li>
+              </ul>
+            </div>
+            <div>
+              <div class="cdp-footer-title mb-3">Confianza</div>
+              <ul class="list-unstyled cdp-footer-list">
+                <li>Compatibilidad por modelo</li>
+                <li>Pedido personalizado</li>
+                <li>Acabados premium</li>
+                <li>Soporte postventa</li>
+              </ul>
+            </div>
+            <div class="cdp-footer-contact">
+              <div class="cdp-footer-title mb-3">Contacto</div>
+              <p>Vizcaya, Espa&ntilde;a</p>
+              <p><a href="tel:+34676525005">(+34) 676 525 005</a></p>
+              <p><a href="mailto:info@cdpcustoms.local">info@cdpcustoms.local</a></p>
+              <p><a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer">@cdp.performanceparts</a></p>
+            </div>
           </div>
         </div>
         <div class="border-bottom border-700 my-4"></div>
-        <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
-          <span>CDP Customs - Proyecto final DAW</span>
-          <span>Bootstrap adaptado y profesionalizado</span>
+        <div class="cdp-footer-bottom d-flex flex-column flex-md-row justify-content-between gap-3">
+          <span>CDP Customs - Ecommerce de volantes personalizados</span>
+          <div class="cdp-footer-payments" aria-label="M&eacute;todos de pago">
+            <span>Visa</span>
+            <span>Mastercard</span>
+            <span>PayPal</span>
+            <span>Bizum</span>
+          </div>
         </div>
       </div>
-    </section>
+    </footer>
 
     <script src="vendors/@popperjs/popper.min.js"></script>
     <script src="vendors/bootstrap/bootstrap.min.js"></script>
     <script src="vendors/is/is.min.js"></script>
     <script src="vendors/feather-icons/feather.min.js"></script>
     <script src="assets/js/theme.js"></script>
-    <script src="assets/js/cdp-header.js?v=idioma-2"></script>
+    <script src="assets/js/cdp-header.js?v=flags-1"></script>
+    <script src="assets/js/aviso-cookies.js?v=aviso-cookies-1"></script>
     <script src="assets/js/cliente-servidor.js?v=php-url-2"></script>
     <script src="assets/js/shop.js?v=account-menu-4"></script>
     <script src="assets/js/catalog.js"></script>

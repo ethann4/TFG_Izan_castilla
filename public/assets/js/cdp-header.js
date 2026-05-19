@@ -4,10 +4,12 @@
     language: "cdp.language",
   };
 
-  const languageLabels = {
-    es: "Espa\u00f1ol",
-    en: "English",
-    fr: "Fran\u00e7ais",
+  const languageOptions = {
+    es: { code: "ES", name: "Espa\u00f1ol" },
+    nb: { code: "NB", name: "Norsk Bokm\u00e5l" },
+    en: { code: "EN", name: "English" },
+    de: { code: "DE", name: "Deutsch" },
+    fr: { code: "FR", name: "Fran\u00e7ais" },
   };
 
   const regionLabels = {
@@ -215,6 +217,8 @@
     const text = normalizeText(value).toLowerCase();
 
     if (["en", "english"].includes(text)) return "en";
+    if (["nb", "no"].includes(text) || text.includes("norsk") || text.includes("noruego") || text.includes("bokm")) return "nb";
+    if (["de", "deutsch"].includes(text) || text.includes("aleman") || text.includes("alem\u00e1n") || text.includes("german")) return "de";
     if (text === "fr" || text.includes("fran") || text.includes("france")) return "fr";
     return "es";
   }
@@ -239,7 +243,7 @@
     try {
       localStorage.setItem(storageKeys[kind], value);
     } catch (error) {
-      // Keep working visually if storage is blocked.
+      return;
     }
   }
 
@@ -247,11 +251,29 @@
     const cleanValue = normalizeText(value);
     const spanishValue = reverseTranslations[cleanValue] || cleanValue;
 
-    if (language === "es") {
+    if (language === "es" || !translations[language]) {
       return spanishValue;
     }
 
     return translations[language]?.[spanishValue] || value;
+  }
+
+  function renderLanguageChoice(target, language) {
+    const normalizedLanguage = normalizeLanguage(language);
+    const option = languageOptions[normalizedLanguage] || languageOptions.es;
+    const choice = document.createElement("span");
+    const flag = document.createElement("span");
+    const code = document.createElement("span");
+
+    target.textContent = "";
+    choice.className = "cdp-language-choice";
+    flag.className = `cdp-language-flag cdp-language-flag--${normalizedLanguage}`;
+    flag.setAttribute("aria-hidden", "true");
+    code.className = "cdp-language-code";
+    code.textContent = option.code;
+
+    choice.append(flag, code);
+    target.appendChild(choice);
   }
 
   function translateTextNode(node, language) {
@@ -310,13 +332,18 @@
   }
 
   function updatePreferenceLabel(kind, value) {
-    const label = kind === "language"
-      ? languageLabels[normalizeLanguage(value)]
-      : regionLabels[normalizeRegion(value)];
-
     document.querySelectorAll(`[data-cdp-preference="${kind}"]`).forEach((button) => {
       const node = button.querySelector("[data-cdp-label]");
-      if (node) node.textContent = label;
+      if (!node) return;
+
+      if (kind === "language") {
+        const language = normalizeLanguage(value);
+        renderLanguageChoice(node, language);
+        button.setAttribute("aria-label", `Idioma: ${languageOptions[language].name}`);
+        return;
+      }
+
+      node.textContent = regionLabels[normalizeRegion(value)];
     });
   }
 
@@ -327,10 +354,24 @@
       option.textContent = regionLabels[region];
     });
 
-    document.querySelectorAll("[data-cdp-preference-target='language']").forEach((option) => {
-      const language = normalizeLanguage(option.dataset.cdpOption || option.textContent);
-      option.dataset.cdpOption = language;
-      option.textContent = languageLabels[language];
+    document.querySelectorAll(".cdp-tools-menu[aria-labelledby='cdpLanguageDropdown']").forEach((menu) => {
+      menu.textContent = "";
+
+      Object.keys(languageOptions).forEach((language) => {
+        const item = document.createElement("li");
+        const option = document.createElement("button");
+
+        option.className = "dropdown-item";
+        option.type = "button";
+        option.dataset.cdpPreferenceTarget = "language";
+        option.dataset.cdpOption = language;
+        option.setAttribute("aria-label", languageOptions[language].name);
+        option.title = languageOptions[language].name;
+        renderLanguageChoice(option, language);
+
+        item.appendChild(option);
+        menu.appendChild(item);
+      });
     });
   }
 

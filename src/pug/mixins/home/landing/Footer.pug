@@ -1,35 +1,62 @@
 mixin Footer
-  section.py-7.cdp-footer#contact
+  footer.py-7.cdp-footer#contact
     .container
-      .row.g-4
-        .col-md-4
-          img.footer-logo.mb-3(src='assets/img/logo_cdp_transparente.png' alt='CDP Customs')
-          p Personalizacion y venta de volantes premium para proyectos de automocion con identidad propia.
-        .col-md-2
-          .cdp-footer-title.mb-3 Menu
-          ul.list-unstyled
-            li
-              a(href='Catalogo.html') Catalogo
-            li
-              a(href='Creacionvirtual.html') Configurador
-            li
-              a(href='contacto.html') Contacto
-        .col-md-3
-          .cdp-footer-title.mb-3 Proyecto DAW
-          ul.list-unstyled
-            li Frontend HTML, CSS y JS
-            li Backend PHP/MySQL
-            li CRUD de productos y pedidos
-        .col-md-3
-          .cdp-footer-title.mb-3 Contacto
-          p.mb-1 Vizcaya, Espana
-          p.mb-1
-            a(href='tel:+34676525005') (+34) 676 525 005
-          p.mb-1
-            a(href='mailto:info@cdpcustoms.local') info@cdpcustoms.local
-          p.mb-0
-            a(href='https://instagram.com/cdp.performanceparts' target='_blank' rel='noreferrer') @cdp.performanceparts
+      .cdp-footer-commerce
+        .cdp-footer-main
+          a.cdp-footer-brand(href='index.html' aria-label='CDP Customs')
+            img.footer-logo(src='assets/img/logo_cdp_transparente.png' alt='CDP Customs')
+          p.cdp-footer-copy!= 'Tienda online especializada en volantes personalizados: acabados premium, compatibilidad por modelo y pedidos a medida para proyectos de automoci&oacute;n.'
+          .cdp-footer-actions
+            a.btn.btn-sm.btn-primary(href='Catalogo.html')!= 'Ver cat&aacute;logo'
+            a.btn.btn-sm.btn-outline-primary(href='Creacionvirtual.html') Configurar volante
+          .cdp-footer-trust(aria-label='Ventajas de compra')
+            span Pago seguro
+            span!= 'Asesor&iacute;a personalizada'
+            span!= 'Env&iacute;os en Espa&ntilde;a'
+        .cdp-footer-grid
+          div
+            .cdp-footer-title.mb-3 Comprar
+            ul.list-unstyled.cdp-footer-list
+              li
+                a(href='Catalogo.html')!= 'Cat&aacute;logo completo'
+              li
+                a(href='Creacionvirtual.html') Configurador a medida
+              li
+                a(href='carrito.html') Carrito
+              li
+                a(href='cuenta.html') Cuenta cliente
+          div
+            .cdp-footer-title.mb-3 Soporte
+            ul.list-unstyled.cdp-footer-list
+              li
+                a(href='contacto.html') Contacto
+              li
+                a(href='https://wa.me/34676525005' target='_blank' rel='noreferrer') WhatsApp
+              li
+                a(href='https://instagram.com/cdp.performanceparts' target='_blank' rel='noreferrer') Instagram
+              li
+                a(href='https://es.wallapop.com/user/izanc-448493585' target='_blank' rel='noreferrer') Wallapop
+          div
+            .cdp-footer-title.mb-3 Confianza
+            ul.list-unstyled.cdp-footer-list
+              li Compatibilidad por modelo
+              li Pedido personalizado
+              li Acabados premium
+              li Soporte postventa
+          .cdp-footer-contact
+            .cdp-footer-title.mb-3 Contacto
+            p!= 'Vizcaya, Espa&ntilde;a'
+            p
+              a(href='tel:+34676525005') (+34) 676 525 005
+            p
+              a(href='mailto:info@cdpcustoms.local') info@cdpcustoms.local
+            p
+              a(href='https://instagram.com/cdp.performanceparts' target='_blank' rel='noreferrer') @cdp.performanceparts
       .border-bottom.border-700.my-4
-      .d-flex.flex-column.flex-md-row.justify-content-between.gap-3
-        span CDP Customs - Proyecto final DAW
-        span Bootstrap adaptado y profesionalizado
+      .cdp-footer-bottom.d-flex.flex-column.flex-md-row.justify-content-between.gap-3
+        span CDP Customs - Ecommerce de volantes personalizados
+        .cdp-footer-payments(aria-label='Metodos de pago')
+          span Visa
+          span Mastercard
+          span PayPal
+          span Bizum
