@@ -1,15 +1,28 @@
-/*===============================================
-|  CDP CUSTOMS | CONFIGURADOR VISUAL PREMIUM
-|  Babylon.js + modelos GLB/GLTF y materiales PBR
-|  Preparado para servidor PHP/MySQL
-================================================*/
-
 (function () {
   "use strict";
 
-  const MODEL_URL = "assets/models/volante.glb";
+  const URL_MODELO_POR_DEFECTO = "assets/models/volante.glb";
+  const MODELOS_POR_VARIANTE = {
+    "BMW|E46":          "assets/models/volante-bmw-e46.glb",
+    "BMW|E39":          "assets/models/volante-bmw-e39.glb",
+    "BMW|F30":          "assets/models/volante-bmw-f30.glb",
+    "BMW|F82":          "assets/models/volante-bmw-f82.glb",
+    "Audi|RS3":         "assets/models/volante-audi-rs3.glb",
+    "Audi|RS6":         "assets/models/volante-audi-rs6.glb",
+    "Audi|RS7":         "assets/models/volante-audi-rs7.glb",
+    "Volkswagen|Golf R":   "assets/models/volante-vw-golf-r.glb",
+    "Volkswagen|Golf GTI": "assets/models/volante-vw-golf-gti.glb",
+    "Volkswagen|Golf GTD": "assets/models/volante-vw-golf-gtd.glb",
+    "Mercedes|AMG":     "assets/models/volante-mercedes-amg.glb",
+    "Mercedes|CLA45":   "assets/models/volante-mercedes-cla45.glb",
+  };
+  const CLAVE_VOLANTE_PENDIENTE = "cdp.volante.pendiente";
 
-  const partAliases = {
+  function resolverUrlModelo(marca, modelo) {
+    return MODELOS_POR_VARIANTE[`${marca}|${modelo}`] || URL_MODELO_POR_DEFECTO;
+  }
+
+  const aliasPartes = {
     aro: ["aro", "rim", "ring_outer", "wheel_ring"],
     agarres_laterales: ["agarre", "agarres", "grip", "thumb", "lateral"],
     costuras: ["costura", "costuras", "stitch", "thread", "seam"],
@@ -20,7 +33,7 @@
     molduras: ["moldura", "molduras", "trim", "spoke", "centro", "hub", "airbag"],
   };
 
-  const configuratorData = {
+  const datosConfigurador = {
     BMW: {
       modelos: [
         { id: "E46", label: "E46", basePrice: 450, levasMagneticas: false },
@@ -63,7 +76,7 @@
     },
   };
 
-  const optionData = {
+  const datosOpciones = {
     aro: [
       {
         id: "carbono",
@@ -181,6 +194,15 @@
         swatch: "linear-gradient(180deg, #1b61ff 0 33%, #fff 33% 66%, #d62828 66% 100%)",
       },
     ],
+    molduras: [
+      { id: "grafito", label: "Grafito (OEM)", price: 0, color: "#151515", metallic: 0.68, roughness: 0.34, swatch: "linear-gradient(135deg, #0e0e0e, #2d2d33)" },
+      { id: "blanco", label: "Blanco perla", price: 25, color: "#f1f1f1", metallic: 0.4, roughness: 0.36, swatch: "linear-gradient(135deg, #f6f6f6, #d8d8d8)" },
+      { id: "rojo", label: "Rojo deportivo", price: 30, color: "#d62828", metallic: 0.5, roughness: 0.3, swatch: "#d62828" },
+      { id: "azul", label: "Azul racing", price: 30, color: "#1b61ff", metallic: 0.5, roughness: 0.3, swatch: "#1b61ff" },
+      { id: "amarillo", label: "Amarillo", price: 30, color: "#f2c94c", metallic: 0.5, roughness: 0.3, swatch: "#f2c94c" },
+      { id: "oro", label: "Oro cepillado", price: 55, color: "#caa75d", metallic: 0.85, roughness: 0.22, swatch: "linear-gradient(135deg, #caa75d, #8a6a2c)" },
+      { id: "cromo", label: "Cromo espejo", price: 45, color: "#c8ced6", metallic: 0.95, roughness: 0.12, swatch: "linear-gradient(135deg, #f1f4f8, #8c92a0)" },
+    ],
   };
 
   const config = {
@@ -193,227 +215,231 @@
     pantallaRpm: false,
     levas: "sin-levas",
     marcador: "negro",
+    molduras: "grafito",
   };
 
-  const state = {
-    engine: null,
-    scene: null,
-    camera: null,
-    canvas: null,
-    modelRoot: null,
-    parts: {},
-    materials: {},
-    textures: {},
-    price: 0,
-    priceLines: [],
-    loadedFromGlb: false,
-    placeholderStyle: "",
-    resizeObserver: null,
+  const estado = {
+    motor: null,
+    escena: null,
+    camara: null,
+    lienzo: null,
+    raizModelo: null,
+    partes: {},
+    materiales: {},
+    texturas: {},
+    precio: 0,
+    lineasPrecio: [],
+    cargadoDesdeGlb: false,
+    estiloPlaceholder: "",
+    observadorResize: null,
   };
 
-  const root = document.querySelector("[data-configurator]");
-  const nodes = {
-    stage: root?.querySelector("[data-babylon-stage]"),
-    canvas: root?.querySelector("[data-babylon-canvas]"),
-    loader: root?.querySelector("[data-babylon-loader]"),
-    resetCamera: root?.querySelector("[data-camera-reset]"),
-    selects: {
-      marca: root?.querySelector('[data-config-select="marca"]'),
-      modelo: root?.querySelector('[data-config-select="modelo"]'),
-      logo: root?.querySelector('[data-config-select="logo"]'),
+  const raiz = document.querySelector("[data-configurator]");
+  const nodos = {
+    escenario: raiz?.querySelector("[data-babylon-stage]"),
+    lienzo: raiz?.querySelector("[data-babylon-canvas]"),
+    cargador: raiz?.querySelector("[data-babylon-loader]"),
+    botonReiniciarCamara: raiz?.querySelector("[data-camera-reset]"),
+    selectores: {
+      marca: raiz?.querySelector('[data-config-select="marca"]'),
+      modelo: raiz?.querySelector('[data-config-select="modelo"]'),
+      logo: raiz?.querySelector('[data-config-select="logo"]'),
     },
-    optionGroups: Array.from(root?.querySelectorAll("[data-option-group]") || []),
-    stepButtons: Array.from(root?.querySelectorAll("[data-step-target]") || []),
-    stepPanels: Array.from(root?.querySelectorAll("[data-step-panel]") || []),
-    brandLogo: root?.querySelector("[data-brand-logo]"),
-    brandBadge: root?.querySelector("[data-brand-badge]"),
-    compatibilityStatus: root?.querySelector("[data-compatibility-status]"),
-    previewBase: root?.querySelector("[data-preview-base]"),
-    previewBackend: root?.querySelector("[data-preview-backend]"),
-    summary: Array.from(root?.querySelectorAll("[data-summary]") || []),
-    price: root?.querySelector("[data-summary-price]"),
-    priceBreakdown: root?.querySelector("[data-price-breakdown]"),
-    jsonOutput: root?.querySelector("[data-config-json]"),
-    requestLink: root?.querySelector("[data-config-request]"),
+    gruposOpciones: Array.from(raiz?.querySelectorAll("[data-option-group]") || []),
+    botonesPaso: Array.from(raiz?.querySelectorAll("[data-step-target]") || []),
+    panelesPaso: Array.from(raiz?.querySelectorAll("[data-step-panel]") || []),
+    logoMarca: raiz?.querySelector("[data-brand-logo]"),
+    chipMarca: raiz?.querySelector("[data-brand-badge]"),
+    estadoCompatibilidad: raiz?.querySelector("[data-compatibility-status]"),
+    basePreview: raiz?.querySelector("[data-preview-base]"),
+    backendPreview: raiz?.querySelector("[data-preview-backend]"),
+    resumen: Array.from(raiz?.querySelectorAll("[data-summary]") || []),
+    precio: raiz?.querySelector("[data-summary-price]"),
+    desglosePrecio: raiz?.querySelector("[data-price-breakdown]"),
+    salidaJson: raiz?.querySelector("[data-config-json]"),
+    enlaceSolicitud: raiz?.querySelector("[data-config-request]"),
+    botonGuardar: raiz?.querySelector("[data-config-save]"),
+    botonComprar: raiz?.querySelector("[data-config-buy]"),
+    estadoUi: raiz?.querySelector("[data-config-status]"),
   };
 
-  function initConfigurator() {
-    if (!root || !nodes.canvas || !nodes.stage) return;
+  function inicializarConfigurador() {
+    if (!raiz || !nodos.lienzo || !nodos.escenario) return;
 
     if (!window.BABYLON) {
-      showViewerMessage("Babylon.js no se ha podido cargar");
+      mostrarMensajeVisor("Babylon.js no se ha podido cargar");
       return;
     }
 
-    initBabylonScene();
-    bindConfiguratorEvents();
-    updateAvailableOptions();
-    updateSummary();
-    updatePrice();
+    inicializarEscenaBabylon();
+    enlazarEventosConfigurador();
+    actualizarOpcionesDisponibles();
+    actualizarResumen();
+    actualizarPrecio();
 
-    loadSteeringModel().then(() => {
-      updateModelAppearance();
-      hideLoader();
+    cargarModeloVolante().then(() => {
+      actualizarAparienciaModelo();
+      ocultarCargador();
     });
   }
 
-  function initBabylonScene() {
-    state.canvas = nodes.canvas;
-    state.engine = new BABYLON.Engine(state.canvas, true, {
+  function inicializarEscenaBabylon() {
+    estado.lienzo = nodos.lienzo;
+    estado.motor = new BABYLON.Engine(estado.lienzo, true, {
       preserveDrawingBuffer: true,
       stencil: true,
       antialias: true,
     });
 
-    state.scene = new BABYLON.Scene(state.engine);
-    state.scene.clearColor = new BABYLON.Color4(0.006, 0.006, 0.007, 0);
-    state.scene.environmentIntensity = 0.85;
-    state.scene.imageProcessingConfiguration.toneMappingEnabled = true;
-    state.scene.imageProcessingConfiguration.toneMappingType =
+    estado.escena = new BABYLON.Scene(estado.motor);
+    estado.escena.clearColor = new BABYLON.Color4(0.006, 0.006, 0.007, 0);
+    estado.escena.environmentIntensity = 0.85;
+    estado.escena.imageProcessingConfiguration.toneMappingEnabled = true;
+    estado.escena.imageProcessingConfiguration.toneMappingType =
       BABYLON.ImageProcessingConfiguration.TONEMAPPING_ACES;
-    state.scene.imageProcessingConfiguration.exposure = 1.08;
-    state.scene.imageProcessingConfiguration.contrast = 1.18;
+    estado.escena.imageProcessingConfiguration.exposure = 1.08;
+    estado.escena.imageProcessingConfiguration.contrast = 1.18;
 
-    state.camera = new BABYLON.ArcRotateCamera(
+    estado.camara = new BABYLON.ArcRotateCamera(
       "cdp_camera",
       Math.PI / 2,
       Math.PI / 2,
       5.0,
       new BABYLON.Vector3(0, 0.02, 0),
-      state.scene
+      estado.escena
     );
-    state.camera.attachControl(state.canvas, true);
-    state.camera.lowerRadiusLimit = 3.0;
-    state.camera.upperRadiusLimit = 6.6;
-    state.camera.lowerBetaLimit = Math.PI / 2.55;
-    state.camera.upperBetaLimit = Math.PI / 1.55;
-    state.camera.angularSensibilityX = 520;
-    state.camera.angularSensibilityY = 560;
-    state.camera.wheelPrecision = 36;
-    state.camera.panningSensibility = 0;
-    state.camera.inertia = 0.82;
-    state.camera.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
+    estado.camara.attachControl(estado.lienzo, true);
+    estado.camara.lowerRadiusLimit = 3.0;
+    estado.camara.upperRadiusLimit = 6.6;
+    estado.camara.lowerBetaLimit = Math.PI / 2.55;
+    estado.camara.upperBetaLimit = Math.PI / 1.55;
+    estado.camara.angularSensibilityX = 520;
+    estado.camara.angularSensibilityY = 560;
+    estado.camara.wheelPrecision = 36;
+    estado.camara.panningSensibility = 0;
+    estado.camara.inertia = 0.82;
+    estado.camara.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
 
-    addPremiumLighting();
-    createTextureLibrary();
-    createMaterialLibrary();
-    createStudioBase();
+    anadirIluminacionPremium();
+    crearLibreriaTexturas();
+    crearLibreriaMateriales();
+    crearBaseEstudio();
 
-    state.engine.runRenderLoop(() => {
-      state.scene.render();
+    estado.motor.runRenderLoop(() => {
+      estado.escena.render();
     });
 
-    resizeRenderer();
+    redimensionarRenderizador();
     if ("ResizeObserver" in window) {
-      state.resizeObserver = new ResizeObserver(resizeRenderer);
-      state.resizeObserver.observe(nodes.stage);
+      estado.observadorResize = new ResizeObserver(redimensionarRenderizador);
+      estado.observadorResize.observe(nodos.escenario);
     }
-    window.addEventListener("resize", resizeRenderer);
+    window.addEventListener("resize", redimensionarRenderizador);
   }
 
-  function addPremiumLighting() {
+  function anadirIluminacionPremium() {
     const hemi = new BABYLON.HemisphericLight(
       "cdp_hemi",
       new BABYLON.Vector3(0, 1, 0),
-      state.scene
+      estado.escena
     );
     hemi.intensity = 0.72;
     hemi.groundColor = new BABYLON.Color3(0.02, 0.02, 0.024);
 
-    const key = new BABYLON.DirectionalLight(
+    const luzPrincipal = new BABYLON.DirectionalLight(
       "cdp_key",
       new BABYLON.Vector3(-0.4, -0.85, -0.34),
-      state.scene
+      estado.escena
     );
-    key.position = new BABYLON.Vector3(4.2, 6.0, 5.2);
-    key.intensity = 3.4;
+    luzPrincipal.position = new BABYLON.Vector3(4.2, 6.0, 5.2);
+    luzPrincipal.intensity = 3.4;
 
-    const redRim = new BABYLON.PointLight(
+    const bordeRojo = new BABYLON.PointLight(
       "cdp_red_rim",
       new BABYLON.Vector3(-3.3, 1.1, 2.3),
-      state.scene
+      estado.escena
     );
-    redRim.diffuse = new BABYLON.Color3(0.9, 0.12, 0.12);
-    redRim.specular = new BABYLON.Color3(1, 0.24, 0.2);
-    redRim.intensity = 2.35;
-    redRim.range = 7.2;
+    bordeRojo.diffuse = new BABYLON.Color3(0.9, 0.12, 0.12);
+    bordeRojo.specular = new BABYLON.Color3(1, 0.24, 0.2);
+    bordeRojo.intensity = 2.35;
+    bordeRojo.range = 7.2;
 
-    const coolRim = new BABYLON.PointLight(
+    const bordeFrio = new BABYLON.PointLight(
       "cdp_cool_rim",
       new BABYLON.Vector3(3.2, -0.5, 2.2),
-      state.scene
+      estado.escena
     );
-    coolRim.diffuse = new BABYLON.Color3(0.28, 0.42, 1);
-    coolRim.specular = new BABYLON.Color3(0.42, 0.54, 1);
-    coolRim.intensity = 1.1;
-    coolRim.range = 7;
+    bordeFrio.diffuse = new BABYLON.Color3(0.28, 0.42, 1);
+    bordeFrio.specular = new BABYLON.Color3(0.42, 0.54, 1);
+    bordeFrio.intensity = 1.1;
+    bordeFrio.range = 7;
 
-    const top = new BABYLON.SpotLight(
+    const cenital = new BABYLON.SpotLight(
       "cdp_top_spot",
       new BABYLON.Vector3(0, 3.4, 2.6),
       new BABYLON.Vector3(0, -1, -0.45),
       Math.PI / 2.2,
       18,
-      state.scene
+      estado.escena
     );
-    top.intensity = 1.8;
+    cenital.intensity = 1.8;
 
-    const glow = new BABYLON.GlowLayer("cdp_glow", state.scene, {
+    const resplandor = new BABYLON.GlowLayer("cdp_glow", estado.escena, {
       mainTextureSamples: 4,
       blurKernelSize: 28,
     });
-    glow.intensity = 0.22;
+    resplandor.intensity = 0.22;
   }
 
-  function createStudioBase() {
-    const backdrop = BABYLON.MeshBuilder.CreatePlane(
+  function crearBaseEstudio() {
+    const fondo = BABYLON.MeshBuilder.CreatePlane(
       "studio_fabric_backdrop",
       { width: 5.3, height: 4.05 },
-      state.scene
+      estado.escena
     );
-    backdrop.position = new BABYLON.Vector3(0, 0, -0.42);
+    fondo.position = new BABYLON.Vector3(0, 0, -0.42);
 
-    const material = new BABYLON.PBRMaterial("studio_fabric_mat", state.scene);
-    material.albedoTexture = createFabricBackdropTexture();
+    const material = new BABYLON.PBRMaterial("studio_fabric_mat", estado.escena);
+    material.albedoTexture = crearTexturaFondoTela();
     material.albedoColor = new BABYLON.Color3(0.55, 0.55, 0.55);
     material.metallic = 0;
     material.roughness = 0.96;
     material.backFaceCulling = false;
-    backdrop.material = material;
-    backdrop.isPickable = false;
+    fondo.material = material;
+    fondo.isPickable = false;
 
-    const shadow = BABYLON.MeshBuilder.CreatePlane(
+    const sombra = BABYLON.MeshBuilder.CreatePlane(
       "studio_floor_shadow",
       { width: 3.4, height: 0.66 },
-      state.scene
+      estado.escena
     );
-    shadow.position = new BABYLON.Vector3(0, -1.34, -0.2);
+    sombra.position = new BABYLON.Vector3(0, -1.34, -0.2);
 
-    const shadowMat = new BABYLON.StandardMaterial("studio_floor_shadow_mat", state.scene);
-    shadowMat.diffuseTexture = createShadowTexture();
-    shadowMat.opacityTexture = shadowMat.diffuseTexture;
-    shadowMat.emissiveColor = new BABYLON.Color3(0, 0, 0);
-    shadowMat.disableLighting = true;
-    shadowMat.backFaceCulling = false;
-    shadow.material = shadowMat;
-    shadow.isPickable = false;
+    const materialSombra = new BABYLON.StandardMaterial("studio_floor_shadow_mat", estado.escena);
+    materialSombra.diffuseTexture = crearTexturaSombra();
+    materialSombra.opacityTexture = materialSombra.diffuseTexture;
+    materialSombra.emissiveColor = new BABYLON.Color3(0, 0, 0);
+    materialSombra.disableLighting = true;
+    materialSombra.backFaceCulling = false;
+    sombra.material = materialSombra;
+    sombra.isPickable = false;
   }
 
-  function createFabricBackdropTexture() {
-    const texture = new BABYLON.DynamicTexture(
+  function crearTexturaFondoTela() {
+    const textura = new BABYLON.DynamicTexture(
       "black_fabric_backdrop_texture",
       { width: 1024, height: 1024 },
-      state.scene,
+      estado.escena,
       false
     );
-    const ctx = texture.getContext();
+    const ctx = textura.getContext();
     ctx.fillStyle = "#090909";
     ctx.fillRect(0, 0, 1024, 1024);
 
     for (let i = 0; i < 9000; i += 1) {
-      const shade = 8 + Math.random() * 42;
-      const alpha = 0.06 + Math.random() * 0.12;
-      ctx.fillStyle = `rgba(${shade},${shade},${shade},${alpha})`;
+      const tono = 8 + Math.random() * 42;
+      const alfa = 0.06 + Math.random() * 0.12;
+      ctx.fillStyle = `rgba(${tono},${tono},${tono},${alfa})`;
       ctx.fillRect(Math.random() * 1024, Math.random() * 1024, 1 + Math.random() * 3, 1 + Math.random() * 3);
     }
 
@@ -425,97 +451,108 @@
       ctx.stroke();
     }
 
-    texture.update(false);
-    texture.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
-    texture.wrapV = BABYLON.Texture.WRAP_ADDRESSMODE;
-    return texture;
+    textura.update(false);
+    textura.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
+    textura.wrapV = BABYLON.Texture.WRAP_ADDRESSMODE;
+    return textura;
   }
 
-  function createShadowTexture() {
-    const texture = new BABYLON.DynamicTexture(
+  function crearTexturaSombra() {
+    const textura = new BABYLON.DynamicTexture(
       "wheel_floor_shadow_texture",
       { width: 512, height: 192 },
-      state.scene,
+      estado.escena,
       true
     );
-    const ctx = texture.getContext();
-    const gradient = ctx.createRadialGradient(256, 96, 24, 256, 96, 230);
-    gradient.addColorStop(0, "rgba(0,0,0,0.72)");
-    gradient.addColorStop(0.58, "rgba(0,0,0,0.34)");
-    gradient.addColorStop(1, "rgba(0,0,0,0)");
+    const ctx = textura.getContext();
+    const degradado = ctx.createRadialGradient(256, 96, 24, 256, 96, 230);
+    degradado.addColorStop(0, "rgba(0,0,0,0.72)");
+    degradado.addColorStop(0.58, "rgba(0,0,0,0.34)");
+    degradado.addColorStop(1, "rgba(0,0,0,0)");
     ctx.clearRect(0, 0, 512, 192);
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = degradado;
     ctx.fillRect(0, 0, 512, 192);
-    texture.hasAlpha = true;
-    texture.update(false);
-    return texture;
+    textura.hasAlpha = true;
+    textura.update(false);
+    return textura;
   }
 
-  function loadSteeringModel() {
-    const split = splitModelUrl(MODEL_URL);
+  function cargarModeloVolante() {
+    const url = resolverUrlModelo(config.marca, config.modelo);
+    estado.urlModeloActual = url;
+    const partes = dividirUrlModelo(url);
 
-    return BABYLON.SceneLoader.ImportMeshAsync("", split.root, split.file, state.scene)
-      .then((result) => {
-        const meshes = result.meshes.filter((mesh) => mesh instanceof BABYLON.Mesh && mesh.name !== "__root__");
-        if (!meshes.length) throw new Error("Modelo GLB sin meshes utiles");
+    return BABYLON.SceneLoader.ImportMeshAsync("", partes.raiz, partes.archivo, estado.escena)
+      .then((resultado) => {
+        const mallas = resultado.meshes.filter((malla) => malla instanceof BABYLON.Mesh && malla.name !== "__root__");
+        if (!mallas.length) throw new Error("Modelo GLB sin meshes utiles");
 
-        resetParts();
-        const importedRoot = new BABYLON.TransformNode("volante_glb_root", state.scene);
-        meshes.forEach((mesh) => {
-          mesh.parent = importedRoot;
-          mesh.isPickable = false;
-          if (!mesh.material) mesh.material = state.materials.molduras;
+        reiniciarPiezas();
+        const raizImportada = new BABYLON.TransformNode("volante_glb_root", estado.escena);
+        mallas.forEach((malla) => {
+          malla.parent = raizImportada;
+          malla.isPickable = false;
+          if (!malla.material) malla.material = estado.materiales.molduras;
         });
 
-        state.modelRoot = importedRoot;
-        state.loadedFromGlb = true;
-        normalizeImportedModel(importedRoot);
-        registerImportedParts(meshes);
+        estado.raizModelo = raizImportada;
+        estado.cargadoDesdeGlb = true;
+        normalizarModeloImportado(raizImportada);
+        registrarPartesImportadas(mallas);
       })
       .catch(() => {
-        state.loadedFromGlb = false;
-        createPlaceholderWheel();
+        estado.cargadoDesdeGlb = false;
+        estado.urlModeloActual = null;
+        crearVolantePlaceholder();
       });
   }
 
-  function splitModelUrl(url) {
-    const lastSlash = url.lastIndexOf("/");
+  function recargarModeloSiNecesario() {
+    const urlSiguiente = resolverUrlModelo(config.marca, config.modelo);
+    if (urlSiguiente === estado.urlModeloActual) return Promise.resolve();
+
+    eliminarModeloActual();
+    return cargarModeloVolante().then(() => actualizarAparienciaModelo());
+  }
+
+  function dividirUrlModelo(url) {
+    const ultimaBarra = url.lastIndexOf("/");
     return {
-      root: lastSlash >= 0 ? url.slice(0, lastSlash + 1) : "",
-      file: lastSlash >= 0 ? url.slice(lastSlash + 1) : url,
+      raiz: ultimaBarra >= 0 ? url.slice(0, ultimaBarra + 1) : "",
+      archivo: ultimaBarra >= 0 ? url.slice(ultimaBarra + 1) : url,
     };
   }
 
-  function normalizeImportedModel(modelRoot) {
-    modelRoot.computeWorldMatrix(true);
-    const bounds = modelRoot.getHierarchyBoundingVectors(true);
-    const size = bounds.max.subtract(bounds.min);
-    const center = bounds.min.add(size.scale(0.5));
-    const maxAxis = Math.max(size.x, size.y, size.z);
-    const scale = maxAxis > 0 ? 3.1 / maxAxis : 1;
+  function normalizarModeloImportado(raizModelo) {
+    raizModelo.computeWorldMatrix(true);
+    const limites = raizModelo.getHierarchyBoundingVectors(true);
+    const tamano = limites.max.subtract(limites.min);
+    const centro = limites.min.add(tamano.scale(0.5));
+    const ejeMax = Math.max(tamano.x, tamano.y, tamano.z);
+    const escala = ejeMax > 0 ? 3.1 / ejeMax : 1;
 
-    modelRoot.getChildMeshes().forEach((mesh) => {
-      mesh.position.subtractInPlace(center);
+    raizModelo.getChildMeshes().forEach((malla) => {
+      malla.position.subtractInPlace(centro);
     });
-    modelRoot.scaling = new BABYLON.Vector3(scale, scale, scale);
-    modelRoot.position = new BABYLON.Vector3(0, 0, 0.05);
-    modelRoot.rotation = new BABYLON.Vector3(0, 0, 0);
+    raizModelo.scaling = new BABYLON.Vector3(escala, escala, escala);
+    raizModelo.position = new BABYLON.Vector3(0, 0, 0.05);
+    raizModelo.rotation = new BABYLON.Vector3(0, 0, 0);
   }
 
-  function registerImportedParts(meshes) {
-    meshes.forEach((mesh) => {
-      const partKey = getPartKeyFromName(mesh.name);
-      registerPart(partKey, mesh);
+  function registrarPartesImportadas(mallas) {
+    mallas.forEach((malla) => {
+      const clavePieza = obtenerClavePorNombre(malla.name);
+      registrarPieza(clavePieza, malla);
     });
 
-    if (!getParts("aro").length && meshes[0]) {
-      registerPart("aro", meshes[0]);
+    if (!obtenerPiezas("aro").length && mallas[0]) {
+      registrarPieza("aro", mallas[0]);
     }
   }
 
-  function getPartKeyFromName(name) {
-    const normalized = normalizeName(name);
-    const priority = [
+  function obtenerClavePorNombre(nombre) {
+    const normalizado = normalizarNombre(nombre);
+    const prioridad = [
       "pantalla_rpm",
       "levas",
       "marcador_superior",
@@ -526,374 +563,374 @@
       "aro",
     ];
 
-    for (const key of priority) {
-      if (partAliases[key].some((alias) => normalized.includes(alias))) return key;
+    for (const clave of prioridad) {
+      if (aliasPartes[clave].some((alias) => normalizado.includes(alias))) return clave;
     }
     return "molduras";
   }
 
-  function createPlaceholderWheel() {
-    if (isAudiRSStyle()) {
-      createAudiRSPlaceholderWheel();
+  function crearVolantePlaceholder() {
+    if (esEstiloAudiRs()) {
+      crearVolanteAudiRsPlaceholder();
       return;
     }
 
-    resetParts();
-    state.placeholderStyle = "default";
+    reiniciarPiezas();
+    estado.estiloPlaceholder = "default";
 
-    const wheel = new BABYLON.TransformNode("volante_placeholder_root", state.scene);
-    wheel.position = new BABYLON.Vector3(0, -0.02, 0.06);
-    wheel.rotation = new BABYLON.Vector3(0, 0, 0);
-    wheel.scaling = new BABYLON.Vector3(1.04, 1.04, 1.04);
-    state.modelRoot = wheel;
+    const volante = new BABYLON.TransformNode("volante_placeholder_root", estado.escena);
+    volante.position = new BABYLON.Vector3(0, -0.02, 0.06);
+    volante.rotation = new BABYLON.Vector3(0, 0, 0);
+    volante.scaling = new BABYLON.Vector3(1.04, 1.04, 1.04);
+    estado.raizModelo = volante;
 
     const aro = BABYLON.MeshBuilder.CreateTorus(
       "aro",
       { diameter: 3.05, thickness: 0.34, tessellation: 300 },
-      state.scene
+      estado.escena
     );
-    aro.parent = wheel;
+    aro.parent = volante;
     aro.rotation.x = Math.PI / 2;
     aro.scaling = new BABYLON.Vector3(1.07, 0.2, 0.9);
     aro.position.z = 0.0;
-    registerPart("aro", aro);
+    registrarPieza("aro", aro);
 
-    const aroSoftShadow = BABYLON.MeshBuilder.CreateTorus(
+    const aroSombraSuave = BABYLON.MeshBuilder.CreateTorus(
       "aro_soft_shadow",
       { diameter: 2.63, thickness: 0.038, tessellation: 260 },
-      state.scene
+      estado.escena
     );
-    aroSoftShadow.parent = wheel;
-    aroSoftShadow.rotation.x = Math.PI / 2;
-    aroSoftShadow.scaling = new BABYLON.Vector3(1.07, 0.2, 0.9);
-    aroSoftShadow.position.z = 0.16;
-    aroSoftShadow.material = state.materials.shadowTrim;
+    aroSombraSuave.parent = volante;
+    aroSombraSuave.rotation.x = Math.PI / 2;
+    aroSombraSuave.scaling = new BABYLON.Vector3(1.07, 0.2, 0.9);
+    aroSombraSuave.position.z = 0.16;
+    aroSombraSuave.material = estado.materiales.bordeSombra;
 
-    const leftGrip = createGripArc("agarres_laterales_left", 2.36, 3.92, wheel);
-    const rightGrip = createGripArc("agarres_laterales_right", -0.78, 0.78, wheel);
-    registerPart("agarres_laterales", leftGrip);
-    registerPart("agarres_laterales", rightGrip);
+    const agarreIzquierdo = crearArcoAgarre("agarres_laterales_left", 2.36, 3.92, volante);
+    const agarreDerecho = crearArcoAgarre("agarres_laterales_right", -0.78, 0.78, volante);
+    registrarPieza("agarres_laterales", agarreIzquierdo);
+    registrarPieza("agarres_laterales", agarreDerecho);
 
-    createRoundedSpoke("molduras_left_spoke", -0.72, 0.1, 0.18, 1.08, 0.28, -0.06, wheel);
-    createRoundedSpoke("molduras_right_spoke", 0.72, 0.1, 0.18, 1.08, 0.28, 0.06, wheel);
-    createRoundedSpoke("molduras_lower_spoke", 0, -0.72, 0.17, 1.02, 0.45, Math.PI / 2, wheel);
+    crearRadioRedondeado("molduras_left_spoke", -0.72, 0.1, 0.18, 1.08, 0.28, -0.06, volante);
+    crearRadioRedondeado("molduras_right_spoke", 0.72, 0.1, 0.18, 1.08, 0.28, 0.06, volante);
+    crearRadioRedondeado("molduras_lower_spoke", 0, -0.72, 0.17, 1.02, 0.45, Math.PI / 2, volante);
 
-    const center = BABYLON.MeshBuilder.CreateSphere(
+    const centro = BABYLON.MeshBuilder.CreateSphere(
       "molduras_centro_airbag",
       { diameter: 1.08, segments: 72 },
-      state.scene
+      estado.escena
     );
-    center.parent = wheel;
-    center.position.z = 0.35;
-    center.scaling = new BABYLON.Vector3(1.18, 0.86, 0.24);
-    center.material = state.materials.center;
-    registerPart("molduras", center);
+    centro.parent = volante;
+    centro.position.z = 0.35;
+    centro.scaling = new BABYLON.Vector3(1.18, 0.86, 0.24);
+    centro.material = estado.materiales.centro;
+    registrarPieza("molduras", centro);
 
-    const centerRing = BABYLON.MeshBuilder.CreateTorus(
+    const anilloCentro = BABYLON.MeshBuilder.CreateTorus(
       "molduras_centro_ring",
       { diameter: 0.43, thickness: 0.022, tessellation: 128 },
-      state.scene
+      estado.escena
     );
-    centerRing.parent = wheel;
-    centerRing.rotation.x = Math.PI / 2;
-    centerRing.position.z = 0.61;
-    centerRing.material = state.materials.metalTrim;
-    registerPart("molduras", centerRing);
+    anilloCentro.parent = volante;
+    anilloCentro.rotation.x = Math.PI / 2;
+    anilloCentro.position.z = 0.61;
+    anilloCentro.material = estado.materiales.bordeMetal;
+    registrarPieza("molduras", anilloCentro);
 
-    createButtonCluster("molduras_buttons_left", -1.03, 0.28, wheel);
-    createButtonCluster("molduras_buttons_right", 1.03, 0.28, wheel);
-    createThreadSegments(wheel);
-    createLogo(wheel);
-    createLowerBadge(wheel);
-    createMarker(wheel);
-    createRpmScreen(wheel);
-    createPaddles(wheel);
+    crearClusterBotones("molduras_buttons_left", -1.03, 0.28, volante);
+    crearClusterBotones("molduras_buttons_right", 1.03, 0.28, volante);
+    crearSegmentosHilo(volante);
+    crearLogo(volante);
+    crearChipInferior(volante);
+    crearMarcador(volante);
+    crearPantallaRpm(volante);
+    crearLevas(volante);
   }
 
-  function createAudiRSPlaceholderWheel() {
-    resetParts();
-    state.placeholderStyle = "audi-rs";
+  function crearVolanteAudiRsPlaceholder() {
+    reiniciarPiezas();
+    estado.estiloPlaceholder = "audi-rs";
 
-    const wheel = new BABYLON.TransformNode("volante_audi_rs_placeholder_root", state.scene);
-    wheel.position = new BABYLON.Vector3(0, -0.03, 0.06);
-    wheel.rotation = new BABYLON.Vector3(0, 0, 0);
-    wheel.scaling = new BABYLON.Vector3(1.02, 1.02, 1.02);
-    state.modelRoot = wheel;
+    const volante = new BABYLON.TransformNode("volante_audi_rs_placeholder_root", estado.escena);
+    volante.position = new BABYLON.Vector3(0, -0.03, 0.06);
+    volante.rotation = new BABYLON.Vector3(0, 0, 0);
+    volante.scaling = new BABYLON.Vector3(1.02, 1.02, 1.02);
+    estado.raizModelo = volante;
 
     const aro = BABYLON.MeshBuilder.CreateTube(
       "aro_audi_rs_flat_bottom",
       {
-        path: createAudiRSRimPath(),
+        path: crearTrazadoAroAudiRs(),
         radius: 0.155,
         tessellation: 42,
         cap: BABYLON.Mesh.CAP_ALL,
       },
-      state.scene
+      estado.escena
     );
-    aro.parent = wheel;
-    aro.material = state.materials.aro;
-    registerPart("aro", aro);
+    aro.parent = volante;
+    aro.material = estado.materiales.aro;
+    registrarPieza("aro", aro);
 
     [
       { name: "agarres_laterales_left", x: -1.33, y: 0.52, rz: -0.36 },
       { name: "agarres_laterales_right", x: 1.33, y: 0.52, rz: 0.36 },
     ].forEach((item) => {
-      const grip = BABYLON.MeshBuilder.CreateSphere(
+      const agarre = BABYLON.MeshBuilder.CreateSphere(
         item.name,
         { diameter: 0.58, segments: 48 },
-        state.scene
+        estado.escena
       );
-      grip.parent = wheel;
-      grip.position = new BABYLON.Vector3(item.x, item.y, 0.16);
-      grip.scaling = new BABYLON.Vector3(0.44, 0.92, 0.28);
-      grip.rotation.z = item.rz;
-      registerPart("agarres_laterales", grip);
+      agarre.parent = volante;
+      agarre.position = new BABYLON.Vector3(item.x, item.y, 0.16);
+      agarre.scaling = new BABYLON.Vector3(0.44, 0.92, 0.28);
+      agarre.rotation.z = item.rz;
+      registrarPieza("agarres_laterales", agarre);
     });
 
-    createAudiRSSpoke("molduras_audi_left_spoke", -0.62, -0.08, -0.1, wheel);
-    createAudiRSSpoke("molduras_audi_right_spoke", 0.62, -0.08, 0.1, wheel);
-    createAudiRSBottomSpoke(wheel);
-    createAudiRSButtonPanel("molduras_audi_buttons_left", -0.92, 0.12, -0.08, wheel);
-    createAudiRSButtonPanel("molduras_audi_buttons_right", 0.92, 0.12, 0.08, wheel);
-    createAudiRSPaddles(wheel);
-    createAudiRSCenter(wheel);
-    createAudiRSStitches(wheel);
-    createMarker(wheel);
-    createRpmScreen(wheel);
+    crearRadioAudiRs("molduras_audi_left_spoke", -0.62, -0.08, -0.1, volante);
+    crearRadioAudiRs("molduras_audi_right_spoke", 0.62, -0.08, 0.1, volante);
+    crearRadioInferiorAudiRs(volante);
+    crearPanelBotonesAudiRs("molduras_audi_buttons_left", -0.92, 0.12, -0.08, volante);
+    crearPanelBotonesAudiRs("molduras_audi_buttons_right", 0.92, 0.12, 0.08, volante);
+    crearLevasAudiRs(volante);
+    crearCentroAudiRs(volante);
+    crearCosturasAudiRs(volante);
+    crearMarcador(volante);
+    crearPantallaRpm(volante);
   }
 
-  function createAudiRSRimPath() {
-    const points = [];
-    const steps = 128;
+  function crearTrazadoAroAudiRs() {
+    const puntos = [];
+    const pasos = 128;
 
-    for (let i = 0; i <= steps; i += 1) {
-      const angle = (Math.PI * 2 * i) / steps;
-      const x = Math.cos(angle) * 1.58;
-      let y = Math.sin(angle) * 1.35;
+    for (let i = 0; i <= pasos; i += 1) {
+      const angulo = (Math.PI * 2 * i) / pasos;
+      const x = Math.cos(angulo) * 1.58;
+      let y = Math.sin(angulo) * 1.35;
 
       if (y < -0.98) {
         y = -1.08 + Math.pow(Math.abs(x) / 1.58, 3.2) * 0.16;
       }
 
-      const topPinch = Math.max(0, 1 - Math.abs(x) / 0.18);
-      if (y > 1.18) y -= topPinch * 0.05;
+      const pellizcoSuperior = Math.max(0, 1 - Math.abs(x) / 0.18);
+      if (y > 1.18) y -= pellizcoSuperior * 0.05;
 
-      points.push(new BABYLON.Vector3(x, y, 0.05));
+      puntos.push(new BABYLON.Vector3(x, y, 0.05));
     }
 
-    return points;
+    return puntos;
   }
 
-  function createAudiRSSpoke(name, x, y, rotationZ, parent) {
-    const group = new BABYLON.TransformNode(name, state.scene);
-    group.parent = parent;
-    group.position = new BABYLON.Vector3(x, y, 0.28);
-    group.rotation.z = rotationZ;
+  function crearRadioAudiRs(nombre, x, y, rotacionZ, padre) {
+    const grupo = new BABYLON.TransformNode(nombre, estado.escena);
+    grupo.parent = padre;
+    grupo.position = new BABYLON.Vector3(x, y, 0.28);
+    grupo.rotation.z = rotacionZ;
 
-    const spoke = BABYLON.MeshBuilder.CreateBox(
-      `${name}_blade`,
+    const radio = BABYLON.MeshBuilder.CreateBox(
+      `${nombre}_blade`,
       { width: 0.78, height: 0.18, depth: 0.12 },
-      state.scene
+      estado.escena
     );
-    spoke.parent = group;
-    spoke.material = state.materials.molduras;
-    registerPart("molduras", spoke);
+    radio.parent = grupo;
+    radio.material = estado.materiales.molduras;
+    registrarPieza("molduras", radio);
 
-    const lip = BABYLON.MeshBuilder.CreateBox(
-      `${name}_upper_lip`,
+    const reborde = BABYLON.MeshBuilder.CreateBox(
+      `${nombre}_upper_lip`,
       { width: 0.76, height: 0.035, depth: 0.04 },
-      state.scene
+      estado.escena
     );
-    lip.parent = group;
-    lip.position = new BABYLON.Vector3(0, 0.105, 0.055);
-    lip.material = state.materials.metalTrim;
-    registerPart("molduras", lip);
+    reborde.parent = grupo;
+    reborde.position = new BABYLON.Vector3(0, 0.105, 0.055);
+    reborde.material = estado.materiales.bordeMetal;
+    registrarPieza("molduras", reborde);
   }
 
-  function createAudiRSBottomSpoke(parent) {
-    const bridge = BABYLON.MeshBuilder.CreateBox(
+  function crearRadioInferiorAudiRs(padre) {
+    const puente = BABYLON.MeshBuilder.CreateBox(
       "molduras_audi_bottom_y_spoke",
       { width: 0.48, height: 0.68, depth: 0.15 },
-      state.scene
+      estado.escena
     );
-    bridge.parent = parent;
-    bridge.position = new BABYLON.Vector3(0, -0.66, 0.26);
-    bridge.material = state.materials.molduras;
-    registerPart("molduras", bridge);
+    puente.parent = padre;
+    puente.position = new BABYLON.Vector3(0, -0.66, 0.26);
+    puente.material = estado.materiales.molduras;
+    registrarPieza("molduras", puente);
 
-    const cutout = BABYLON.MeshBuilder.CreateBox(
+    const recorte = BABYLON.MeshBuilder.CreateBox(
       "molduras_audi_bottom_cutout_shadow",
       { width: 0.27, height: 0.36, depth: 0.04 },
-      state.scene
+      estado.escena
     );
-    cutout.parent = parent;
-    cutout.position = new BABYLON.Vector3(0, -0.66, 0.36);
-    cutout.material = state.materials.shadowTrim;
-    registerPart("molduras", cutout);
+    recorte.parent = padre;
+    recorte.position = new BABYLON.Vector3(0, -0.66, 0.36);
+    recorte.material = estado.materiales.bordeSombra;
+    registrarPieza("molduras", recorte);
 
-    const badge = BABYLON.MeshBuilder.CreatePlane(
+    const chip = BABYLON.MeshBuilder.CreatePlane(
       "molduras_audi_rs_badge_lower",
       { width: 0.28, height: 0.095 },
-      state.scene
+      estado.escena
     );
-    badge.parent = parent;
-    badge.position = new BABYLON.Vector3(0, -1.02, 0.42);
-    badge.material = createAudiRSBadgeMaterial();
-    registerPart("molduras", badge);
+    chip.parent = padre;
+    chip.position = new BABYLON.Vector3(0, -1.02, 0.42);
+    chip.material = crearMaterialChipAudiRs();
+    registrarPieza("molduras", chip);
   }
 
-  function createAudiRSButtonPanel(name, x, y, rotationZ, parent) {
-    const group = new BABYLON.TransformNode(name, state.scene);
-    group.parent = parent;
-    group.position = new BABYLON.Vector3(x, y, 0.42);
-    group.rotation.z = rotationZ;
+  function crearPanelBotonesAudiRs(nombre, x, y, rotacionZ, padre) {
+    const grupo = new BABYLON.TransformNode(nombre, estado.escena);
+    grupo.parent = padre;
+    grupo.position = new BABYLON.Vector3(x, y, 0.42);
+    grupo.rotation.z = rotacionZ;
 
     const panel = BABYLON.MeshBuilder.CreateBox(
-      `${name}_trapezoid_panel`,
+      `${nombre}_trapezoid_panel`,
       { width: 0.52, height: 0.27, depth: 0.08 },
-      state.scene
+      estado.escena
     );
-    panel.parent = group;
+    panel.parent = grupo;
     panel.scaling.x = 1.18;
-    panel.material = state.materials.buttonPanel;
-    registerPart("molduras", panel);
+    panel.material = estado.materiales.panelBoton;
+    registrarPieza("molduras", panel);
 
-    const buttons = [
+    const botones = [
       [-0.14, 0.045, 0.105, 0.052],
       [0.04, 0.052, 0.112, 0.048],
       [-0.12, -0.07, 0.08, 0.065],
       [0.075, -0.07, 0.115, 0.055],
     ];
 
-    buttons.forEach(([bx, by, width, height], index) => {
-      const button = BABYLON.MeshBuilder.CreateBox(
-        `${name}_button_${index}`,
+    botones.forEach(([bx, by, width, height], indice) => {
+      const boton = BABYLON.MeshBuilder.CreateBox(
+        `${nombre}_button_${indice}`,
         { width, height, depth: 0.026 },
-        state.scene
+        estado.escena
       );
-      button.parent = group;
-      button.position = new BABYLON.Vector3(bx, by, 0.055);
-      button.material = state.materials.buttonFace;
-      registerPart("molduras", button);
+      boton.parent = grupo;
+      boton.position = new BABYLON.Vector3(bx, by, 0.055);
+      boton.material = estado.materiales.caraBoton;
+      registrarPieza("molduras", boton);
     });
 
-    const iconDot = BABYLON.MeshBuilder.CreateCylinder(
-      `${name}_small_round_button`,
+    const puntoIcono = BABYLON.MeshBuilder.CreateCylinder(
+      `${nombre}_small_round_button`,
       { diameter: 0.058, height: 0.026, tessellation: 24 },
-      state.scene
+      estado.escena
     );
-    iconDot.parent = group;
-    iconDot.rotation.x = Math.PI / 2;
-    iconDot.position = new BABYLON.Vector3(0.18, 0.065, 0.06);
-    iconDot.material = state.materials.buttonFace;
-    registerPart("molduras", iconDot);
+    puntoIcono.parent = grupo;
+    puntoIcono.rotation.x = Math.PI / 2;
+    puntoIcono.position = new BABYLON.Vector3(0.18, 0.065, 0.06);
+    puntoIcono.material = estado.materiales.caraBoton;
+    registrarPieza("molduras", puntoIcono);
   }
 
-  function createAudiRSPaddles(parent) {
-    [-1, 1].forEach((side) => {
-      const paddle = BABYLON.MeshBuilder.CreateBox(
-        side < 0 ? "levas_audi_rs_left" : "levas_audi_rs_right",
+  function crearLevasAudiRs(padre) {
+    [-1, 1].forEach((lado) => {
+      const leva = BABYLON.MeshBuilder.CreateBox(
+        lado < 0 ? "levas_audi_rs_left" : "levas_audi_rs_right",
         { width: 0.16, height: 0.86, depth: 0.052 },
-        state.scene
+        estado.escena
       );
-      paddle.parent = parent;
-      paddle.position = new BABYLON.Vector3(side * 1.16, 0.09, -0.18);
-      paddle.rotation.z = side * -0.18;
-      paddle.material = state.materials.levasCarbono;
-      registerPart("levas", paddle);
+      leva.parent = padre;
+      leva.position = new BABYLON.Vector3(lado * 1.16, 0.09, -0.18);
+      leva.rotation.z = lado * -0.18;
+      leva.material = estado.materiales.levasCarbono;
+      registrarPieza("levas", leva);
 
-      [-0.25, 0, 0.25].forEach((offset, index) => {
-        const hole = BABYLON.MeshBuilder.CreateCylinder(
-          `levas_audi_rs_hole_${side}_${index}`,
+      [-0.25, 0, 0.25].forEach((desplazamiento, indice) => {
+        const agujero = BABYLON.MeshBuilder.CreateCylinder(
+          `levas_audi_rs_hole_${lado}_${indice}`,
           { diameter: 0.075, height: 0.018, tessellation: 24 },
-          state.scene
+          estado.escena
         );
-        hole.parent = parent;
-        hole.rotation.x = Math.PI / 2;
-        hole.position = new BABYLON.Vector3(side * 1.16, 0.09 + offset, -0.145);
-        hole.material = state.materials.shadowTrim;
-        registerPart("levas", hole);
+        agujero.parent = padre;
+        agujero.rotation.x = Math.PI / 2;
+        agujero.position = new BABYLON.Vector3(lado * 1.16, 0.09 + desplazamiento, -0.145);
+        agujero.material = estado.materiales.bordeSombra;
+        registrarPieza("levas", agujero);
       });
     });
   }
 
-  function createAudiRSCenter(parent) {
-    const center = BABYLON.MeshBuilder.CreateSphere(
+  function crearCentroAudiRs(padre) {
+    const centro = BABYLON.MeshBuilder.CreateSphere(
       "molduras_audi_round_airbag",
       { diameter: 0.96, segments: 96 },
-      state.scene
+      estado.escena
     );
-    center.parent = parent;
-    center.position = new BABYLON.Vector3(0, -0.04, 0.42);
-    center.scaling = new BABYLON.Vector3(1, 1, 0.2);
-    center.material = state.materials.center;
-    registerPart("molduras", center);
+    centro.parent = padre;
+    centro.position = new BABYLON.Vector3(0, -0.04, 0.42);
+    centro.scaling = new BABYLON.Vector3(1, 1, 0.2);
+    centro.material = estado.materiales.centro;
+    registrarPieza("molduras", centro);
 
     for (let i = 0; i < 9; i += 1) {
-      const seam = BABYLON.MeshBuilder.CreateTorus(
+      const costura = BABYLON.MeshBuilder.CreateTorus(
         `costuras_audi_center_ring_${i}`,
         { diameter: 0.72 + i * 0.023, thickness: 0.004, tessellation: 120 },
-        state.scene
+        estado.escena
       );
-      seam.parent = parent;
-      seam.rotation.x = Math.PI / 2;
-      seam.position = new BABYLON.Vector3(0, -0.04, 0.63 + i * 0.001);
-      registerPart("costuras", seam);
+      costura.parent = padre;
+      costura.rotation.x = Math.PI / 2;
+      costura.position = new BABYLON.Vector3(0, -0.04, 0.63 + i * 0.001);
+      registrarPieza("costuras", costura);
     }
 
-    createAudiLogo(parent);
+    crearLogoAudi(padre);
   }
 
-  function createAudiLogo(parent) {
+  function crearLogoAudi(padre) {
     for (let i = 0; i < 4; i += 1) {
-      const ring = BABYLON.MeshBuilder.CreateTorus(
+      const anillo = BABYLON.MeshBuilder.CreateTorus(
         `logo_audi_ring_${i}`,
         { diameter: 0.16, thickness: 0.018, tessellation: 64 },
-        state.scene
+        estado.escena
       );
-      ring.parent = parent;
-      ring.rotation.x = Math.PI / 2;
-      ring.position = new BABYLON.Vector3(-0.135 + i * 0.09, -0.01, 0.66);
-      ring.material = state.materials.logoBase;
-      registerPart("logo", ring);
+      anillo.parent = padre;
+      anillo.rotation.x = Math.PI / 2;
+      anillo.position = new BABYLON.Vector3(-0.135 + i * 0.09, -0.01, 0.66);
+      anillo.material = estado.materiales.baseLogo;
+      registrarPieza("logo", anillo);
     }
 
-    const rsPlane = BABYLON.MeshBuilder.CreatePlane(
+    const planoRs = BABYLON.MeshBuilder.CreatePlane(
       "logo_audi_rs_text",
       { width: 0.28, height: 0.07 },
-      state.scene
+      estado.escena
     );
-    rsPlane.parent = parent;
-    rsPlane.position = new BABYLON.Vector3(0, -0.2, 0.665);
-    rsPlane.material = createAudiRSBadgeMaterial();
-    registerPart("logo", rsPlane);
+    planoRs.parent = padre;
+    planoRs.position = new BABYLON.Vector3(0, -0.2, 0.665);
+    planoRs.material = crearMaterialChipAudiRs();
+    registrarPieza("logo", planoRs);
   }
 
-  function createAudiRSStitches(parent) {
+  function crearCosturasAudiRs(padre) {
     [
       [-1.48, -1.08, -0.82, 0.1],
       [1.48, -1.08, 0.82, -0.1],
       [-0.03, 1.35, 0, 0],
       [-1.05, 0.94, -0.62, -0.32],
       [1.05, 0.94, 0.62, 0.32],
-    ].forEach(([x, y, rx, rz], groupIndex) => {
+    ].forEach(([x, y, rx, rz], indiceGrupo) => {
       for (let i = 0; i < 5; i += 1) {
-        const stitch = BABYLON.MeshBuilder.CreateBox(
-          `costuras_audi_rs_${groupIndex}_${i}`,
+        const costura = BABYLON.MeshBuilder.CreateBox(
+          `costuras_audi_rs_${indiceGrupo}_${i}`,
           { width: 0.012, height: 0.11, depth: 0.01 },
-          state.scene
+          estado.escena
         );
-        stitch.parent = parent;
-        stitch.position = new BABYLON.Vector3(x + (i - 2) * 0.018, y, 0.34);
-        stitch.rotation.z = rx + rz;
-        registerPart("costuras", stitch);
+        costura.parent = padre;
+        costura.position = new BABYLON.Vector3(x + (i - 2) * 0.018, y, 0.34);
+        costura.rotation.z = rx + rz;
+        registrarPieza("costuras", costura);
       }
     });
   }
 
-  function createAudiRSBadgeMaterial() {
-    const texture = new BABYLON.DynamicTexture("audi_rs_badge_texture", { width: 256, height: 96 }, state.scene, true);
-    const ctx = texture.getContext();
+  function crearMaterialChipAudiRs() {
+    const textura = new BABYLON.DynamicTexture("audi_rs_badge_texture", { width: 256, height: 96 }, estado.escena, true);
+    const ctx = textura.getContext();
     ctx.clearRect(0, 0, 256, 96);
     ctx.fillStyle = "#d62828";
     ctx.fillRect(24, 28, 42, 40);
@@ -902,12 +939,12 @@
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     ctx.fillText("RS", 78, 50);
-    texture.hasAlpha = true;
-    texture.update(false);
+    textura.hasAlpha = true;
+    textura.update(false);
 
-    const material = new BABYLON.PBRMaterial("audi_rs_badge_material", state.scene);
-    material.albedoTexture = texture;
-    material.emissiveTexture = texture;
+    const material = new BABYLON.PBRMaterial("audi_rs_badge_material", estado.escena);
+    material.albedoTexture = textura;
+    material.emissiveTexture = textura;
     material.emissiveColor = new BABYLON.Color3(1, 1, 1);
     material.emissiveIntensity = 0.1;
     material.metallic = 0;
@@ -918,261 +955,261 @@
     return material;
   }
 
-  function createGripArc(name, startAngle, endAngle, parent) {
-    const points = [];
-    const steps = 42;
+  function crearArcoAgarre(nombre, anguloInicio, anguloFin, padre) {
+    const puntos = [];
+    const pasos = 42;
 
-    for (let i = 0; i <= steps; i += 1) {
-      const angle = startAngle + ((endAngle - startAngle) * i) / steps;
-      points.push(new BABYLON.Vector3(
-        Math.cos(angle) * 1.62,
-        Math.sin(angle) * 1.28,
+    for (let i = 0; i <= pasos; i += 1) {
+      const angulo = anguloInicio + ((anguloFin - anguloInicio) * i) / pasos;
+      puntos.push(new BABYLON.Vector3(
+        Math.cos(angulo) * 1.62,
+        Math.sin(angulo) * 1.28,
         0.24
       ));
     }
 
-    const grip = BABYLON.MeshBuilder.CreateTube(
-      name,
+    const agarre = BABYLON.MeshBuilder.CreateTube(
+      nombre,
       {
-        path: points,
+        path: puntos,
         radius: 0.12,
         tessellation: 28,
         cap: BABYLON.Mesh.CAP_ALL,
       },
-      state.scene
+      estado.escena
     );
-    grip.parent = parent;
-    return grip;
+    agarre.parent = padre;
+    return agarre;
   }
 
-  function createRoundedSpoke(name, x, y, z, width, height, rotationZ, parent) {
-    const group = new BABYLON.TransformNode(name, state.scene);
-    group.parent = parent;
-    group.position = new BABYLON.Vector3(x, y, z);
-    group.rotation.z = rotationZ;
+  function crearRadioRedondeado(nombre, x, y, z, ancho, alto, rotacionZ, padre) {
+    const grupo = new BABYLON.TransformNode(nombre, estado.escena);
+    grupo.parent = padre;
+    grupo.position = new BABYLON.Vector3(x, y, z);
+    grupo.rotation.z = rotacionZ;
 
-    const coreWidth = Math.max(width - height, 0.04);
-    const core = BABYLON.MeshBuilder.CreateBox(
-      `${name}_core`,
-      { width: coreWidth, height, depth: 0.18 },
-      state.scene
+    const anchoNucleo = Math.max(ancho - alto, 0.04);
+    const nucleo = BABYLON.MeshBuilder.CreateBox(
+      `${nombre}_core`,
+      { width: anchoNucleo, height: alto, depth: 0.18 },
+      estado.escena
     );
-    core.parent = group;
-    core.material = state.materials.molduras;
-    registerPart("molduras", core);
+    nucleo.parent = grupo;
+    nucleo.material = estado.materiales.molduras;
+    registrarPieza("molduras", nucleo);
 
-    [-1, 1].forEach((side) => {
-      const cap = BABYLON.MeshBuilder.CreateCylinder(
-        `${name}_cap_${side}`,
-        { diameter: height, height: 0.18, tessellation: 44 },
-        state.scene
+    [-1, 1].forEach((lado) => {
+      const tapa = BABYLON.MeshBuilder.CreateCylinder(
+        `${nombre}_cap_${lado}`,
+        { diameter: alto, height: 0.18, tessellation: 44 },
+        estado.escena
       );
-      cap.parent = group;
-      cap.rotation.x = Math.PI / 2;
-      cap.position.x = side * coreWidth * 0.5;
-      cap.material = state.materials.molduras;
-      registerPart("molduras", cap);
+      tapa.parent = grupo;
+      tapa.rotation.x = Math.PI / 2;
+      tapa.position.x = lado * anchoNucleo * 0.5;
+      tapa.material = estado.materiales.molduras;
+      registrarPieza("molduras", tapa);
     });
 
-    return group;
+    return grupo;
   }
 
-  function createDisc(name, diameter, depth, parent) {
-    const disc = BABYLON.MeshBuilder.CreateCylinder(
-      name,
-      { diameter, height: depth, tessellation: 96 },
-      state.scene
+  function crearDisco(nombre, diametro, profundidad, padre) {
+    const disco = BABYLON.MeshBuilder.CreateCylinder(
+      nombre,
+      { diameter: diametro, height: profundidad, tessellation: 96 },
+      estado.escena
     );
-    disc.parent = parent;
-    disc.rotation.x = Math.PI / 2;
-    return disc;
+    disco.parent = padre;
+    disco.rotation.x = Math.PI / 2;
+    return disco;
   }
 
-  function createButtonCluster(name, x, y, parent) {
-    const group = new BABYLON.TransformNode(name, state.scene);
-    group.parent = parent;
-    group.position = new BABYLON.Vector3(x, y, 0.36);
-    group.rotation.z = x < 0 ? -0.22 : 0.22;
+  function crearClusterBotones(nombre, x, y, padre) {
+    const grupo = new BABYLON.TransformNode(nombre, estado.escena);
+    grupo.parent = padre;
+    grupo.position = new BABYLON.Vector3(x, y, 0.36);
+    grupo.rotation.z = x < 0 ? -0.22 : 0.22;
 
-    const base = createRoundedButtonPanel(`${name}_panel`, group);
+    const base = crearPanelBotonesRedondeado(`${nombre}_panel`, grupo);
 
-    const positions = [
+    const posiciones = [
       { x: -0.095, y: 0.06 },
       { x: 0.095, y: 0.06 },
       { x: -0.095, y: -0.06 },
       { x: 0.095, y: -0.06 },
     ];
 
-    positions.forEach((offset, index) => {
-      const button = BABYLON.MeshBuilder.CreateCylinder(
-        `${name}_button_${index}`,
+    posiciones.forEach((desplazamiento, indice) => {
+      const boton = BABYLON.MeshBuilder.CreateCylinder(
+        `${nombre}_button_${indice}`,
         { diameter: 0.074, height: 0.03, tessellation: 24 },
-        state.scene
+        estado.escena
       );
-      button.parent = group;
-      button.rotation.x = Math.PI / 2;
-      button.position = new BABYLON.Vector3(offset.x, offset.y, 0.06);
-      button.material = state.materials.buttonFace;
-      registerPart("molduras", button);
+      boton.parent = grupo;
+      boton.rotation.x = Math.PI / 2;
+      boton.position = new BABYLON.Vector3(desplazamiento.x, desplazamiento.y, 0.06);
+      boton.material = estado.materiales.caraBoton;
+      registrarPieza("molduras", boton);
     });
 
     return base;
   }
 
-  function createRoundedButtonPanel(name, parent) {
+  function crearPanelBotonesRedondeado(nombre, padre) {
     const panel = BABYLON.MeshBuilder.CreateBox(
-      name,
+      nombre,
       { width: 0.42, height: 0.3, depth: 0.09 },
-      state.scene
+      estado.escena
     );
-    panel.parent = parent;
-    panel.material = state.materials.buttonPanel;
-    registerPart("molduras", panel);
+    panel.parent = padre;
+    panel.material = estado.materiales.panelBoton;
+    registrarPieza("molduras", panel);
     return panel;
   }
 
-  function createThreadSegments(parent) {
-    const arcs = [
+  function crearSegmentosHilo(padre) {
+    const arcos = [
       [-2.62, -2.26],
       [-1.02, -0.66],
       [0.66, 1.02],
       [2.26, 2.62],
     ];
 
-    arcs.forEach((range, index) => {
+    arcos.forEach((rango, indice) => {
       for (let i = 0; i < 7; i += 1) {
-        const start = range[0] + i * 0.045;
-        const end = start + 0.022;
-        const thread = createArcTube(`costuras_${index}_${i}`, 1.5, start, end, 0.36);
-        thread.parent = parent;
-        registerPart("costuras", thread);
+        const inicio = rango[0] + i * 0.045;
+        const fin = inicio + 0.022;
+        const hilo = crearTuboArco(`costuras_${indice}_${i}`, 1.5, inicio, fin, 0.36);
+        hilo.parent = padre;
+        registrarPieza("costuras", hilo);
       }
     });
   }
 
-  function createArcTube(name, radius, startAngle, endAngle, z) {
-    const points = [];
-    const steps = 5;
-    for (let i = 0; i <= steps; i += 1) {
-      const angle = startAngle + ((endAngle - startAngle) * i) / steps;
-      points.push(new BABYLON.Vector3(Math.cos(angle) * radius, Math.sin(angle) * radius * 0.78, z));
+  function crearTuboArco(nombre, radio, anguloInicio, anguloFin, z) {
+    const puntos = [];
+    const pasos = 5;
+    for (let i = 0; i <= pasos; i += 1) {
+      const angulo = anguloInicio + ((anguloFin - anguloInicio) * i) / pasos;
+      puntos.push(new BABYLON.Vector3(Math.cos(angulo) * radio, Math.sin(angulo) * radio * 0.78, z));
     }
 
     return BABYLON.MeshBuilder.CreateTube(
-      name,
-      { path: points, radius: 0.006, tessellation: 8, cap: BABYLON.Mesh.CAP_ALL },
-      state.scene
+      nombre,
+      { path: puntos, radius: 0.006, tessellation: 8, cap: BABYLON.Mesh.CAP_ALL },
+      estado.escena
     );
   }
 
-  function createLogo(parent) {
-    const logoDisc = createDisc("logo_base", 0.42, 0.032, parent);
-    logoDisc.position.z = 0.64;
-    logoDisc.material = state.materials.logoBase;
-    registerPart("logo", logoDisc);
+  function crearLogo(padre) {
+    const discoLogo = crearDisco("logo_base", 0.42, 0.032, padre);
+    discoLogo.position.z = 0.64;
+    discoLogo.material = estado.materiales.baseLogo;
+    registrarPieza("logo", discoLogo);
 
-    const logoPlane = BABYLON.MeshBuilder.CreatePlane(
+    const planoLogo = BABYLON.MeshBuilder.CreatePlane(
       "logo_decal",
       { width: 0.37, height: 0.37 },
-      state.scene
+      estado.escena
     );
-    logoPlane.parent = parent;
-    logoPlane.position = new BABYLON.Vector3(0, 0, 0.682);
-    logoPlane.material = state.materials.logo;
-    registerPart("logo", logoPlane);
+    planoLogo.parent = padre;
+    planoLogo.position = new BABYLON.Vector3(0, 0, 0.682);
+    planoLogo.material = estado.materiales.logo;
+    registrarPieza("logo", planoLogo);
   }
 
-  function createLowerBadge(parent) {
-    const badge = BABYLON.MeshBuilder.CreatePlane(
+  function crearChipInferior(padre) {
+    const chip = BABYLON.MeshBuilder.CreatePlane(
       "molduras_m_badge_lower",
       { width: 0.24, height: 0.075 },
-      state.scene
+      estado.escena
     );
-    badge.parent = parent;
-    badge.position = new BABYLON.Vector3(0, -1.06, 0.43);
-    badge.material = state.materials.mBadge;
-    registerPart("molduras", badge);
+    chip.parent = padre;
+    chip.position = new BABYLON.Vector3(0, -1.06, 0.43);
+    chip.material = estado.materiales.chipM;
+    registrarPieza("molduras", chip);
   }
 
-  function createMarker(parent) {
-    const marker = BABYLON.MeshBuilder.CreateBox(
+  function crearMarcador(padre) {
+    const marcador = BABYLON.MeshBuilder.CreateBox(
       "marcador_superior",
       { width: 0.34, height: 0.075, depth: 0.045 },
-      state.scene
+      estado.escena
     );
-    marker.parent = parent;
-    marker.position = new BABYLON.Vector3(0, 1.45, 0.4);
-    marker.material = state.materials.marcador;
-    registerPart("marcador_superior", marker);
+    marcador.parent = padre;
+    marcador.position = new BABYLON.Vector3(0, 1.45, 0.4);
+    marcador.material = estado.materiales.marcador;
+    registrarPieza("marcador_superior", marcador);
   }
 
-  function createRpmScreen(parent) {
-    const screen = BABYLON.MeshBuilder.CreateBox(
+  function crearPantallaRpm(padre) {
+    const pantalla = BABYLON.MeshBuilder.CreateBox(
       "pantalla_rpm",
       { width: 0.62, height: 0.2, depth: 0.055 },
-      state.scene
+      estado.escena
     );
-    screen.parent = parent;
-    screen.position = new BABYLON.Vector3(0, 0.7, 0.5);
-    screen.material = state.materials.pantalla;
-    registerPart("pantalla_rpm", screen);
+    pantalla.parent = padre;
+    pantalla.position = new BABYLON.Vector3(0, 0.7, 0.5);
+    pantalla.material = estado.materiales.pantalla;
+    registrarPieza("pantalla_rpm", pantalla);
 
     for (let i = 0; i < 7; i += 1) {
       const led = BABYLON.MeshBuilder.CreateBox(
         `pantalla_rpm_led_${i}`,
         { width: 0.052, height: 0.018, depth: 0.012 },
-        state.scene
+        estado.escena
       );
-      led.parent = parent;
+      led.parent = padre;
       led.position = new BABYLON.Vector3(-0.21 + i * 0.07, 0.7, 0.54);
-      led.material = i < 4 ? state.materials.ledGreen : state.materials.ledRed;
-      registerPart("pantalla_rpm", led);
+      led.material = i < 4 ? estado.materiales.ledVerde : estado.materiales.ledRojo;
+      registrarPieza("pantalla_rpm", led);
     }
   }
 
-  function createPaddles(parent) {
-    [-1, 1].forEach((side) => {
-      const paddle = BABYLON.MeshBuilder.CreateBox(
-        side < 0 ? "levas_left" : "levas_right",
+  function crearLevas(padre) {
+    [-1, 1].forEach((lado) => {
+      const leva = BABYLON.MeshBuilder.CreateBox(
+        lado < 0 ? "levas_left" : "levas_right",
         { width: 0.18, height: 0.62, depth: 0.07 },
-        state.scene
+        estado.escena
       );
-      paddle.parent = parent;
-      paddle.position = new BABYLON.Vector3(side * 1.34, 0.12, -0.18);
-      paddle.rotation.z = side * 0.18;
-      paddle.material = state.materials.levasCarbono;
-      registerPart("levas", paddle);
+      leva.parent = padre;
+      leva.position = new BABYLON.Vector3(lado * 1.34, 0.12, -0.18);
+      leva.rotation.z = lado * 0.18;
+      leva.material = estado.materiales.levasCarbono;
+      registrarPieza("levas", leva);
     });
   }
 
-  function createTextureLibrary() {
-    state.textures = {
-      cuero: createProceduralTexture("cuero"),
-      cueroPerforado: createProceduralTexture("cueroPerforado"),
-      alcantara: createProceduralTexture("alcantara"),
-      carbono: createProceduralTexture("carbono"),
-      carbonoForjado: createProceduralTexture("carbonoForjado"),
-      tricolor: createStripeTexture(["#1b61ff", "#f5f5f5", "#d62828"]),
-      italiano: createStripeTexture(["#119447", "#f5f5f5", "#d62828"]),
-      aleman: createStripeTexture(["#111111", "#d62828", "#f2c94c"]),
-      frances: createStripeTexture(["#1b61ff", "#f5f5f5", "#d62828"]),
-      tricolorVertical: createStripeTexture(["#1b61ff", "#f5f5f5", "#d62828"], true),
+  function crearLibreriaTexturas() {
+    estado.texturas = {
+      cuero: crearTexturaProcedural("cuero"),
+      cueroPerforado: crearTexturaProcedural("cueroPerforado"),
+      alcantara: crearTexturaProcedural("alcantara"),
+      carbono: crearTexturaProcedural("carbono"),
+      carbonoForjado: crearTexturaProcedural("carbonoForjado"),
+      tricolor: crearTexturaTira(["#1b61ff", "#f5f5f5", "#d62828"]),
+      italiano: crearTexturaTira(["#119447", "#f5f5f5", "#d62828"]),
+      aleman: crearTexturaTira(["#111111", "#d62828", "#f2c94c"]),
+      frances: crearTexturaTira(["#1b61ff", "#f5f5f5", "#d62828"]),
+      tricolorVertical: crearTexturaTira(["#1b61ff", "#f5f5f5", "#d62828"], true),
     };
   }
 
-  function createProceduralTexture(type) {
-    const texture = new BABYLON.DynamicTexture(
-      `${type}_texture`,
+  function crearTexturaProcedural(tipo) {
+    const textura = new BABYLON.DynamicTexture(
+      `${tipo}_texture`,
       { width: 512, height: 512 },
-      state.scene,
+      estado.escena,
       false
     );
-    const ctx = texture.getContext();
+    const ctx = textura.getContext();
 
-    ctx.fillStyle = type.includes("carbono") ? "#111" : "#171717";
+    ctx.fillStyle = tipo.includes("carbono") ? "#111" : "#171717";
     ctx.fillRect(0, 0, 512, 512);
 
-    if (type === "carbono") {
+    if (tipo === "carbono") {
       for (let y = -512; y < 768; y += 34) {
         for (let x = -512; x < 768; x += 34) {
           ctx.fillStyle = "rgba(255,255,255,0.08)";
@@ -1183,7 +1220,7 @@
       }
     }
 
-    if (type === "carbonoForjado") {
+    if (tipo === "carbonoForjado") {
       for (let i = 0; i < 260; i += 1) {
         ctx.save();
         ctx.translate(Math.random() * 512, Math.random() * 512);
@@ -1194,15 +1231,15 @@
       }
     }
 
-    if (type === "alcantara") {
+    if (tipo === "alcantara") {
       for (let i = 0; i < 1800; i += 1) {
-        const shade = 35 + Math.random() * 80;
-        ctx.fillStyle = `rgba(${shade},${shade},${shade},0.17)`;
+        const tono = 35 + Math.random() * 80;
+        ctx.fillStyle = `rgba(${tono},${tono},${tono},0.17)`;
         ctx.fillRect(Math.random() * 512, Math.random() * 512, 1.5, 1.5);
       }
     }
 
-    if (type === "cuero" || type === "cueroPerforado") {
+    if (tipo === "cuero" || tipo === "cueroPerforado") {
       for (let i = 0; i < 850; i += 1) {
         ctx.strokeStyle = `rgba(255,255,255,${Math.random() * 0.075})`;
         ctx.beginPath();
@@ -1212,7 +1249,7 @@
       }
     }
 
-    if (type === "cueroPerforado") {
+    if (tipo === "cueroPerforado") {
       for (let y = 24; y < 512; y += 42) {
         for (let x = 24; x < 512; x += 42) {
           ctx.fillStyle = "rgba(0,0,0,0.76)";
@@ -1223,101 +1260,101 @@
       }
     }
 
-    texture.update(false);
-    texture.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
-    texture.wrapV = BABYLON.Texture.WRAP_ADDRESSMODE;
-    texture.uScale = 2.4;
-    texture.vScale = 2.4;
-    return texture;
+    textura.update(false);
+    textura.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
+    textura.wrapV = BABYLON.Texture.WRAP_ADDRESSMODE;
+    textura.uScale = 2.4;
+    textura.vScale = 2.4;
+    return textura;
   }
 
-  function createStripeTexture(colors, vertical = false) {
-    const texture = new BABYLON.DynamicTexture(
-      `stripe_${colors.join("_")}_${vertical ? "v" : "h"}`,
+  function crearTexturaTira(colores, vertical = false) {
+    const textura = new BABYLON.DynamicTexture(
+      `stripe_${colores.join("_")}_${vertical ? "v" : "h"}`,
       { width: 256, height: 256 },
-      state.scene,
+      estado.escena,
       false
     );
-    const ctx = texture.getContext();
-    const size = 256 / colors.length;
+    const ctx = textura.getContext();
+    const tamano = 256 / colores.length;
 
-    colors.forEach((color, index) => {
+    colores.forEach((color, indice) => {
       ctx.fillStyle = color;
-      if (vertical) ctx.fillRect(0, index * size, 256, size);
-      else ctx.fillRect(index * size, 0, size, 256);
+      if (vertical) ctx.fillRect(0, indice * tamano, 256, tamano);
+      else ctx.fillRect(indice * tamano, 0, tamano, 256);
     });
 
-    texture.update(false);
-    texture.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
-    texture.wrapV = BABYLON.Texture.WRAP_ADDRESSMODE;
-    texture.uScale = vertical ? 1 : 2;
-    texture.vScale = vertical ? 2 : 1;
-    return texture;
+    textura.update(false);
+    textura.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
+    textura.wrapV = BABYLON.Texture.WRAP_ADDRESSMODE;
+    textura.uScale = vertical ? 1 : 2;
+    textura.vScale = vertical ? 2 : 1;
+    return textura;
   }
 
-  function createMaterialLibrary() {
-    state.materials = {
-      aro: createPbrMaterial("mat_aro", { texture: state.textures.carbono, metallic: 0.54, roughness: 0.3 }),
-      agarres: createPbrMaterial("mat_agarres", { texture: state.textures.alcantara, metallic: 0.03, roughness: 0.88 }),
-      center: createPbrMaterial("mat_center", { texture: state.textures.cuero, metallic: 0.08, roughness: 0.62 }),
-      molduras: createPbrMaterial("mat_molduras", { color: "#151515", metallic: 0.68, roughness: 0.34 }),
-      shadowTrim: createPbrMaterial("mat_shadow_trim", { color: "#060606", metallic: 0.4, roughness: 0.5 }),
-      metalTrim: createPbrMaterial("mat_metal_trim", { color: "#2b2b2f", metallic: 0.78, roughness: 0.22 }),
-      buttonPanel: createPbrMaterial("mat_button_panel", { color: "#080808", metallic: 0.6, roughness: 0.42 }),
-      buttonFace: createPbrMaterial("mat_button_face", { color: "#242424", metallic: 0.46, roughness: 0.36 }),
-      costuras: createPbrMaterial("mat_costuras", { color: "#d62828", metallic: 0.02, roughness: 0.58 }),
-      marcador: createPbrMaterial("mat_marcador", { color: "#d62828", metallic: 0.16, roughness: 0.32 }),
-      pantalla: createPbrMaterial("mat_pantalla", {
+  function crearLibreriaMateriales() {
+    estado.materiales = {
+      aro: crearMaterialPbr("mat_aro", { texture: estado.texturas.carbono, metallic: 0.54, roughness: 0.3 }),
+      agarres: crearMaterialPbr("mat_agarres", { texture: estado.texturas.alcantara, metallic: 0.03, roughness: 0.88 }),
+      centro: crearMaterialPbr("mat_center", { texture: estado.texturas.cuero, metallic: 0.08, roughness: 0.62 }),
+      molduras: crearMaterialPbr("mat_molduras", { color: "#151515", metallic: 0.68, roughness: 0.34 }),
+      bordeSombra: crearMaterialPbr("mat_shadow_trim", { color: "#060606", metallic: 0.4, roughness: 0.5 }),
+      bordeMetal: crearMaterialPbr("mat_metal_trim", { color: "#2b2b2f", metallic: 0.78, roughness: 0.22 }),
+      panelBoton: crearMaterialPbr("mat_button_panel", { color: "#080808", metallic: 0.6, roughness: 0.42 }),
+      caraBoton: crearMaterialPbr("mat_button_face", { color: "#242424", metallic: 0.46, roughness: 0.36 }),
+      costuras: crearMaterialPbr("mat_costuras", { color: "#d62828", metallic: 0.02, roughness: 0.58 }),
+      marcador: crearMaterialPbr("mat_marcador", { color: "#d62828", metallic: 0.16, roughness: 0.32 }),
+      pantalla: crearMaterialPbr("mat_pantalla", {
         color: "#031018",
         emissive: "#32ffa2",
         emissiveIntensity: 0.22,
         metallic: 0.18,
         roughness: 0.18,
       }),
-      ledGreen: createPbrMaterial("mat_led_green", { color: "#2bff9a", emissive: "#2bff9a", emissiveIntensity: 1.4 }),
-      ledRed: createPbrMaterial("mat_led_red", { color: "#ff2432", emissive: "#ff2432", emissiveIntensity: 1.4 }),
-      levasCarbono: createPbrMaterial("mat_levas_carbono", { texture: state.textures.carbono, metallic: 0.58, roughness: 0.28 }),
-      levasAluminio: createPbrMaterial("mat_levas_aluminio", { color: "#bec4ca", metallic: 0.92, roughness: 0.18 }),
-      levasMagneticas: createPbrMaterial("mat_levas_magneticas", {
+      ledVerde: crearMaterialPbr("mat_led_green", { color: "#2bff9a", emissive: "#2bff9a", emissiveIntensity: 1.4 }),
+      ledRojo: crearMaterialPbr("mat_led_red", { color: "#ff2432", emissive: "#ff2432", emissiveIntensity: 1.4 }),
+      levasCarbono: crearMaterialPbr("mat_levas_carbono", { texture: estado.texturas.carbono, metallic: 0.58, roughness: 0.28 }),
+      levasAluminio: crearMaterialPbr("mat_levas_aluminio", { color: "#bec4ca", metallic: 0.92, roughness: 0.18 }),
+      levasMagneticas: crearMaterialPbr("mat_levas_magneticas", {
         color: "#101010",
         emissive: "#d62828",
         emissiveIntensity: 0.18,
         metallic: 0.78,
         roughness: 0.26,
       }),
-      logoBase: createPbrMaterial("mat_logo_base", { color: "#060606", metallic: 0.48, roughness: 0.34 }),
-      logo: createLogoMaterial(config.logo, config.marca),
-      mBadge: createMBadgeMaterial(),
+      baseLogo: crearMaterialPbr("mat_logo_base", { color: "#060606", metallic: 0.48, roughness: 0.34 }),
+      logo: crearMaterialLogo(config.logo, config.marca),
+      chipM: crearMaterialChipM(),
     };
   }
 
-  function createPbrMaterial(name, options = {}) {
-    const material = new BABYLON.PBRMaterial(name, state.scene);
-    material.albedoColor = options.color ? hexToColor3(options.color) : new BABYLON.Color3(1, 1, 1);
-    material.metallic = options.metallic ?? 0.12;
-    material.roughness = options.roughness ?? 0.45;
-    material.clearCoat.isEnabled = options.clearCoat ?? true;
-    material.clearCoat.intensity = options.clearCoatIntensity ?? 0.42;
-    material.clearCoat.roughness = options.clearCoatRoughness ?? 0.32;
+  function crearMaterialPbr(nombre, opciones = {}) {
+    const material = new BABYLON.PBRMaterial(nombre, estado.escena);
+    material.albedoColor = opciones.color ? hexAColor3(opciones.color) : new BABYLON.Color3(1, 1, 1);
+    material.metallic = opciones.metallic ?? 0.12;
+    material.roughness = opciones.roughness ?? 0.45;
+    material.clearCoat.isEnabled = opciones.clearCoat ?? true;
+    material.clearCoat.intensity = opciones.clearCoatIntensity ?? 0.42;
+    material.clearCoat.roughness = opciones.clearCoatRoughness ?? 0.32;
 
-    if (options.texture) {
-      material.albedoTexture = options.texture;
+    if (opciones.texture) {
+      material.albedoTexture = opciones.texture;
       material.useRoughnessFromMetallicTextureAlpha = false;
     }
 
-    if (options.emissive) {
-      material.emissiveColor = hexToColor3(options.emissive);
-      material.emissiveIntensity = options.emissiveIntensity ?? 0.35;
+    if (opciones.emissive) {
+      material.emissiveColor = hexAColor3(opciones.emissive);
+      material.emissiveIntensity = opciones.emissiveIntensity ?? 0.35;
     }
 
     return material;
   }
 
-  function createLogoMaterial(text, brand) {
-    const texture = createLogoTexture(text, brand);
-    const material = new BABYLON.PBRMaterial(`logo_${normalizeName(brand)}_${normalizeName(text)}`, state.scene);
-    material.albedoTexture = texture;
-    material.emissiveTexture = texture;
+  function crearMaterialLogo(texto, marca) {
+    const textura = crearTexturaLogo(texto, marca);
+    const material = new BABYLON.PBRMaterial(`logo_${normalizarNombre(marca)}_${normalizarNombre(texto)}`, estado.escena);
+    material.albedoTexture = textura;
+    material.emissiveTexture = textura;
     material.emissiveColor = new BABYLON.Color3(1, 1, 1);
     material.emissiveIntensity = 0.18;
     material.metallic = 0;
@@ -1328,11 +1365,11 @@
     return material;
   }
 
-  function createMBadgeMaterial() {
-    const texture = createMBadgeTexture();
-    const material = new BABYLON.PBRMaterial("m_badge_lower_material", state.scene);
-    material.albedoTexture = texture;
-    material.emissiveTexture = texture;
+  function crearMaterialChipM() {
+    const textura = crearTexturaChipM();
+    const material = new BABYLON.PBRMaterial("m_badge_lower_material", estado.escena);
+    material.albedoTexture = textura;
+    material.emissiveTexture = textura;
     material.emissiveColor = new BABYLON.Color3(1, 1, 1);
     material.emissiveIntensity = 0.12;
     material.metallic = 0;
@@ -1343,42 +1380,42 @@
     return material;
   }
 
-  function createLogoTexture(text, brand) {
-    const texture = new BABYLON.DynamicTexture(
-      `logo_texture_${normalizeName(brand)}_${normalizeName(text)}`,
+  function crearTexturaLogo(texto, marca) {
+    const textura = new BABYLON.DynamicTexture(
+      `logo_texture_${normalizarNombre(marca)}_${normalizarNombre(texto)}`,
       { width: 512, height: 512 },
-      state.scene,
+      estado.escena,
       true
     );
-    const ctx = texture.getContext();
+    const ctx = textura.getContext();
     ctx.clearRect(0, 0, 512, 512);
 
-    if (brand === "BMW" && text === "M") {
-      drawBMWRoundel(ctx);
+    if (marca === "BMW" && texto === "M") {
+      dibujarEmblemaBmw(ctx);
     } else {
       ctx.save();
       ctx.shadowColor = "rgba(0,0,0,0.6)";
       ctx.shadowBlur = 18;
       ctx.fillStyle = "rgba(5,5,5,0.88)";
-      roundRect(ctx, 56, 162, 400, 170, 34);
+      rectanguloRedondeado(ctx, 56, 162, 400, 170, 34);
       ctx.fill();
-      ctx.strokeStyle = brand === "Audi" || brand === "Mercedes" ? "#d62828" : "#ffffff";
+      ctx.strokeStyle = marca === "Audi" || marca === "Mercedes" ? "#d62828" : "#ffffff";
       ctx.lineWidth = 8;
       ctx.stroke();
       ctx.fillStyle = "#ffffff";
-      ctx.font = text.length > 10 ? "800 44px Arial" : "900 68px Arial";
+      ctx.font = texto.length > 10 ? "800 44px Arial" : "900 68px Arial";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(text, 256, 247);
+      ctx.fillText(texto, 256, 247);
       ctx.restore();
     }
 
-    texture.hasAlpha = true;
-    texture.update(false);
-    return texture;
+    textura.hasAlpha = true;
+    textura.update(false);
+    return textura;
   }
 
-  function drawBMWRoundel(ctx) {
+  function dibujarEmblemaBmw(ctx) {
     ctx.save();
     ctx.shadowColor = "rgba(0,0,0,0.6)";
     ctx.shadowBlur = 18;
@@ -1418,9 +1455,9 @@
     ctx.fillText("BMW", 256, 136);
   }
 
-  function drawMBadge(ctx) {
+  function dibujarChipM(ctx) {
     ctx.fillStyle = "rgba(0,0,0,0.82)";
-    roundRect(ctx, 132, 338, 248, 70, 12);
+    rectanguloRedondeado(ctx, 132, 338, 248, 70, 12);
     ctx.fill();
     ctx.fillStyle = "#2c7dff";
     ctx.fillRect(158, 354, 20, 38);
@@ -1435,17 +1472,17 @@
     ctx.fillText("M", 248, 374);
   }
 
-  function createMBadgeTexture() {
-    const texture = new BABYLON.DynamicTexture(
+  function crearTexturaChipM() {
+    const textura = new BABYLON.DynamicTexture(
       "m_badge_lower_texture",
       { width: 256, height: 96 },
-      state.scene,
+      estado.escena,
       true
     );
-    const ctx = texture.getContext();
+    const ctx = textura.getContext();
     ctx.clearRect(0, 0, 256, 96);
     ctx.fillStyle = "rgba(5,5,5,0.9)";
-    roundRect(ctx, 16, 18, 224, 60, 10);
+    rectanguloRedondeado(ctx, 16, 18, 224, 60, 10);
     ctx.fill();
     ctx.strokeStyle = "rgba(255,255,255,0.28)";
     ctx.lineWidth = 3;
@@ -1461,534 +1498,696 @@
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     ctx.fillText("M", 116, 49);
-    texture.hasAlpha = true;
-    texture.update(false);
-    return texture;
+    textura.hasAlpha = true;
+    textura.update(false);
+    return textura;
   }
 
-  function bindConfiguratorEvents() {
-    root.addEventListener("change", (event) => {
-      const select = event.target.closest("[data-config-select]");
-      if (!select) return;
+  function enlazarEventosConfigurador() {
+    raiz.addEventListener("change", (evento) => {
+      const selector = evento.target.closest("[data-config-select]");
+      if (!selector) return;
 
-      config[select.dataset.configSelect] = select.value;
-      updateAvailableOptions();
-      updateModelAppearance();
-      updateSummary();
-      updatePrice();
+      const clave = selector.dataset.configSelect;
+      config[clave] = selector.value;
+      actualizarOpcionesDisponibles();
+
+      if (clave === "marca" || clave === "modelo") {
+        recargarModeloSiNecesario().then(() => {
+          actualizarResumen();
+          actualizarPrecio();
+        });
+      } else {
+        actualizarAparienciaModelo();
+        actualizarResumen();
+        actualizarPrecio();
+      }
     });
 
-    root.addEventListener("click", (event) => {
-      const option = event.target.closest("[data-config-option]");
-      if (option && !option.disabled) {
-        const key = option.dataset.configOption;
-        config[key] = key === "pantallaRpm" ? option.dataset.value === "true" : option.dataset.value;
-        updateAvailableOptions();
-        updateModelAppearance();
-        updateSummary();
-        updatePrice();
+    raiz.addEventListener("click", (evento) => {
+      const opcion = evento.target.closest("[data-config-option]");
+      if (opcion && !opcion.disabled) {
+        const clave = opcion.dataset.configOption;
+        config[clave] = clave === "pantallaRpm" ? opcion.dataset.value === "true" : opcion.dataset.value;
+        actualizarOpcionesDisponibles();
+        actualizarAparienciaModelo();
+        actualizarResumen();
+        actualizarPrecio();
         return;
       }
 
-      const step = event.target.closest("[data-step-target]");
-      if (step) {
-        setActiveStep(step.dataset.stepTarget);
+      const paso = evento.target.closest("[data-step-target]");
+      if (paso) {
+        establecerPasoActivo(paso.dataset.stepTarget);
       }
     });
 
-    nodes.resetCamera?.addEventListener("click", resetCamera);
+    nodos.botonReiniciarCamara?.addEventListener("click", reiniciarCamara);
+    nodos.botonGuardar?.addEventListener("click", () => guardarDiseno(false));
+    nodos.botonComprar?.addEventListener("click", () => irAlPago());
   }
 
-  function updateAvailableOptions() {
-    const brandKeys = Object.keys(configuratorData);
-    if (!configuratorData[config.marca]) config.marca = brandKeys[0];
-
-    const brand = configuratorData[config.marca];
-    if (!brand.modelos.some((model) => model.id === config.modelo)) {
-      config.modelo = brand.modelos[0].id;
-    }
-    if (!brand.logos.includes(config.logo)) {
-      config.logo = brand.logos[0];
-    }
-
-    sanitizeOption("levas");
-    populateSelect(nodes.selects.marca, brandKeys.map((brandKey) => ({ id: brandKey, label: brandKey })), config.marca);
-    populateSelect(nodes.selects.modelo, brand.modelos, config.modelo);
-    populateSelect(nodes.selects.logo, brand.logos.map((logo) => ({ id: logo, label: logo })), config.logo);
-    renderOptionGroups();
+  function irAlPago() {
+    const payload = crearPayloadVolante(true);
+    try {
+      localStorage.setItem("cdp.volante.checkout", JSON.stringify(payload));
+    } catch (error) { /* localStorage no disponible */ }
+    window.location.href = "pago.html";
   }
 
-  function populateSelect(select, options, selectedValue) {
-    if (!select) return;
-    select.innerHTML = "";
-    options.forEach((item) => {
-      const option = document.createElement("option");
-      option.value = item.id;
-      option.textContent = item.label;
-      option.selected = String(item.id) === String(selectedValue);
-      select.appendChild(option);
+  function construirUrlCompartir() {
+    const ligero = {
+      marca: config.marca,
+      modelo: config.modelo,
+      logo: config.logo,
+      aro: config.aro,
+      agarres: config.agarres,
+      costuras: config.costuras,
+      marcador: config.marcador,
+      molduras: config.molduras,
+      pantallaRpm: config.pantallaRpm,
+      levas: config.levas,
+    };
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(ligero))));
+    const base = window.location.origin + window.location.pathname;
+    return `${base}?cfg=${encoded}`;
+  }
+
+  window.CDPConfiguratorShare = construirUrlCompartir;
+
+  function actualizarOpcionesDisponibles() {
+    const clavesMarca = Object.keys(datosConfigurador);
+    if (!datosConfigurador[config.marca]) config.marca = clavesMarca[0];
+
+    const marca = datosConfigurador[config.marca];
+    if (!marca.modelos.some((modelo) => modelo.id === config.modelo)) {
+      config.modelo = marca.modelos[0].id;
+    }
+    if (!marca.logos.includes(config.logo)) {
+      config.logo = marca.logos[0];
+    }
+
+    sanearOpcion("levas");
+    rellenarSelect(nodos.selectores.marca, clavesMarca.map((claveMarca) => ({ id: claveMarca, label: claveMarca })), config.marca);
+    rellenarSelect(nodos.selectores.modelo, marca.modelos, config.modelo);
+    rellenarSelect(nodos.selectores.logo, marca.logos.map((logo) => ({ id: logo, label: logo })), config.logo);
+    renderizarGruposOpciones();
+  }
+
+  function rellenarSelect(selector, opciones, valorSeleccionado) {
+    if (!selector) return;
+    selector.innerHTML = "";
+    opciones.forEach((item) => {
+      const opcion = document.createElement("option");
+      opcion.value = item.id;
+      opcion.textContent = item.label;
+      opcion.selected = String(item.id) === String(valorSeleccionado);
+      selector.appendChild(opcion);
     });
   }
 
-  function renderOptionGroups() {
-    nodes.optionGroups.forEach((groupNode) => {
-      const key = groupNode.dataset.optionGroup;
-      groupNode.innerHTML = "";
+  function renderizarGruposOpciones() {
+    nodos.gruposOpciones.forEach((nodoGrupo) => {
+      const clave = nodoGrupo.dataset.optionGroup;
+      nodoGrupo.innerHTML = "";
 
-      (optionData[key] || []).forEach((option) => {
-        groupNode.appendChild(createOptionButton(key, option));
+      (datosOpciones[clave] || []).forEach((opcion) => {
+        nodoGrupo.appendChild(crearBotonOpcion(clave, opcion));
       });
     });
   }
 
-  function createOptionButton(key, option) {
-    const button = document.createElement("button");
-    const active = String(config[key]) === String(option.id);
-    const compatible = isOptionCompatible(key, option);
+  function crearBotonOpcion(clave, opcion) {
+    const boton = document.createElement("button");
+    const activo = String(config[clave]) === String(opcion.id);
+    const compatible = esOpcionCompatible(clave, opcion);
 
-    button.type = "button";
-    button.className = `option-btn${active ? " is-active" : ""}`;
-    button.dataset.configOption = key;
-    button.dataset.value = String(option.id);
-    button.disabled = !compatible;
-    button.setAttribute("aria-pressed", active ? "true" : "false");
+    boton.type = "button";
+    boton.className = `option-btn${activo ? " is-active" : ""}`;
+    boton.dataset.configOption = clave;
+    boton.dataset.value = String(opcion.id);
+    boton.disabled = !compatible;
+    boton.setAttribute("aria-pressed", activo ? "true" : "false");
 
     if (!compatible) {
-      button.title = "No compatible con el modelo seleccionado";
+      boton.title = "No compatible con el modelo seleccionado";
     }
 
-    if (option.swatch) {
-      const swatch = document.createElement("span");
-      swatch.className = "option-swatch";
-      swatch.style.background = option.swatch;
-      button.appendChild(swatch);
+    if (opcion.swatch) {
+      const muestra = document.createElement("span");
+      muestra.className = "option-swatch";
+      muestra.style.background = opcion.swatch;
+      boton.appendChild(muestra);
     }
 
-    const label = document.createElement("span");
-    label.textContent = option.label;
-    button.appendChild(label);
+    const etiqueta = document.createElement("span");
+    etiqueta.textContent = opcion.label;
+    boton.appendChild(etiqueta);
 
-    if (option.price > 0) {
-      const price = document.createElement("small");
-      price.textContent = `+${formatPrice(option.price)}`;
-      button.appendChild(price);
+    if (opcion.price > 0) {
+      const precio = document.createElement("small");
+      precio.textContent = `+${formatearPrecio(opcion.price)}`;
+      boton.appendChild(precio);
     }
 
-    return button;
+    return boton;
   }
 
-  function sanitizeOption(key) {
-    const current = getOption(key);
-    if (current && isOptionCompatible(key, current)) return;
+  function sanearOpcion(clave) {
+    const actual = obtenerOpcion(clave);
+    if (actual && esOpcionCompatible(clave, actual)) return;
 
-    const fallback = (optionData[key] || []).find((option) => isOptionCompatible(key, option));
-    if (fallback) config[key] = fallback.id;
+    const alternativa = (datosOpciones[clave] || []).find((opcion) => esOpcionCompatible(clave, opcion));
+    if (alternativa) config[clave] = alternativa.id;
   }
 
-  function isOptionCompatible(key, option) {
-    if (key === "levas" && option.needsMagnetic) return !!getModel().levasMagneticas;
+  function esOpcionCompatible(clave, opcion) {
+    if (clave === "levas" && opcion.needsMagnetic) return !!obtenerModelo().levasMagneticas;
     return true;
   }
 
-  function updateModelAppearance() {
-    if (!state.modelRoot) return;
+  function actualizarAparienciaModelo() {
+    if (!estado.raizModelo) return;
 
-    rebuildProceduralModelIfNeeded();
+    reconstruirModeloProceduralSiNecesario();
 
-    const aro = getOption("aro");
-    const agarres = getOption("agarres");
-    const costuras = getOption("costuras");
-    const marcador = getOption("marcador");
+    const aro = obtenerOpcion("aro");
+    const agarres = obtenerOpcion("agarres");
+    const costuras = obtenerOpcion("costuras");
+    const marcador = obtenerOpcion("marcador");
+    const molduras = obtenerOpcion("molduras");
 
-    applyTextureToPart("aro", aro.texture, aro.materialProfile);
-    applyTextureToPart("agarres_laterales", agarres.texture, agarres.materialProfile);
-    applyThreadMaterial(costuras);
-    applyMarkerMaterial(marcador);
-    applyLogoTexture();
-    applyPaddleMaterial();
-    togglePart("pantalla_rpm", config.pantallaRpm);
-    togglePart("levas", config.levas !== "sin-levas");
+    aplicarTexturaAPieza("aro", aro.texture, aro.materialProfile);
+    aplicarTexturaAPieza("agarres_laterales", agarres.texture, agarres.materialProfile);
+    aplicarMaterialCosturas(costuras);
+    aplicarMaterialMarcador(marcador);
+    aplicarMaterialMolduras(molduras);
+    aplicarTexturaLogo();
+    aplicarMaterialLevas();
+    alternarPieza("pantalla_rpm", config.pantallaRpm);
+    alternarPieza("levas", config.levas !== "sin-levas");
 
-    updatePreviewMeta();
+    actualizarMetaPreview();
   }
 
-  function rebuildProceduralModelIfNeeded() {
-    if (state.loadedFromGlb) return;
+  function reconstruirModeloProceduralSiNecesario() {
+    if (estado.cargadoDesdeGlb) return;
 
-    const nextStyle = isAudiRSStyle() ? "audi-rs" : "default";
-    if (state.placeholderStyle === nextStyle) return;
+    const estiloSiguiente = esEstiloAudiRs() ? "audi-rs" : "default";
+    if (estado.estiloPlaceholder === estiloSiguiente) return;
 
-    disposeCurrentModel();
-    createPlaceholderWheel();
+    eliminarModeloActual();
+    crearVolantePlaceholder();
   }
 
-  function disposeCurrentModel() {
-    if (!state.modelRoot) return;
+  function eliminarModeloActual() {
+    if (!estado.raizModelo) return;
 
-    state.modelRoot.getChildMeshes(false).forEach((mesh) => {
-      mesh.dispose(false, false);
+    estado.raizModelo.getChildMeshes(false).forEach((malla) => {
+      malla.dispose(false, false);
     });
-    state.modelRoot.dispose();
-    state.modelRoot = null;
-    resetParts();
+    estado.raizModelo.dispose();
+    estado.raizModelo = null;
+    reiniciarPiezas();
   }
 
-  function isAudiRSStyle() {
+  function esEstiloAudiRs() {
     return config.marca === "Audi" && (/rs/i.test(config.modelo) || /rs/i.test(config.logo));
   }
 
-  function applyMaterialToPart(partKey, material) {
-    getParts(partKey).forEach((part) => {
-      part.material = material;
+  function aplicarMaterialAPieza(clavePieza, material) {
+    obtenerPiezas(clavePieza).forEach((pieza) => {
+      pieza.material = material;
     });
   }
 
-  function applyTextureToPart(partKey, textureKey, profile = "leather") {
-    const profileSettings = {
+  function aplicarTexturaAPieza(clavePieza, claveTextura, perfil = "leather") {
+    const ajustesPerfil = {
       carbon: { metallic: 0.56, roughness: 0.28, clearCoatIntensity: 0.72 },
       forgedCarbon: { metallic: 0.62, roughness: 0.24, clearCoatIntensity: 0.82 },
       leather: { metallic: 0.06, roughness: 0.62, clearCoatIntensity: 0.28 },
       fabric: { metallic: 0.02, roughness: 0.92, clearCoat: false },
     };
-    const material = createPbrMaterial(
-      `mat_${partKey}_${textureKey}`,
+    const material = crearMaterialPbr(
+      `mat_${clavePieza}_${claveTextura}`,
       {
-        texture: state.textures[textureKey],
-        ...(profileSettings[profile] || profileSettings.leather),
+        texture: estado.texturas[claveTextura],
+        ...(ajustesPerfil[perfil] || ajustesPerfil.leather),
       }
     );
-    applyMaterialToPart(partKey, material);
+    aplicarMaterialAPieza(clavePieza, material);
   }
 
-  function applyThreadMaterial(option) {
-    const material = option.texture
-      ? createPbrMaterial("mat_costuras_pattern", {
-          texture: state.textures[option.texture],
+  function aplicarMaterialCosturas(opcion) {
+    const material = opcion.texture
+      ? crearMaterialPbr("mat_costuras_pattern", {
+          texture: estado.texturas[opcion.texture],
           metallic: 0.02,
           roughness: 0.58,
           clearCoatIntensity: 0.1,
         })
-      : createPbrMaterial(`mat_costuras_${option.id}`, {
-          color: option.color,
+      : crearMaterialPbr(`mat_costuras_${opcion.id}`, {
+          color: opcion.color,
           metallic: 0.02,
           roughness: 0.58,
           clearCoatIntensity: 0.1,
         });
-    applyMaterialToPart("costuras", material);
+    aplicarMaterialAPieza("costuras", material);
   }
 
-  function applyMarkerMaterial(option) {
-    const material = option.texture
-      ? createPbrMaterial("mat_marcador_pattern", {
-          texture: state.textures[option.texture],
+  function aplicarMaterialMarcador(opcion) {
+    const material = opcion.texture
+      ? crearMaterialPbr("mat_marcador_pattern", {
+          texture: estado.texturas[opcion.texture],
           metallic: 0.2,
           roughness: 0.32,
         })
-      : createPbrMaterial(`mat_marcador_${option.id}`, {
-          color: option.color,
+      : crearMaterialPbr(`mat_marcador_${opcion.id}`, {
+          color: opcion.color,
           metallic: 0.2,
           roughness: 0.32,
         });
-    applyMaterialToPart("marcador_superior", material);
+    aplicarMaterialAPieza("marcador_superior", material);
   }
 
-  function applyLogoTexture() {
-    if (state.placeholderStyle === "audi-rs") return;
-
-    const material = createLogoMaterial(config.logo, config.marca);
-    applyMaterialToPart("logo", material);
+  function aplicarMaterialMolduras(opcion) {
+    const material = crearMaterialPbr(`mat_molduras_${opcion.id}`, {
+      color: opcion.color,
+      metallic: opcion.metallic ?? 0.68,
+      roughness: opcion.roughness ?? 0.34,
+    });
+    aplicarMaterialAPieza("molduras", material);
+    estado.materiales.molduras = material;
   }
 
-  function applyPaddleMaterial() {
+  function aplicarTexturaLogo() {
+    if (estado.estiloPlaceholder === "audi-rs") return;
+
+    const material = crearMaterialLogo(config.logo, config.marca);
+    aplicarMaterialAPieza("logo", material);
+  }
+
+  function aplicarMaterialLevas() {
     if (config.levas === "aluminio") {
-      applyMaterialToPart("levas", state.materials.levasAluminio);
-      restoreAudiRSPaddleDetails();
+      aplicarMaterialAPieza("levas", estado.materiales.levasAluminio);
+      restaurarDetallesLevasAudiRs();
       return;
     }
     if (config.levas === "magneticas") {
-      applyMaterialToPart("levas", state.materials.levasMagneticas);
-      restoreAudiRSPaddleDetails();
+      aplicarMaterialAPieza("levas", estado.materiales.levasMagneticas);
+      restaurarDetallesLevasAudiRs();
       return;
     }
-    applyMaterialToPart("levas", state.materials.levasCarbono);
-    restoreAudiRSPaddleDetails();
+    aplicarMaterialAPieza("levas", estado.materiales.levasCarbono);
+    restaurarDetallesLevasAudiRs();
   }
 
-  function restoreAudiRSPaddleDetails() {
-    if (state.placeholderStyle !== "audi-rs") return;
+  function restaurarDetallesLevasAudiRs() {
+    if (estado.estiloPlaceholder !== "audi-rs") return;
 
-    getParts("levas")
-      .filter((part) => part.name.includes("_hole_"))
-      .forEach((part) => {
-        part.material = state.materials.shadowTrim;
+    obtenerPiezas("levas")
+      .filter((pieza) => pieza.name.includes("_hole_"))
+      .forEach((pieza) => {
+        pieza.material = estado.materiales.bordeSombra;
       });
   }
 
-  function togglePart(partKey, visible) {
-    getParts(partKey).forEach((part) => {
-      part.setEnabled(visible);
+  function alternarPieza(clavePieza, visible) {
+    obtenerPiezas(clavePieza).forEach((pieza) => {
+      pieza.setEnabled(visible);
     });
   }
 
-  function updateSummary() {
-    const values = getSummaryLabels();
-    nodes.summary.forEach((summaryNode) => {
-      summaryNode.textContent = values[summaryNode.dataset.summary] || "";
+  function actualizarResumen() {
+    const valores = obtenerEtiquetasResumen();
+    nodos.resumen.forEach((nodoResumen) => {
+      nodoResumen.textContent = valores[nodoResumen.dataset.summary] || "";
     });
   }
 
-  function updatePrice() {
-    const model = getModel();
+  function actualizarPrecio() {
+    const modelo = obtenerModelo();
     const extras = [
-      ["Aro", getOption("aro")],
-      ["Agarres", getOption("agarres")],
-      ["Costuras", getOption("costuras")],
-      ["Pantalla RPM", getOption("pantallaRpm")],
-      ["Levas", getOption("levas")],
-      ["Marcador", getOption("marcador")],
+      ["Aro", obtenerOpcion("aro")],
+      ["Agarres", obtenerOpcion("agarres")],
+      ["Costuras", obtenerOpcion("costuras")],
+      ["Pantalla RPM", obtenerOpcion("pantallaRpm")],
+      ["Levas", obtenerOpcion("levas")],
+      ["Marcador", obtenerOpcion("marcador")],
+      ["Molduras", obtenerOpcion("molduras")],
     ];
 
-    const extraLines = extras
-      .filter(([, option]) => option && option.price > 0)
-      .map(([label, option]) => ({
-        label,
-        option: option.label,
-        amount: option.price,
+    const lineasExtras = extras
+      .filter(([, opcion]) => opcion && opcion.price > 0)
+      .map(([etiqueta, opcion]) => ({
+        label: etiqueta,
+        option: opcion.label,
+        amount: opcion.price,
       }));
 
-    state.priceLines = [
-      { label: `Base ${config.marca} ${model.label}`, amount: model.basePrice },
-      ...extraLines,
+    estado.lineasPrecio = [
+      { label: `Base ${config.marca} ${modelo.label}`, amount: modelo.basePrice },
+      ...lineasExtras,
     ];
-    state.price = state.priceLines.reduce((total, line) => total + line.amount, 0);
+    estado.precio = estado.lineasPrecio.reduce((total, linea) => total + linea.amount, 0);
 
-    if (nodes.price) nodes.price.textContent = formatPrice(state.price);
-    if (nodes.priceBreakdown) {
-      nodes.priceBreakdown.innerHTML = state.priceLines
-        .map((line, index) => {
-          const sign = index === 0 ? "" : "+";
-          const label = line.option ? `${line.label}: ${line.option}` : line.label;
-          return `<div><span>${label}</span><strong>${sign}${formatPrice(line.amount)}</strong></div>`;
+    if (nodos.precio) nodos.precio.textContent = formatearPrecio(estado.precio);
+    if (nodos.desglosePrecio) {
+      nodos.desglosePrecio.innerHTML = estado.lineasPrecio
+        .map((linea, indice) => {
+          const signo = indice === 0 ? "" : "+";
+          const etiqueta = linea.option ? `${linea.label}: ${linea.option}` : linea.label;
+          return `<div><span>${etiqueta}</span><strong>${signo}${formatearPrecio(linea.amount)}</strong></div>`;
         })
         .join("");
     }
 
-    updateBackendPayload();
+    actualizarPayloadBackend();
   }
 
-  function updateBackendPayload() {
-    const payload = buildBackendPayload();
+  function actualizarPayloadBackend() {
+    const payload = construirPayloadBackend();
     const json = JSON.stringify(payload);
-    if (nodes.jsonOutput) nodes.jsonOutput.value = json;
-    if (nodes.requestLink) {
-      nodes.requestLink.href = `contacto.html?configuracion=${encodeURIComponent(json)}`;
+    if (nodos.salidaJson) nodos.salidaJson.value = json;
+    if (nodos.enlaceSolicitud) {
+      nodos.enlaceSolicitud.href = `contacto.html?configuracion=${encodeURIComponent(json)}`;
     }
   }
 
-  function buildBackendPayload() {
+  async function guardarDiseno(crearSolicitud) {
+    const backend = window.CDPBackend;
+    const payload = crearPayloadVolante(crearSolicitud);
+    const modo = crearSolicitud ? "comprar" : "guardar";
+
+    cambiarEstadoBotones(true);
+    mostrarEstado(crearSolicitud ? "Preparando solicitud de compra..." : "Guardando boceto 3D...", "info");
+
+    try {
+      if (!backend?.isConfigured?.()) {
+        const guardado = guardarVolantePendiente(payload, modo);
+        mostrarEstado(guardado
+          ? "Boceto guardado en este navegador. Abre la web desde XAMPP e inicia sesion para verlo en Cuenta > Volantes generados."
+          : "No se pudo guardar el boceto en este navegador. Prueba a iniciar sesion antes de guardar.", guardado ? "info" : "error");
+        return;
+      }
+
+      const session = await backend.getCustomerSession();
+      if (session?.authenticated) {
+        const respuesta = await backend.guardarVolanteGenerado(payload);
+        mostrarEstado(respuesta?.mensaje || (crearSolicitud
+          ? "Solicitud enviada. El diseno queda guardado en Cuenta > Volantes generados y en el panel de administrador."
+          : "Diseno guardado. Lo podras ver desde Cuenta > Volantes generados."), "success");
+        localStorage.removeItem(CLAVE_VOLANTE_PENDIENTE);
+        return;
+      }
+
+      const guardado = guardarVolantePendiente(payload, modo);
+      mostrarEstado(guardado
+        ? (crearSolicitud
+          ? "Para completar la compra inicia sesion. Hemos guardado este boceto en el navegador y se enviara al entrar en tu cuenta."
+          : "Boceto guardado temporalmente. Podras volver a verlo desde esta misma pagina; si inicias sesion se guardara en Cuenta > Volantes generados.")
+        : "No se pudo guardar el boceto en este navegador. Inicia sesion para guardarlo directamente en tu cuenta.", guardado ? "info" : "error");
+    } catch (error) {
+      const guardado = guardarVolantePendiente(payload, modo);
+      mostrarEstado(guardado
+        ? (error?.message || "No se pudo guardar ahora. Hemos dejado el boceto preparado para recuperarlo al iniciar sesion.")
+        : (error?.message || "No se pudo guardar ahora. Inicia sesion y vuelve a intentarlo."), "error");
+    } finally {
+      cambiarEstadoBotones(false);
+    }
+  }
+
+  function crearPayloadVolante(crearSolicitud) {
+    const payload = construirPayloadBackend();
+    const resumen = payload.resumen || {};
+
+    return {
+      ...payload,
+      titulo: `Volante ${resumen.marca || config.marca} ${resumen.modelo || config.modelo}`,
+      boceto_3d: capturarBoceto(),
+      crear_solicitud: crearSolicitud,
+    };
+  }
+
+  function capturarBoceto() {
+    if (!estado.escena || !estado.lienzo) return "";
+
+    try {
+      estado.escena.render();
+      return estado.lienzo.toDataURL("image/jpeg", 0.86);
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function guardarVolantePendiente(payload, modo) {
+    try {
+      localStorage.setItem(CLAVE_VOLANTE_PENDIENTE, JSON.stringify({
+        modo,
+        diseno: payload,
+        guardado_en: new Date().toISOString(),
+      }));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function mostrarEstado(mensaje, tipo = "info") {
+    if (!nodos.estadoUi) return;
+    nodos.estadoUi.hidden = false;
+    nodos.estadoUi.className = `configurator-status is-${tipo}`;
+    nodos.estadoUi.textContent = mensaje;
+  }
+
+  function cambiarEstadoBotones(bloqueado) {
+    [nodos.botonGuardar, nodos.botonComprar].forEach((boton) => {
+      if (boton) boton.disabled = bloqueado;
+    });
+  }
+
+  function construirPayloadBackend() {
     return {
       producto: "volante-personalizado-cdp-customs",
       configuracion: { ...config },
-      resumen: getSummaryLabels(),
+      resumen: obtenerEtiquetasResumen(),
       precio: {
         moneda: "EUR",
-        lineas: state.priceLines.map((line) => ({ ...line })),
-        total: state.price,
+        lineas: estado.lineasPrecio.map((linea) => ({ ...linea })),
+        total: estado.precio,
       },
       visual: {
         motor: "Babylon.js",
-        modelo: state.loadedFromGlb ? MODEL_URL : "placeholder-procedural",
+        modelo: estado.cargadoDesdeGlb ? (estado.urlModeloActual || URL_MODELO_POR_DEFECTO) : "placeholder-procedural",
         formatoEsperado: "glb/gltf",
-        piezasEsperadas: Object.keys(partAliases),
+        piezasEsperadas: Object.keys(aliasPartes),
       },
     };
   }
 
-  function updatePreviewMeta() {
-    const brand = configuratorData[config.marca];
-    const model = getModel();
+  function actualizarMetaPreview() {
+    const marca = datosConfigurador[config.marca];
+    const modelo = obtenerModelo();
 
-    if (nodes.brandLogo) {
-      nodes.brandLogo.src = brand.brandLogo;
-      nodes.brandLogo.alt = config.marca;
+    if (nodos.logoMarca) {
+      nodos.logoMarca.src = marca.brandLogo;
+      nodos.logoMarca.alt = config.marca;
     }
-    if (nodes.brandBadge) nodes.brandBadge.textContent = `${config.marca} ${model.label}`;
-    if (nodes.previewBase) nodes.previewBase.textContent = `${config.marca} ${model.label}`;
-    if (nodes.previewBackend) {
-      nodes.previewBackend.textContent = state.loadedFromGlb
+    if (nodos.chipMarca) nodos.chipMarca.textContent = `${config.marca} ${modelo.label}`;
+    if (nodos.basePreview) nodos.basePreview.textContent = `${config.marca} ${modelo.label}`;
+    if (nodos.backendPreview) {
+      nodos.backendPreview.textContent = estado.cargadoDesdeGlb
         ? "GLB por piezas cargado"
         : "Vista 3D generada lista para GLB";
     }
-    if (nodes.compatibilityStatus) {
-      nodes.compatibilityStatus.textContent = model.levasMagneticas
+    if (nodos.estadoCompatibilidad) {
+      nodos.estadoCompatibilidad.textContent = modelo.levasMagneticas
         ? "Compatible con levas magneticas"
         : "Sin levas magneticas";
     }
   }
 
-  function setActiveStep(stepKey) {
-    nodes.stepButtons.forEach((button) => {
-      button.classList.toggle("is-active", button.dataset.stepTarget === stepKey);
+  function establecerPasoActivo(clavePaso) {
+    nodos.botonesPaso.forEach((boton) => {
+      boton.classList.toggle("is-active", boton.dataset.stepTarget === clavePaso);
     });
-    nodes.stepPanels.forEach((panel) => {
-      panel.classList.toggle("is-active", panel.dataset.stepPanel === stepKey);
+    nodos.panelesPaso.forEach((panel) => {
+      panel.classList.toggle("is-active", panel.dataset.stepPanel === clavePaso);
     });
   }
 
-  function registerPart(partKey, mesh) {
-    if (!state.parts[partKey]) state.parts[partKey] = [];
-    state.parts[partKey].push(mesh);
-    mesh.isPickable = false;
+  function registrarPieza(clavePieza, malla) {
+    if (!estado.partes[clavePieza]) estado.partes[clavePieza] = [];
+    estado.partes[clavePieza].push(malla);
+    malla.isPickable = false;
   }
 
-  function resetParts() {
-    state.parts = Object.keys(partAliases).reduce((acc, key) => {
-      acc[key] = [];
+  function reiniciarPiezas() {
+    estado.partes = Object.keys(aliasPartes).reduce((acc, clave) => {
+      acc[clave] = [];
       return acc;
     }, {});
   }
 
-  function getParts(partKey) {
-    return state.parts[partKey] || [];
+  function obtenerPiezas(clavePieza) {
+    return estado.partes[clavePieza] || [];
   }
 
-  function getModel() {
-    const brand = configuratorData[config.marca];
-    return brand.modelos.find((model) => model.id === config.modelo) || brand.modelos[0];
+  function obtenerModelo() {
+    const marca = datosConfigurador[config.marca];
+    return marca.modelos.find((modelo) => modelo.id === config.modelo) || marca.modelos[0];
   }
 
-  function getOption(key) {
-    return (optionData[key] || []).find((option) => String(option.id) === String(config[key]));
+  function obtenerOpcion(clave) {
+    return (datosOpciones[clave] || []).find((opcion) => String(opcion.id) === String(config[clave]));
   }
 
-  function getSummaryLabels() {
+  function obtenerEtiquetasResumen() {
     return {
       marca: config.marca,
-      modelo: getModel().label,
-      aro: getOption("aro").label,
-      agarres: getOption("agarres").label,
-      costuras: getOption("costuras").label,
+      modelo: obtenerModelo().label,
+      aro: obtenerOpcion("aro").label,
+      agarres: obtenerOpcion("agarres").label,
+      costuras: obtenerOpcion("costuras").label,
       logo: config.logo,
       pantallaRpm: config.pantallaRpm ? "Si" : "No",
-      levas: getOption("levas").label,
-      marcador: getOption("marcador").label,
-      precioFinal: formatPrice(state.price),
+      levas: obtenerOpcion("levas").label,
+      marcador: obtenerOpcion("marcador").label,
+      molduras: obtenerOpcion("molduras").label,
+      precioFinal: formatearPrecio(estado.precio),
     };
   }
 
-  function resetCamera() {
-    if (!state.camera) return;
-    BABYLON.Animation.CreateAndStartAnimation(
-      "reset_camera_alpha",
-      state.camera,
-      "alpha",
-      60,
-      18,
-      state.camera.alpha,
-      Math.PI / 2,
-      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-    );
-    BABYLON.Animation.CreateAndStartAnimation(
-      "reset_camera_beta",
-      state.camera,
-      "beta",
-      60,
-      18,
-      state.camera.beta,
-      Math.PI / 2,
-      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-    );
-    BABYLON.Animation.CreateAndStartAnimation(
-      "reset_camera_radius",
-      state.camera,
-      "radius",
-      60,
-      18,
-      state.camera.radius,
-      4.6,
-      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-    );
-    state.camera.setTarget(new BABYLON.Vector3(0, 0.02, 0));
+  function animarCamaraA(alfa, beta, radio, fotogramas = 24) {
+    if (!estado.camara) return;
+    BABYLON.Animation.CreateAndStartAnimation("cam_a", estado.camara, "alpha", 60, fotogramas, estado.camara.alpha, alfa, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    BABYLON.Animation.CreateAndStartAnimation("cam_b", estado.camara, "beta",  60, fotogramas, estado.camara.beta,  beta,  BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    BABYLON.Animation.CreateAndStartAnimation("cam_r", estado.camara, "radius",60, fotogramas, estado.camara.radius,radio,BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    estado.camara.setTarget(new BABYLON.Vector3(0, 0.02, 0));
   }
 
-  function resizeRenderer() {
-    if (!state.engine || !nodes.stage) return;
-    state.engine.resize();
+  function reiniciarCamara() {
+    animarCamaraA(Math.PI / 2, Math.PI / 2, 4.6);
+  }
 
-    if (state.camera?.mode === BABYLON.Camera.ORTHOGRAPHIC_CAMERA) {
-      const { width, height } = nodes.stage.getBoundingClientRect();
-      const halfHeight = 1.95;
-      const halfWidth = halfHeight * (width / Math.max(height, 1));
-      state.camera.orthoLeft = -halfWidth;
-      state.camera.orthoRight = halfWidth;
-      state.camera.orthoTop = halfHeight;
-      state.camera.orthoBottom = -halfHeight;
+  window.CDPCameraView = {
+    frontal: () => animarCamaraA(Math.PI / 2,    Math.PI / 2,    4.6),
+    tresCuartos: () => animarCamaraA(Math.PI / 2.6, Math.PI / 2.2, 4.9),
+    trasera: () => animarCamaraA(-Math.PI / 2,   Math.PI / 2,    4.8),
+  };
+
+  function redimensionarRenderizador() {
+    if (!estado.motor || !nodos.escenario) return;
+    estado.motor.resize();
+
+    if (estado.camara?.mode === BABYLON.Camera.ORTHOGRAPHIC_CAMERA) {
+      const { width, height } = nodos.escenario.getBoundingClientRect();
+      const mediaAltura = 1.95;
+      const mediaAnchura = mediaAltura * (width / Math.max(height, 1));
+      estado.camara.orthoLeft = -mediaAnchura;
+      estado.camara.orthoRight = mediaAnchura;
+      estado.camara.orthoTop = mediaAltura;
+      estado.camara.orthoBottom = -mediaAltura;
     }
   }
 
-  function hideLoader() {
-    nodes.loader?.classList.add("is-hidden");
+  function ocultarCargador() {
+    nodos.cargador?.classList.add("is-hidden");
   }
 
-  function showViewerMessage(message) {
-    if (!nodes.loader) return;
-    nodes.loader.innerHTML = `<strong>${message}</strong>`;
-    nodes.loader.classList.remove("is-hidden");
+  function mostrarMensajeVisor(mensaje) {
+    if (!nodos.cargador) return;
+    nodos.cargador.innerHTML = `<strong>${mensaje}</strong>`;
+    nodos.cargador.classList.remove("is-hidden");
   }
 
-  function formatPrice(value) {
-    return `${value.toLocaleString("es-ES")} EUR`;
+  function formatearPrecio(valor) {
+    return `${valor.toLocaleString("es-ES")} EUR`;
   }
 
-  function normalizeName(value) {
-    return String(value)
+  function normalizarNombre(valor) {
+    return String(valor)
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[̀-ͯ]/g, "")
       .replace(/[^a-z0-9]+/g, "_")
       .replace(/^_|_$/g, "");
   }
 
-  function hexToColor3(hex) {
-    const rgb = hexToRgb(hex);
+  function hexAColor3(hex) {
+    const rgb = hexARgb(hex);
     return new BABYLON.Color3(rgb.r / 255, rgb.g / 255, rgb.b / 255);
   }
 
-  function hexToRgb(hex) {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
+  function hexARgb(hex) {
+    const resultado = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return resultado
       ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16),
+          r: parseInt(resultado[1], 16),
+          g: parseInt(resultado[2], 16),
+          b: parseInt(resultado[3], 16),
         }
       : { r: 0, g: 0, b: 0 };
   }
 
-  function roundRect(ctx, x, y, width, height, radius) {
+  function rectanguloRedondeado(ctx, x, y, ancho, alto, radio) {
     ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.arcTo(x + width, y, x + width, y + height, radius);
-    ctx.arcTo(x + width, y + height, x, y + height, radius);
-    ctx.arcTo(x, y + height, x, y, radius);
-    ctx.arcTo(x, y, x + width, y, radius);
+    ctx.moveTo(x + radio, y);
+    ctx.arcTo(x + ancho, y, x + ancho, y + alto, radio);
+    ctx.arcTo(x + ancho, y + alto, x, y + alto, radio);
+    ctx.arcTo(x, y + alto, x, y, radio);
+    ctx.arcTo(x, y, x + ancho, y, radio);
     ctx.closePath();
   }
 
-  initConfigurator();
+  function aplicarConfiguracionInicial() {
+    const params = new URLSearchParams(window.location.search);
+    const cfg = params.get("cfg");
+    const raw = params.get("configuracion");
+    let entrada = null;
+
+    if (cfg) {
+      try {
+        const json = decodeURIComponent(escape(atob(cfg)));
+        const data = JSON.parse(json);
+        entrada = data?.configuracion && typeof data.configuracion === "object" ? data.configuracion : data;
+      } catch (error) { /* fallback al siguiente formato */ }
+    }
+
+    if (!entrada && raw) {
+      try {
+        const data = JSON.parse(raw);
+        entrada = data?.configuracion && typeof data.configuracion === "object" ? data.configuracion : data;
+      } catch (error) { return; }
+    }
+
+    if (!entrada) return;
+
+    Object.keys(config).forEach((clave) => {
+      if (!Object.prototype.hasOwnProperty.call(entrada, clave)) return;
+      config[clave] = clave === "pantallaRpm"
+        ? entrada[clave] === true || entrada[clave] === "true"
+        : entrada[clave];
+    });
+  }
+
+  aplicarConfiguracionInicial();
+  inicializarConfigurador();
 
   window.CDPConfigurator = {
     getConfig: () => ({ ...config }),
-    getPayload: buildBackendPayload,
+    getPayload: construirPayloadBackend,
+    getBoceto: capturarBoceto,
     setConfig: (partialConfig) => {
       Object.assign(config, partialConfig || {});
-      updateAvailableOptions();
-      updateModelAppearance();
-      updateSummary();
-      updatePrice();
+      actualizarOpcionesDisponibles();
+      actualizarAparienciaModelo();
+      actualizarResumen();
+      actualizarPrecio();
     },
-    data: configuratorData,
-    options: optionData,
+    data: datosConfigurador,
+    options: datosOpciones,
+    irAlPago,
   };
 
   window.CDPConfigurator3D = window.CDPConfigurator;

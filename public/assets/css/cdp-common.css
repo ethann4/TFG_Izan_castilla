@@ -571,6 +571,20 @@ body {
   align-items: center;
 }
 
+.cdp-footer-legal a {
+  color: #9aa0ad;
+  font-size: 0.82rem;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.18s ease;
+}
+
+.cdp-footer-legal a:hover {
+  color: #ff7878;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .cdp-footer-payments {
   display: flex;
   flex-wrap: wrap;

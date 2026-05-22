@@ -1,57 +1,57 @@
 ;(async () => {
-  const carouselInner = document.querySelector("[data-productos-inicio]");
-  if (!carouselInner) return;
+  const interiorCarrusel = document.querySelector("[data-productos-inicio]");
+  if (!interiorCarrusel) return;
 
-  const escapeHtml = (value) => window.CDPBackend?.escapeHtml(value) || "";
+  const escaparHtml = (valor) => window.CDPBackend?.escapeHtml(valor) || "";
 
-  const renderMessage = (message) => {
-    carouselInner.innerHTML = `
+  const mostrarMensaje = (mensaje) => {
+    interiorCarrusel.innerHTML = `
       <div class="carousel-item active">
-        <div class="mensaje-productos-inicio">${escapeHtml(message)}</div>
+        <div class="mensaje-productos-inicio">${escaparHtml(mensaje)}</div>
       </div>
     `;
   };
 
-  const renderProduct = (product) => {
-    const image = product.gallery[0] || "assets/img/logo_cdp_transparente.png";
+  const renderizarProducto = (producto) => {
+    const imagen = producto.gallery[0] || "assets/img/logo_cdp_transparente.png";
     return `
       <div class="col-md-4">
-        <a class="tarjeta-producto-inicio" href="producto.html?id=${encodeURIComponent(product.id)}">
-          <img src="${escapeHtml(image)}" alt="${escapeHtml(product.brand + " " + product.title)}">
-          <span>${escapeHtml(product.brand)}</span>
-          <strong>${escapeHtml(product.title)}</strong>
-          <em>${escapeHtml(product.price)}</em>
+        <a class="tarjeta-producto-inicio" href="producto.html?id=${encodeURIComponent(producto.id)}">
+          <img src="${escaparHtml(imagen)}" alt="${escaparHtml(producto.brand + " " + producto.title)}">
+          <span>${escaparHtml(producto.brand)}</span>
+          <strong>${escaparHtml(producto.title)}</strong>
+          <em>${escaparHtml(producto.price)}</em>
         </a>
       </div>
     `;
   };
 
-  const chunkProducts = (products) => {
-    const chunks = [];
-    for (let index = 0; index < products.length; index += 3) {
-      chunks.push(products.slice(index, index + 3));
+  const agruparProductos = (productos) => {
+    const grupos = [];
+    for (let indice = 0; indice < productos.length; indice += 3) {
+      grupos.push(productos.slice(indice, indice + 3));
     }
-    return chunks;
+    return grupos;
   };
 
   if (!window.CDPBackend?.isConfigured()) {
-    renderMessage("Abre la web desde XAMPP para mostrar los productos destacados.");
+    mostrarMensaje("Abre la web desde XAMPP para mostrar los productos destacados.");
     return;
   }
 
   try {
-    const products = await window.CDPBackend.listProducts();
-    if (!products.length) {
-      renderMessage("Importa productos desde el panel de administrador para mostrar destacados.");
+    const productos = await window.CDPBackend.listProducts();
+    if (!productos.length) {
+      mostrarMensaje("Importa productos desde el panel de administrador para mostrar destacados.");
       return;
     }
 
-    carouselInner.innerHTML = chunkProducts(products.slice(0, 6))
+    interiorCarrusel.innerHTML = agruparProductos(productos.slice(0, 6))
       .map(
-        (chunk, index) => `
-          <div class="carousel-item${index === 0 ? " active" : ""}">
+        (grupo, indice) => `
+          <div class="carousel-item${indice === 0 ? " active" : ""}">
             <div class="row g-4">
-              ${chunk.map(renderProduct).join("")}
+              ${grupo.map(renderizarProducto).join("")}
             </div>
           </div>
         `
@@ -59,6 +59,6 @@
       .join("");
   } catch (error) {
     console.warn("No se pudieron cargar los productos destacados.", error);
-    renderMessage("No se pudieron cargar los productos destacados desde MySQL.");
+    mostrarMensaje("No se pudieron cargar los productos destacados desde MySQL.");
   }
 })();

@@ -1,24 +1,24 @@
 (function () {
-  const storageKeys = {
+  const clavesAlmacenamiento = {
     region: "cdp.region",
     language: "cdp.language",
   };
 
-  const languageOptions = {
-    es: { code: "ES", name: "Espa\u00f1ol" },
-    nb: { code: "NB", name: "Norsk Bokm\u00e5l" },
+  const opcionesIdioma = {
+    es: { code: "ES", name: "Español" },
+    nb: { code: "NB", name: "Norsk Bokmål" },
     en: { code: "EN", name: "English" },
     de: { code: "DE", name: "Deutsch" },
-    fr: { code: "FR", name: "Fran\u00e7ais" },
+    fr: { code: "FR", name: "Français" },
   };
 
-  const regionLabels = {
-    es: "Espa\u00f1a | EUR \u20ac",
-    pt: "Portugal | EUR \u20ac",
-    fr: "Francia | EUR \u20ac",
+  const etiquetasRegion = {
+    es: "España | EUR €",
+    pt: "Portugal | EUR €",
+    fr: "Francia | EUR €",
   };
 
-  const translations = {
+  const traducciones = {
     en: {
       "INICIO": "HOME",
       "TIENDA": "SHOP",
@@ -46,19 +46,11 @@
       "Abrir catalogo completo": "Open full catalog",
       "Compatibilidad": "Compatibility",
       "Marcas preparadas": "Supported brands",
-      "La estructura separa marca, modelo, material, color y precio para filtrar productos cargados desde SQL.": "The structure separates brand, model, material, color and price to filter products loaded from SQL.",
       "Personalizacion y venta de volantes premium para proyectos de automocion con identidad propia.": "Customization and sale of premium steering wheels for automotive projects with their own identity.",
       "Menu": "Menu",
-      "Proyecto DAW": "DAW project",
-      "Interfaz HTML, CSS y JS": "HTML, CSS and JS interface",
-      "Servidor PHP/MySQL": "PHP/MySQL server",
-      "CRUD de productos y pedidos": "Product and order CRUD",
       "Vizcaya, Espana": "Biscay, Spain",
-      "CDP Customs - Proyecto final DAW": "CDP Customs - Final DAW project",
-      "Bootstrap adaptado y profesionalizado": "Adapted and professionalized Bootstrap",
       "Volantes personalizados con acabados en cuero, alcantara, carbono, levas y pantalla RPM.": "Custom steering wheels with leather, alcantara, carbon fiber, paddles and RPM screen finishes.",
       "Volantes premium": "Premium steering wheels",
-      "Catalogo conectado a PHP/MySQL con filtros normalizados.": "Catalog connected to PHP/MySQL with normalized filters.",
       "FILTROS": "FILTERS",
       "MARCA": "BRAND",
       "MODELO": "MODEL",
@@ -76,20 +68,20 @@
       "Blanco": "White",
       "PRECIO": "PRICE",
       "Volver": "Back",
-      "Iniciar sesi\u00f3n": "Sign in",
+      "Iniciar sesión": "Sign in",
       "Accede a tu cuenta para continuar": "Access your account to continue",
-      "Correo electr\u00f3nico": "Email",
-      "Contrase\u00f1a": "Password",
-      "\u00bfOlvidaste tu contrase\u00f1a?": "Forgot your password?",
-      "O contin\u00faa con": "Or continue with",
-      "\u00bfNo tienes cuenta? Reg\u00edstrate": "No account? Register",
+      "Correo electrónico": "Email",
+      "Contraseña": "Password",
+      "¿Olvidaste tu contraseña?": "Forgot your password?",
+      "O continúa con": "Or continue with",
+      "¿No tienes cuenta? Regístrate": "No account? Register",
       "Crear cuenta": "Create account",
-      "Reg\u00edstrate para guardar tus pedidos y usar la cesta": "Register to save your orders and use the basket",
+      "Regístrate para guardar tus pedidos y usar la cesta": "Register to save your orders and use the basket",
       "Nombre": "Name",
-      "Tel\u00e9fono": "Phone",
+      "Teléfono": "Phone",
       "Ya tienes cuenta": "Already have an account",
-      "Inicia sesi\u00f3n": "Sign in",
-      "Sesi\u00f3n iniciada": "Session started",
+      "Inicia sesión": "Sign in",
+      "Sesión iniciada": "Session started",
       "Acceso administrador": "Administrator access",
       "Panel administrador": "Administrator panel",
       "Tu sesion de administrador ya esta activa.": "Your administrator session is already active.",
@@ -100,13 +92,13 @@
       "Mis datos": "My details",
       "Mis pedidos": "My orders",
       "Volantes generados": "Generated steering wheels",
-      "Cerrar sesi\u00f3n": "Log out",
+      "Cerrar sesión": "Log out",
     },
     fr: {
       "INICIO": "ACCUEIL",
       "TIENDA": "BOUTIQUE",
       "MARCAS": "MARQUES",
-      "NOSOTROS": "\u00c0 PROPOS",
+      "NOSOTROS": "À PROPOS",
       "CONTACTO": "CONTACT",
       "Catalogo completo": "Catalogue complet",
       "Volantes y acabados personalizados": "Volants et finitions sur mesure",
@@ -129,19 +121,11 @@
       "Abrir catalogo completo": "Ouvrir le catalogue complet",
       "Compatibilidad": "Compatibilite",
       "Marcas preparadas": "Marques preparees",
-      "La estructura separa marca, modelo, material, color y precio para filtrar productos cargados desde SQL.": "La structure separe marque, modele, materiau, couleur et prix pour filtrer les produits charges depuis SQL.",
       "Personalizacion y venta de volantes premium para proyectos de automocion con identidad propia.": "Personnalisation et vente de volants premium pour des projets automobiles avec identite propre.",
       "Menu": "Menu",
-      "Proyecto DAW": "Projet DAW",
-      "Interfaz HTML, CSS y JS": "Interface HTML, CSS et JS",
-      "Servidor PHP/MySQL": "Serveur PHP/MySQL",
-      "CRUD de productos y pedidos": "CRUD de produits et commandes",
       "Vizcaya, Espana": "Biscaye, Espagne",
-      "CDP Customs - Proyecto final DAW": "CDP Customs - Projet final DAW",
-      "Bootstrap adaptado y profesionalizado": "Bootstrap adapte et professionnalise",
       "Volantes personalizados con acabados en cuero, alcantara, carbono, levas y pantalla RPM.": "Volants personnalises avec finitions cuir, alcantara, carbone, palettes et ecran RPM.",
       "Volantes premium": "Volants premium",
-      "Catalogo conectado a PHP/MySQL con filtros normalizados.": "Catalogue connecte a PHP/MySQL avec filtres normalises.",
       "FILTROS": "FILTRES",
       "MARCA": "MARQUE",
       "MODELO": "MODELE",
@@ -159,20 +143,20 @@
       "Blanco": "Blanc",
       "PRECIO": "PRIX",
       "Volver": "Retour",
-      "Iniciar sesi\u00f3n": "Connexion",
+      "Iniciar sesión": "Connexion",
       "Accede a tu cuenta para continuar": "Accedez a votre compte pour continuer",
-      "Correo electr\u00f3nico": "E-mail",
-      "Contrase\u00f1a": "Mot de passe",
-      "\u00bfOlvidaste tu contrase\u00f1a?": "Mot de passe oublie ?",
-      "O contin\u00faa con": "Ou continuer avec",
-      "\u00bfNo tienes cuenta? Reg\u00edstrate": "Pas de compte ? Inscrivez-vous",
+      "Correo electrónico": "E-mail",
+      "Contraseña": "Mot de passe",
+      "¿Olvidaste tu contraseña?": "Mot de passe oublie ?",
+      "O continúa con": "Ou continuer avec",
+      "¿No tienes cuenta? Regístrate": "Pas de compte ? Inscrivez-vous",
       "Crear cuenta": "Creer un compte",
-      "Reg\u00edstrate para guardar tus pedidos y usar la cesta": "Inscrivez-vous pour sauvegarder vos commandes et utiliser le panier",
+      "Regístrate para guardar tus pedidos y usar la cesta": "Inscrivez-vous pour sauvegarder vos commandes et utiliser le panier",
       "Nombre": "Nom",
-      "Tel\u00e9fono": "Telephone",
+      "Teléfono": "Telephone",
       "Ya tienes cuenta": "Vous avez deja un compte",
-      "Inicia sesi\u00f3n": "Connexion",
-      "Sesi\u00f3n iniciada": "Session ouverte",
+      "Inicia sesión": "Connexion",
+      "Sesión iniciada": "Session ouverte",
       "Acceso administrador": "Acces administrateur",
       "Panel administrador": "Panneau administrateur",
       "Tu sesion de administrador ya esta activa.": "Votre session administrateur est deja active.",
@@ -183,11 +167,11 @@
       "Mis datos": "Mes donnees",
       "Mis pedidos": "Mes commandes",
       "Volantes generados": "Volants generes",
-      "Cerrar sesi\u00f3n": "Se deconnecter",
+      "Cerrar sesión": "Se deconnecter",
     },
   };
 
-  const keyedTranslations = {
+  const traduccionesPorClave = {
     "home-hero-title": {
       es: 'Disena tu volante<br class="d-none d-xxl-block">a medida',
       en: 'Design your custom<br class="d-none d-xxl-block">steering wheel',
@@ -195,236 +179,236 @@
     },
   };
 
-  const reverseTranslations = {};
+  const traduccionesInversas = {};
 
-  Object.entries(translations).forEach(([, dictionary]) => {
-    Object.entries(dictionary).forEach(([spanishText, translatedText]) => {
-      reverseTranslations[translatedText] = spanishText;
+  Object.entries(traducciones).forEach(([, diccionario]) => {
+    Object.entries(diccionario).forEach(([textoEspanol, textoTraducido]) => {
+      traduccionesInversas[textoTraducido] = textoEspanol;
     });
   });
 
-  function normalizeText(value) {
-    return (value || "").replace(/\s+/g, " ").trim();
+  function normalizarTexto(valor) {
+    return (valor || "").replace(/\s+/g, " ").trim();
   }
 
-  function withOriginalSpacing(original, replacement) {
-    const start = original.match(/^\s*/)?.[0] || "";
-    const end = original.match(/\s*$/)?.[0] || "";
-    return `${start}${replacement}${end}`;
+  function conEspaciadoOriginal(original, reemplazo) {
+    const inicio = original.match(/^\s*/)?.[0] || "";
+    const fin = original.match(/\s*$/)?.[0] || "";
+    return `${inicio}${reemplazo}${fin}`;
   }
 
-  function normalizeLanguage(value) {
-    const text = normalizeText(value).toLowerCase();
+  function normalizarIdioma(valor) {
+    const texto = normalizarTexto(valor).toLowerCase();
 
-    if (["en", "english"].includes(text)) return "en";
-    if (["nb", "no"].includes(text) || text.includes("norsk") || text.includes("noruego") || text.includes("bokm")) return "nb";
-    if (["de", "deutsch"].includes(text) || text.includes("aleman") || text.includes("alem\u00e1n") || text.includes("german")) return "de";
-    if (text === "fr" || text.includes("fran") || text.includes("france")) return "fr";
+    if (["en", "english"].includes(texto)) return "en";
+    if (["nb", "no"].includes(texto) || texto.includes("norsk") || texto.includes("noruego") || texto.includes("bokm")) return "nb";
+    if (["de", "deutsch"].includes(texto) || texto.includes("aleman") || texto.includes("alemán") || texto.includes("german")) return "de";
+    if (texto === "fr" || texto.includes("fran") || texto.includes("france")) return "fr";
     return "es";
   }
 
-  function normalizeRegion(value) {
-    const text = normalizeText(value).toLowerCase();
+  function normalizarRegion(valor) {
+    const texto = normalizarTexto(valor).toLowerCase();
 
-    if (text.includes("portugal")) return "pt";
-    if (text.includes("francia") || text.includes("france")) return "fr";
+    if (texto.includes("portugal")) return "pt";
+    if (texto.includes("francia") || texto.includes("france")) return "fr";
     return "es";
   }
 
-  function getStoredPreference(kind) {
+  function obtenerPreferenciaGuardada(tipo) {
     try {
-      return localStorage.getItem(storageKeys[kind]);
+      return localStorage.getItem(clavesAlmacenamiento[tipo]);
     } catch (error) {
       return null;
     }
   }
 
-  function savePreference(kind, value) {
+  function guardarPreferencia(tipo, valor) {
     try {
-      localStorage.setItem(storageKeys[kind], value);
+      localStorage.setItem(clavesAlmacenamiento[tipo], valor);
     } catch (error) {
       return;
     }
   }
 
-  function translateString(value, language) {
-    const cleanValue = normalizeText(value);
-    const spanishValue = reverseTranslations[cleanValue] || cleanValue;
+  function traducirCadena(valor, idioma) {
+    const valorLimpio = normalizarTexto(valor);
+    const valorEspanol = traduccionesInversas[valorLimpio] || valorLimpio;
 
-    if (language === "es" || !translations[language]) {
-      return spanishValue;
+    if (idioma === "es" || !traducciones[idioma]) {
+      return valorEspanol;
     }
 
-    return translations[language]?.[spanishValue] || value;
+    return traducciones[idioma]?.[valorEspanol] || valor;
   }
 
-  function renderLanguageChoice(target, language) {
-    const normalizedLanguage = normalizeLanguage(language);
-    const option = languageOptions[normalizedLanguage] || languageOptions.es;
-    const choice = document.createElement("span");
-    const flag = document.createElement("span");
-    const code = document.createElement("span");
+  function renderizarSeleccionIdioma(destino, idioma) {
+    const idiomaNormalizado = normalizarIdioma(idioma);
+    const opcion = opcionesIdioma[idiomaNormalizado] || opcionesIdioma.es;
+    const seleccion = document.createElement("span");
+    const bandera = document.createElement("span");
+    const codigo = document.createElement("span");
 
-    target.textContent = "";
-    choice.className = "cdp-language-choice";
-    flag.className = `cdp-language-flag cdp-language-flag--${normalizedLanguage}`;
-    flag.setAttribute("aria-hidden", "true");
-    code.className = "cdp-language-code";
-    code.textContent = option.code;
+    destino.textContent = "";
+    seleccion.className = "cdp-language-choice";
+    bandera.className = `cdp-language-flag cdp-language-flag--${idiomaNormalizado}`;
+    bandera.setAttribute("aria-hidden", "true");
+    codigo.className = "cdp-language-code";
+    codigo.textContent = opcion.code;
 
-    choice.append(flag, code);
-    target.appendChild(choice);
+    seleccion.append(bandera, codigo);
+    destino.appendChild(seleccion);
   }
 
-  function translateTextNode(node, language) {
-    const original = node.nodeValue || "";
-    const trimmed = normalizeText(original);
+  function traducirNodoTexto(nodo, idioma) {
+    const original = nodo.nodeValue || "";
+    const recortado = normalizarTexto(original);
 
-    if (!trimmed) return;
+    if (!recortado) return;
 
-    const translated = translateString(trimmed, language);
+    const traducido = traducirCadena(recortado, idioma);
 
-    if (translated !== trimmed) {
-      node.nodeValue = withOriginalSpacing(original, translated);
+    if (traducido !== recortado) {
+      nodo.nodeValue = conEspaciadoOriginal(original, traducido);
     }
   }
 
-  function translateAttributes(element, language) {
-    ["placeholder", "aria-label", "title", "alt"].forEach((attribute) => {
-      const value = element.getAttribute(attribute);
-      if (!value) return;
+  function traducirAtributos(elemento, idioma) {
+    ["placeholder", "aria-label", "title", "alt"].forEach((atributo) => {
+      const valor = elemento.getAttribute(atributo);
+      if (!valor) return;
 
-      const translated = translateString(value, language);
-      if (translated !== value) {
-        element.setAttribute(attribute, translated);
+      const traducido = traducirCadena(valor, idioma);
+      if (traducido !== valor) {
+        elemento.setAttribute(atributo, traducido);
       }
     });
   }
 
-  function translateElement(element, language) {
-    if (element.closest("script, style, textarea")) return;
+  function traducirElemento(elemento, idioma) {
+    if (elemento.closest("script, style, textarea")) return;
 
-    translateAttributes(element, language);
+    traducirAtributos(elemento, idioma);
 
-    Array.from(element.childNodes).forEach((child) => {
-      if (child.nodeType === Node.TEXT_NODE) {
-        translateTextNode(child, language);
-      } else if (child.nodeType === Node.ELEMENT_NODE) {
-        translateElement(child, language);
+    Array.from(elemento.childNodes).forEach((hijo) => {
+      if (hijo.nodeType === Node.TEXT_NODE) {
+        traducirNodoTexto(hijo, idioma);
+      } else if (hijo.nodeType === Node.ELEMENT_NODE) {
+        traducirElemento(hijo, idioma);
       }
     });
   }
 
-  function applyLanguage(language) {
-    const normalizedLanguage = normalizeLanguage(language);
-    document.documentElement.lang = normalizedLanguage;
-    translateElement(document.body, normalizedLanguage);
-    applyKeyTranslations(normalizedLanguage);
-    updatePreferenceLabel("language", normalizedLanguage);
+  function aplicarIdioma(idioma) {
+    const idiomaNormalizado = normalizarIdioma(idioma);
+    document.documentElement.lang = idiomaNormalizado;
+    traducirElemento(document.body, idiomaNormalizado);
+    aplicarTraduccionesPorClave(idiomaNormalizado);
+    actualizarEtiquetaPreferencia("language", idiomaNormalizado);
   }
 
-  function applyKeyTranslations(language) {
-    document.querySelectorAll("[data-cdp-i18n]").forEach((element) => {
-      const key = element.dataset.cdpI18n;
-      const html = keyedTranslations[key]?.[language] || keyedTranslations[key]?.es;
-      if (html) element.innerHTML = html;
+  function aplicarTraduccionesPorClave(idioma) {
+    document.querySelectorAll("[data-cdp-i18n]").forEach((elemento) => {
+      const clave = elemento.dataset.cdpI18n;
+      const html = traduccionesPorClave[clave]?.[idioma] || traduccionesPorClave[clave]?.es;
+      if (html) elemento.innerHTML = html;
     });
   }
 
-  function updatePreferenceLabel(kind, value) {
-    document.querySelectorAll(`[data-cdp-preference="${kind}"]`).forEach((button) => {
-      const node = button.querySelector("[data-cdp-label]");
-      if (!node) return;
+  function actualizarEtiquetaPreferencia(tipo, valor) {
+    document.querySelectorAll(`[data-cdp-preference="${tipo}"]`).forEach((boton) => {
+      const nodo = boton.querySelector("[data-cdp-label]");
+      if (!nodo) return;
 
-      if (kind === "language") {
-        const language = normalizeLanguage(value);
-        renderLanguageChoice(node, language);
-        button.setAttribute("aria-label", `Idioma: ${languageOptions[language].name}`);
+      if (tipo === "language") {
+        const idioma = normalizarIdioma(valor);
+        renderizarSeleccionIdioma(nodo, idioma);
+        boton.setAttribute("aria-label", `Idioma: ${opcionesIdioma[idioma].name}`);
         return;
       }
 
-      node.textContent = regionLabels[normalizeRegion(value)];
+      nodo.textContent = etiquetasRegion[normalizarRegion(valor)];
     });
   }
 
-  function updatePreferenceOptions() {
-    document.querySelectorAll("[data-cdp-preference-target='region']").forEach((option) => {
-      const region = normalizeRegion(option.dataset.cdpOption || option.textContent);
-      option.dataset.cdpOption = region;
-      option.textContent = regionLabels[region];
+  function actualizarOpcionesPreferencia() {
+    document.querySelectorAll("[data-cdp-preference-target='region']").forEach((opcion) => {
+      const region = normalizarRegion(opcion.dataset.cdpOption || opcion.textContent);
+      opcion.dataset.cdpOption = region;
+      opcion.textContent = etiquetasRegion[region];
     });
 
     document.querySelectorAll(".cdp-tools-menu[aria-labelledby='cdpLanguageDropdown']").forEach((menu) => {
       menu.textContent = "";
 
-      Object.keys(languageOptions).forEach((language) => {
+      Object.keys(opcionesIdioma).forEach((idioma) => {
         const item = document.createElement("li");
-        const option = document.createElement("button");
+        const opcion = document.createElement("button");
 
-        option.className = "dropdown-item";
-        option.type = "button";
-        option.dataset.cdpPreferenceTarget = "language";
-        option.dataset.cdpOption = language;
-        option.setAttribute("aria-label", languageOptions[language].name);
-        option.title = languageOptions[language].name;
-        renderLanguageChoice(option, language);
+        opcion.className = "dropdown-item";
+        opcion.type = "button";
+        opcion.dataset.cdpPreferenceTarget = "language";
+        opcion.dataset.cdpOption = idioma;
+        opcion.setAttribute("aria-label", opcionesIdioma[idioma].name);
+        opcion.title = opcionesIdioma[idioma].name;
+        renderizarSeleccionIdioma(opcion, idioma);
 
-        item.appendChild(option);
+        item.appendChild(opcion);
         menu.appendChild(item);
       });
     });
   }
 
-  function updatePreference(kind, rawValue) {
-    if (kind === "language") {
-      const language = normalizeLanguage(rawValue);
-      savePreference(kind, language);
-      applyLanguage(language);
+  function actualizarPreferencia(tipo, valorCrudo) {
+    if (tipo === "language") {
+      const idioma = normalizarIdioma(valorCrudo);
+      guardarPreferencia(tipo, idioma);
+      aplicarIdioma(idioma);
       return;
     }
 
-    const region = normalizeRegion(rawValue);
-    savePreference(kind, region);
-    updatePreferenceLabel(kind, region);
+    const region = normalizarRegion(valorCrudo);
+    guardarPreferencia(tipo, region);
+    actualizarEtiquetaPreferencia(tipo, region);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    updatePreferenceOptions();
+    actualizarOpcionesPreferencia();
 
-    const storedRegion = normalizeRegion(getStoredPreference("region"));
-    const storedLanguage = normalizeLanguage(getStoredPreference("language"));
+    const regionGuardada = normalizarRegion(obtenerPreferenciaGuardada("region"));
+    const idiomaGuardado = normalizarIdioma(obtenerPreferenciaGuardada("language"));
 
-    updatePreferenceLabel("region", storedRegion);
-    applyLanguage(storedLanguage);
+    actualizarEtiquetaPreferencia("region", regionGuardada);
+    aplicarIdioma(idiomaGuardado);
 
-    document.querySelectorAll("[data-cdp-option]").forEach((option) => {
-      option.addEventListener("click", () => {
-        updatePreference(option.dataset.cdpPreferenceTarget, option.dataset.cdpOption);
+    document.querySelectorAll("[data-cdp-option]").forEach((opcion) => {
+      opcion.addEventListener("click", () => {
+        actualizarPreferencia(opcion.dataset.cdpPreferenceTarget, opcion.dataset.cdpOption);
       });
     });
 
-    const observer = new MutationObserver((changes) => {
-      const language = normalizeLanguage(getStoredPreference("language"));
+    const observador = new MutationObserver((cambios) => {
+      const idioma = normalizarIdioma(obtenerPreferenciaGuardada("language"));
 
-      changes.forEach((change) => {
-        change.addedNodes.forEach((node) => {
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            translateElement(node, language);
-          } else if (node.nodeType === Node.TEXT_NODE) {
-            translateTextNode(node, language);
+      cambios.forEach((cambio) => {
+        cambio.addedNodes.forEach((nodo) => {
+          if (nodo.nodeType === Node.ELEMENT_NODE) {
+            traducirElemento(nodo, idioma);
+          } else if (nodo.nodeType === Node.TEXT_NODE) {
+            traducirNodoTexto(nodo, idioma);
           }
         });
       });
     });
 
-    observer.observe(document.body, {
+    observador.observe(document.body, {
       childList: true,
       subtree: true,
     });
   });
 
   window.CDPHeader = {
-    applyLanguage,
-    updatePreference,
+    applyLanguage: aplicarIdioma,
+    updatePreference: actualizarPreferencia,
   };
 })();
