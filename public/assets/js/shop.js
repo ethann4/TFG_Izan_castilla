@@ -1,35 +1,35 @@
 (function () {
   const backend = window.CDPBackend;
-  const cartCountNodes = () => Array.from(document.querySelectorAll(".cdp-cart-count"));
-  const userLinks = () => Array.from(document.querySelectorAll('.cdp-header-icon[aria-label="Usuario"], .cdp-header-icon[data-customer-link]'));
-  let activeAccountMenu = null;
+  const nodosContadorCesta = () => Array.from(document.querySelectorAll(".cdp-cart-count"));
+  const enlacesUsuario = () => Array.from(document.querySelectorAll('.cdp-header-icon[aria-label="Usuario"], .cdp-header-icon[data-customer-link]'));
+  let menuCuentaActivo = null;
 
-  const closeAccountMenus = () => {
-    document.querySelectorAll(".cdp-account-menu-shell.is-open").forEach((shell) => {
-      shell.classList.remove("is-open");
-      const menu = shell.querySelector(".cdp-account-menu");
+  const cerrarMenusCuenta = () => {
+    document.querySelectorAll(".cdp-account-menu-shell.is-open").forEach((envoltorio) => {
+      envoltorio.classList.remove("is-open");
+      const menu = envoltorio.querySelector(".cdp-account-menu");
       if (menu) menu.hidden = true;
     });
-    activeAccountMenu = null;
+    menuCuentaActivo = null;
   };
 
-  const applyFeatherIcons = () => {
+  const aplicarIconosFeather = () => {
     if (window.feather?.replace) {
       window.feather.replace();
     }
   };
 
-  const ensureAccountMenu = (link) => {
-    let shell = link.closest(".cdp-account-menu-shell");
+  const asegurarMenuCuenta = (enlace) => {
+    let envoltorio = enlace.closest(".cdp-account-menu-shell");
 
-    if (!shell) {
-      shell = document.createElement("div");
-      shell.className = "cdp-account-menu-shell";
-      link.parentNode.insertBefore(shell, link);
-      shell.appendChild(link);
+    if (!envoltorio) {
+      envoltorio = document.createElement("div");
+      envoltorio.className = "cdp-account-menu-shell";
+      enlace.parentNode.insertBefore(envoltorio, enlace);
+      envoltorio.appendChild(enlace);
     }
 
-    let menu = shell.querySelector(".cdp-account-menu");
+    let menu = envoltorio.querySelector(".cdp-account-menu");
 
     if (!menu) {
       menu = document.createElement("div");
@@ -55,124 +55,124 @@
         </button>
       `;
 
-      menu.addEventListener("click", (event) => {
-        event.stopPropagation();
+      menu.addEventListener("click", (evento) => {
+        evento.stopPropagation();
       });
 
       menu.querySelector("[data-account-menu-logout]")?.addEventListener("click", async () => {
         await backend?.logoutCustomer?.();
-        closeAccountMenus();
-        await refreshCartCount();
+        cerrarMenusCuenta();
+        await refrescarContadorCesta();
 
         if (window.location.pathname.toLowerCase().endsWith("/cuenta.html")) {
           window.location.href = "cuenta.html";
         }
       });
 
-      shell.appendChild(menu);
+      envoltorio.appendChild(menu);
     }
 
-    return { shell, menu };
+    return { shell: envoltorio, menu };
   };
 
-  const renderCartCount = (quantity = 0) => {
-    cartCountNodes().forEach((node) => {
-      node.textContent = Number(quantity || 0).toString();
+  const renderizarContadorCesta = (cantidad = 0) => {
+    nodosContadorCesta().forEach((nodo) => {
+      nodo.textContent = Number(cantidad || 0).toString();
     });
   };
 
-  const renderCustomerState = (session) => {
-    userLinks().forEach((link) => {
-      const { shell, menu } = ensureAccountMenu(link);
-      const authenticated = Boolean(session?.authenticated);
-      const userLabel = session?.user?.email || session?.user?.nombre || "";
-      const emailNode = menu.querySelector("[data-account-menu-email]");
+  const renderizarEstadoCliente = (sesion) => {
+    enlacesUsuario().forEach((enlace) => {
+      const { shell, menu } = asegurarMenuCuenta(enlace);
+      const autenticado = Boolean(sesion?.authenticated);
+      const etiquetaUsuario = sesion?.user?.email || sesion?.user?.nombre || "";
+      const nodoEmail = menu.querySelector("[data-account-menu-email]");
 
-      link.href = "cuenta.html";
-      link.dataset.customerLink = "true";
-      link.title = authenticated ? `Cliente: ${session.user?.nombre || session.user?.email}` : "Acceder o registrarse";
-      link.classList.toggle("is-authenticated", authenticated);
-      shell.classList.toggle("is-authenticated", authenticated);
+      enlace.href = "cuenta.html";
+      enlace.dataset.customerLink = "true";
+      enlace.title = autenticado ? `Cliente: ${sesion.user?.nombre || sesion.user?.email}` : "Acceder o registrarse";
+      enlace.classList.toggle("is-authenticated", autenticado);
+      shell.classList.toggle("is-authenticated", autenticado);
 
-      if (emailNode) {
-        emailNode.textContent = userLabel;
+      if (nodoEmail) {
+        nodoEmail.textContent = etiquetaUsuario;
       }
 
-      if (link.dataset.accountMenuReady !== "true") {
-        link.addEventListener("click", (event) => {
-          const currentShell = link.closest(".cdp-account-menu-shell");
+      if (enlace.dataset.accountMenuReady !== "true") {
+        enlace.addEventListener("click", (evento) => {
+          const envoltorioActual = enlace.closest(".cdp-account-menu-shell");
 
-          if (!currentShell?.classList.contains("is-authenticated")) {
+          if (!envoltorioActual?.classList.contains("is-authenticated")) {
             return;
           }
 
-          event.preventDefault();
-          event.stopPropagation();
+          evento.preventDefault();
+          evento.stopPropagation();
 
-          const currentMenu = currentShell.querySelector(".cdp-account-menu");
-          const isOpen = currentShell.classList.contains("is-open");
-          closeAccountMenus();
+          const menuActual = envoltorioActual.querySelector(".cdp-account-menu");
+          const estaAbierto = envoltorioActual.classList.contains("is-open");
+          cerrarMenusCuenta();
 
-          if (!isOpen && currentMenu) {
-            currentShell.classList.add("is-open");
-            currentMenu.hidden = false;
-            activeAccountMenu = currentMenu;
+          if (!estaAbierto && menuActual) {
+            envoltorioActual.classList.add("is-open");
+            menuActual.hidden = false;
+            menuCuentaActivo = menuActual;
           }
         });
-        link.dataset.accountMenuReady = "true";
+        enlace.dataset.accountMenuReady = "true";
       }
 
-      if (!authenticated) {
+      if (!autenticado) {
         menu.hidden = true;
         shell.classList.remove("is-open");
       }
     });
 
-    applyFeatherIcons();
+    aplicarIconosFeather();
   };
 
-  const refreshCartCount = async () => {
+  const refrescarContadorCesta = async () => {
     if (!backend?.isConfigured?.()) {
-      renderCartCount(0);
-      renderCustomerState({ authenticated: false, user: null });
+      renderizarContadorCesta(0);
+      renderizarEstadoCliente({ authenticated: false, user: null });
       return { authenticated: false, user: null };
     }
 
-    const session = await backend.getCustomerSession();
-    renderCustomerState(session);
+    const sesion = await backend.getCustomerSession();
+    renderizarEstadoCliente(sesion);
 
-    if (!session.authenticated) {
-      renderCartCount(0);
-      return session;
+    if (!sesion.authenticated) {
+      renderizarContadorCesta(0);
+      return sesion;
     }
 
     try {
-      const cart = await backend.getCart();
-      renderCartCount(cart.total_quantity || 0);
+      const cesta = await backend.getCart();
+      renderizarContadorCesta(cesta.total_quantity || 0);
     } catch (error) {
-      renderCartCount(0);
+      renderizarContadorCesta(0);
     }
 
-    return session;
+    return sesion;
   };
 
   window.CDPShop = {
-    refreshCartCount,
-    renderCartCount,
-    renderCustomerState,
+    refreshCartCount: refrescarContadorCesta,
+    renderCartCount: renderizarContadorCesta,
+    renderCustomerState: renderizarEstadoCliente,
   };
 
-  refreshCartCount();
+  refrescarContadorCesta();
 
-  document.addEventListener("click", (event) => {
-    if (activeAccountMenu && !event.target.closest(".cdp-account-menu-shell")) {
-      closeAccountMenus();
+  document.addEventListener("click", (evento) => {
+    if (menuCuentaActivo && !evento.target.closest(".cdp-account-menu-shell")) {
+      cerrarMenusCuenta();
     }
   });
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeAccountMenus();
+  document.addEventListener("keydown", (evento) => {
+    if (evento.key === "Escape") {
+      cerrarMenusCuenta();
     }
   });
 })();

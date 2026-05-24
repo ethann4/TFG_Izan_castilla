@@ -3,10 +3,16 @@
 
   function leerConsentimiento() {
     try {
-      return localStorage.getItem(claveAlmacenamiento);
+      const crudo = localStorage.getItem(claveAlmacenamiento);
+      return crudo ? JSON.parse(crudo) : null;
     } catch (error) {
       return null;
     }
+  }
+
+  function publicarConsentimiento(consentimiento) {
+    window.CDPConsent = consentimiento;
+    document.dispatchEvent(new CustomEvent("cdp:cookie-consent", { detail: consentimiento }));
   }
 
   function guardarConsentimiento(tipo, preferencias) {
@@ -21,6 +27,7 @@
     } catch (error) {
       return;
     }
+    publicarConsentimiento(datos);
   }
 
   function crearAviso() {
@@ -35,7 +42,7 @@
           <p>Usamos cookies para que la tienda funcione correctamente y para mejorar tu experiencia al buscar volantes personalizados.</p>
           <p>Algunas cookies son necesarias para navegar, iniciar sesi&oacute;n y usar el carrito. Otras, incluidas cookies de terceros, nos ayudan con el an&aacute;lisis estad&iacute;stico, la personalizaci&oacute;n de la experiencia y el contenido relacionado con acabados premium, compatibilidad por modelo y pedidos a medida.</p>
           <p>Puedes aceptar estas cookies seleccionando &ldquo;Aceptar todas&rdquo;, rechazarlas seleccionando &ldquo;Rechazar todas&rdquo; o elegir qu&eacute; cookies prefieres haciendo clic en &ldquo;Personalizar configuraci&oacute;n&rdquo;.</p>
-          <p>Puedes cambiar tus preferencias desde la configuraci&oacute;n de tu navegador. Lee nuestros <a href="contacto.html">T&eacute;rminos y condiciones generales</a> de uso y nuestra <a href="contacto.html">Pol&iacute;tica de privacidad</a>.</p>
+          <p>Puedes cambiar tus preferencias en cualquier momento desde la <a href="politica-cookies.html">pol&iacute;tica de cookies</a>. Consulta tambi&eacute;n nuestros <a href="terminos-condiciones.html">t&eacute;rminos y condiciones</a> y la <a href="politica-privacidad.html">pol&iacute;tica de privacidad</a>.</p>
         </div>
         <div class="cdp-aviso-cookies-opciones" id="cdpAvisoCookiesOpciones" hidden>
           <label class="cdp-aviso-cookies-opcion">
@@ -131,10 +138,24 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    if (leerConsentimiento() || document.querySelector("[data-cdp-aviso-cookies]")) return;
+    const consentimiento = leerConsentimiento();
+    if (consentimiento) {
+      publicarConsentimiento(consentimiento);
+    }
+    if (consentimiento || document.querySelector("[data-cdp-aviso-cookies]")) return;
 
     const capa = crearAviso();
     document.body.appendChild(capa);
     enlazarAviso(capa);
   });
+
+  // API publica para que otros scripts (Analytics, Meta Pixel...) decidan
+  // si pueden cargarse segun el consentimiento del usuario.
+  window.CDPCookies = {
+    consentimiento: leerConsentimiento,
+    puede(categoria) {
+      const c = leerConsentimiento();
+      return !!(c && c.preferencias && c.preferencias[categoria]);
+    },
+  };
 })();

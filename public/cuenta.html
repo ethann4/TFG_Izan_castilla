@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">
     <link href="assets/css/theme.css" rel="stylesheet">
     <link href="assets/css/cdp-common.css?v=aviso-cookies-1" rel="stylesheet">
-    <link href="assets/css/shop.css?v=cuenta-social-10" rel="stylesheet">
+    <link href="assets/css/shop.css?v=cuenta-dashboard-1" rel="stylesheet">
   </head>
 
   <body class="shop-page account-page">
@@ -50,25 +50,238 @@
         <div class="account-wrap">
           <a class="account-back-link" href="index.html"><span data-feather="arrow-left"></span> Volver</a>
 
-            <div class="customer-session shop-card account-session-card" data-customer-session hidden>
-              <div>
-                <div class="cdp-section-kicker">Sesi&oacute;n iniciada</div>
-                <strong data-customer-name>Cliente</strong>
-                <p class="mb-0" data-customer-email></p>
-              </div>
-              <div class="account-admin-access" data-admin-access hidden>
-                <div>
-                  <div class="cdp-section-kicker">Acceso administrador</div>
-                  <strong>Panel administrador</strong>
-                  <p class="mb-0" data-admin-access-copy>Este usuario tambien tiene permisos de administracion.</p>
+            <div class="account-dashboard" data-customer-session hidden>
+              <aside class="account-dashboard__sidebar">
+                <div class="account-user">
+                  <div class="account-user__avatar" data-customer-initials aria-hidden="true">CL</div>
+                  <div class="account-user__info">
+                    <strong data-customer-name>Cliente</strong>
+                    <span class="account-user__email" data-customer-email></span>
+                    <span class="account-user__badge" data-admin-badge hidden>
+                      <span data-feather="shield"></span>Administrador
+                    </span>
+                  </div>
                 </div>
-                <a class="btn btn-primary" href="admin/index.html">Entrar al panel</a>
-              </div>
-              <div class="d-flex flex-wrap gap-2">
-                <a class="btn btn-primary" href="Catalogo.html">Seguir comprando</a>
-                <a class="btn btn-outline-primary" href="carrito.html">Ir a la cesta</a>
-                <button class="btn btn-outline-primary" type="button" data-customer-logout>Cerrar sesion</button>
-              </div>
+
+                <nav class="account-nav" aria-label="Secciones de mi cuenta">
+                  <button class="account-nav__item is-active" type="button" data-account-tab="resumen">
+                    <span data-feather="grid"></span><span class="account-nav__label">Resumen</span>
+                  </button>
+                  <button class="account-nav__item" type="button" data-account-tab="volantes">
+                    <span data-feather="aperture"></span><span class="account-nav__label">Mis volantes 3D</span>
+                    <span class="account-nav__count" data-volantes-count-nav>0</span>
+                  </button>
+                  <button class="account-nav__item" type="button" data-account-tab="pedidos">
+                    <span data-feather="package"></span><span class="account-nav__label">Pedidos</span>
+                  </button>
+                  <button class="account-nav__item" type="button" data-account-tab="datos">
+                    <span data-feather="user"></span><span class="account-nav__label">Mis datos</span>
+                  </button>
+                  <button class="account-nav__item" type="button" data-account-tab="seguridad">
+                    <span data-feather="lock"></span><span class="account-nav__label">Seguridad</span>
+                  </button>
+                </nav>
+
+                <div class="account-nav__divider"></div>
+
+                <a class="account-nav__item" href="Catalogo.html">
+                  <span data-feather="shopping-bag"></span><span class="account-nav__label">Seguir comprando</span>
+                </a>
+                <a class="account-nav__item" href="carrito.html">
+                  <span data-feather="shopping-cart"></span><span class="account-nav__label">Mi cesta</span>
+                </a>
+                <button class="account-nav__item account-nav__item--danger" type="button" data-customer-logout>
+                  <span data-feather="log-out"></span><span class="account-nav__label">Cerrar sesi&oacute;n</span>
+                </button>
+              </aside>
+
+              <section class="account-dashboard__main">
+
+                <div class="account-tab is-active" data-account-panel="resumen">
+                  <div class="account-greeting">
+                    <div>
+                      <div class="cdp-section-kicker">Bienvenido</div>
+                      <h1>Hola, <span data-customer-firstname>Cliente</span></h1>
+                      <p class="account-greeting__copy">Gestiona tus dise&ntilde;os, pedidos y datos desde un solo lugar.</p>
+                    </div>
+                  </div>
+
+                  <div class="account-admin-banner" data-admin-access hidden>
+                    <div class="account-admin-banner__icon"><span data-feather="shield"></span></div>
+                    <div class="account-admin-banner__body">
+                      <div class="cdp-section-kicker">Acceso administrador</div>
+                      <strong>Panel administrador</strong>
+                      <p data-admin-access-copy>Tu sesi&oacute;n tambi&eacute;n tiene permisos de administraci&oacute;n.</p>
+                    </div>
+                    <a class="btn btn-primary" href="admin/index.html">Entrar al panel <span data-feather="arrow-right"></span></a>
+                  </div>
+
+                  <div class="account-stats">
+                    <div class="account-stat">
+                      <div class="account-stat__icon"><span data-feather="aperture"></span></div>
+                      <div>
+                        <span>Volantes 3D guardados</span>
+                        <strong data-stat-volantes>0</strong>
+                      </div>
+                    </div>
+                    <div class="account-stat">
+                      <div class="account-stat__icon"><span data-feather="package"></span></div>
+                      <div>
+                        <span>Pedidos realizados</span>
+                        <strong data-stat-pedidos>0</strong>
+                      </div>
+                    </div>
+                    <div class="account-stat">
+                      <div class="account-stat__icon"><span data-feather="shopping-cart"></span></div>
+                      <div>
+                        <span>En la cesta</span>
+                        <strong data-stat-cart>0</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="account-quick-grid">
+                    <a class="account-quick-card" href="Creacionvirtual.html">
+                      <span data-feather="layers"></span>
+                      <strong>Configurar volante</strong>
+                      <small>Dise&ntilde;a uno desde cero</small>
+                    </a>
+                    <a class="account-quick-card" href="Catalogo.html">
+                      <span data-feather="shopping-bag"></span>
+                      <strong>Explorar cat&aacute;logo</strong>
+                      <small>Ver productos disponibles</small>
+                    </a>
+                    <a class="account-quick-card" href="contacto.html">
+                      <span data-feather="message-circle"></span>
+                      <strong>Contacto</strong>
+                      <small>Hablar con el equipo</small>
+                    </a>
+                  </div>
+                </div>
+
+                <div class="account-tab" data-account-panel="volantes">
+                  <div class="account-section-head">
+                    <div>
+                      <div class="cdp-section-kicker">Configurador</div>
+                      <h2>Dise&ntilde;os 3D guardados</h2>
+                    </div>
+                    <a class="btn btn-outline-primary btn-sm" href="Creacionvirtual.html"><span data-feather="plus"></span> Nuevo dise&ntilde;o</a>
+                  </div>
+                  <div class="shop-status" data-volantes-status hidden></div>
+                  <div class="volantes-generados__lista" data-volantes-list></div>
+                  <div class="account-empty-state" data-volantes-empty hidden>
+                    <span data-feather="aperture"></span>
+                    <h3>Aun no tienes volantes guardados</h3>
+                    <p>Crea tu primer dise&ntilde;o personalizado desde el configurador.</p>
+                    <a class="btn btn-primary btn-sm" href="Creacionvirtual.html">Ir al configurador</a>
+                  </div>
+                </div>
+
+                <div class="account-tab" data-account-panel="pedidos">
+                  <div class="account-section-head">
+                    <div>
+                      <div class="cdp-section-kicker">Historial</div>
+                      <h2>Mis pedidos</h2>
+                    </div>
+                  </div>
+                  <div class="account-empty-state">
+                    <span data-feather="package"></span>
+                    <h3>Aun no tienes pedidos</h3>
+                    <p>Cuando completes una compra aparecer&aacute; aqu&iacute; con su seguimiento.</p>
+                    <a class="btn btn-primary btn-sm" href="Catalogo.html">Ir al cat&aacute;logo</a>
+                  </div>
+                </div>
+
+                <div class="account-tab" data-account-panel="datos">
+                  <div class="account-section-head">
+                    <div>
+                      <div class="cdp-section-kicker">Perfil</div>
+                      <h2>Mis datos</h2>
+                    </div>
+                  </div>
+                  <div class="account-info-grid">
+                    <div class="account-info-card">
+                      <span class="account-info-card__label"><span data-feather="user"></span>Nombre completo</span>
+                      <strong data-info-name>&mdash;</strong>
+                    </div>
+                    <div class="account-info-card">
+                      <span class="account-info-card__label"><span data-feather="mail"></span>Correo electr&oacute;nico</span>
+                      <strong data-info-email>&mdash;</strong>
+                    </div>
+                    <div class="account-info-card">
+                      <span class="account-info-card__label"><span data-feather="phone"></span>Tel&eacute;fono</span>
+                      <strong data-info-phone>No registrado</strong>
+                    </div>
+                    <div class="account-info-card">
+                      <span class="account-info-card__label"><span data-feather="check-circle"></span>Estado</span>
+                      <strong><span class="account-info-badge">Activo</span></strong>
+                    </div>
+                  </div>
+                  <p class="account-helper">Para actualizar tus datos, ponte en contacto con el equipo de CDP Customs.</p>
+                </div>
+
+                <div class="account-tab" data-account-panel="seguridad">
+                  <div class="account-section-head">
+                    <div>
+                      <div class="cdp-section-kicker">Cuenta</div>
+                      <h2>Seguridad</h2>
+                    </div>
+                  </div>
+                  <div class="account-security-card" data-password-card>
+                    <div>
+                      <div class="account-security-card__icon"><span data-feather="lock"></span></div>
+                      <div>
+                        <strong>Contrase&ntilde;a</strong>
+                        <p>Cambia tu contrase&ntilde;a si crees que alguien m&aacute;s tiene acceso.</p>
+                      </div>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm" type="button" data-password-toggle-card>Cambiar</button>
+                  </div>
+                  <form class="account-password-form" data-password-form hidden autocomplete="off">
+                    <div class="customer-input">
+                      <label for="account-password-actual">Contrase&ntilde;a actual</label>
+                      <input id="account-password-actual" name="password_actual" type="password" required autocomplete="current-password">
+                      <button class="customer-input__toggle" type="button" data-password-toggle aria-label="Mostrar contrase&ntilde;a">
+                        <span data-feather="eye"></span>
+                      </button>
+                    </div>
+                    <div class="customer-input">
+                      <label for="account-password-nueva">Nueva contrase&ntilde;a</label>
+                      <input id="account-password-nueva" name="password_nueva" type="password" required autocomplete="new-password" minlength="8">
+                      <button class="customer-input__toggle" type="button" data-password-toggle aria-label="Mostrar contrase&ntilde;a">
+                        <span data-feather="eye"></span>
+                      </button>
+                    </div>
+                    <ul class="customer-password-rules" data-password-rules>
+                      <li data-rule="length"><span data-feather="circle"></span> Al menos 8 caracteres</li>
+                      <li data-rule="upper"><span data-feather="circle"></span> Una may&uacute;scula</li>
+                      <li data-rule="number"><span data-feather="circle"></span> Un n&uacute;mero</li>
+                    </ul>
+                    <div class="customer-input">
+                      <label for="account-password-confirm">Confirmar nueva contrase&ntilde;a</label>
+                      <input id="account-password-confirm" name="password_confirm" type="password" required autocomplete="new-password" minlength="8">
+                      <button class="customer-input__toggle" type="button" data-password-toggle aria-label="Mostrar contrase&ntilde;a">
+                        <span data-feather="eye"></span>
+                      </button>
+                    </div>
+                    <div class="shop-status" data-password-status hidden></div>
+                    <div class="account-password-form__actions">
+                      <button class="btn btn-outline-secondary btn-sm" type="button" data-password-cancel>Cancelar</button>
+                      <button class="btn btn-primary btn-sm" type="submit">Guardar cambios</button>
+                    </div>
+                  </form>
+                  <div class="account-security-card">
+                    <div>
+                      <div class="account-security-card__icon"><span data-feather="log-out"></span></div>
+                      <div>
+                        <strong>Cerrar sesi&oacute;n</strong>
+                        <p>Finaliza la sesi&oacute;n en este dispositivo.</p>
+                      </div>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm" type="button" data-customer-logout>Cerrar sesi&oacute;n</button>
+                  </div>
+                </div>
+              </section>
             </div>
 
           <div class="customer-auth-layout" data-customer-guest>
@@ -76,31 +289,34 @@
               <img class="customer-auth-logo" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs">
               <div class="customer-auth-heading">
                 <h1>Iniciar sesi&oacute;n</h1>
-                <p>Accede a tu cuenta para continuar</p>
+                <p>Accede con tus credenciales</p>
               </div>
 
-              <form class="shop-form customer-auth-form" data-customer-login>
+              <form class="shop-form customer-auth-form" data-customer-login novalidate>
                 <div class="customer-field">
-                  <label for="login-email">Correo electr&oacute;nico</label>
+                  <label for="login-email">Correo electr&oacute;nico <span class="customer-required">*</span></label>
                   <div class="customer-input">
                     <span data-feather="mail"></span>
-                    <input id="login-email" class="form-control cdp-form-control" type="email" name="email" placeholder="tu@email.com" maxlength="160" required>
+                    <input id="login-email" class="form-control cdp-form-control" type="email" name="email" placeholder="tu@email.com" maxlength="160" autocomplete="email" required>
                   </div>
                 </div>
                 <div class="customer-field">
-                  <label for="login-password">Contrase&ntilde;a</label>
-                  <div class="customer-input">
+                  <label for="login-password">Contrase&ntilde;a <span class="customer-required">*</span></label>
+                  <div class="customer-input customer-input--password">
                     <span data-feather="lock"></span>
-                    <input id="login-password" class="form-control cdp-form-control" type="password" name="password" placeholder="m&iacute;nimo 6 caracteres" required>
+                    <input id="login-password" class="form-control cdp-form-control" type="password" name="password" placeholder="Introduce tu contrase&ntilde;a" autocomplete="current-password" required>
+                    <button class="customer-password-toggle" type="button" data-password-toggle aria-label="Mostrar contrase&ntilde;a">
+                      <span data-feather="eye"></span>
+                    </button>
                   </div>
                 </div>
-                <a class="customer-forgot-link" href="contacto.html">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+                <a class="customer-forgot-link" href="recuperar-password.html">&iquest;Has olvidado tu contrase&ntilde;a?</a>
                 <button class="btn btn-primary customer-auth-submit" type="submit">Iniciar sesi&oacute;n</button>
                 <div class="shop-status" data-login-status hidden></div>
               </form>
 
-              <div class="customer-auth-divider"><span>O contin&uacute;a con</span></div>
-              <div class="customer-social-grid">
+              <div class="customer-auth-divider"><span>O accede con</span></div>
+              <div class="customer-social-grid customer-social-grid--single">
                 <a class="customer-social-button" href="api/oauth_inicio.php?proveedor=google">
                   <span class="customer-social-icon customer-social-icon--google" aria-hidden="true">
                     <svg viewBox="0 0 24 24" focusable="false">
@@ -110,15 +326,7 @@
                       <path fill="#EA4335" d="M12 5.8c1.47 0 2.78.5 3.82 1.49l2.87-2.87C16.95 2.8 14.7 2 12 2a10 10 0 0 0-8.93 5.33l3.34 2.59C7.2 7.56 9.4 5.8 12 5.8z"/>
                     </svg>
                   </span>
-                  <span>Google</span>
-                </a>
-                <a class="customer-social-button" href="api/oauth_inicio.php?proveedor=apple">
-                  <span class="customer-social-icon customer-social-icon--apple" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" focusable="false">
-                      <path fill="currentColor" d="M16.52 12.42c-.03-2.36 1.93-3.5 2.02-3.56-1.1-1.61-2.82-1.83-3.43-1.85-1.46-.15-2.85.86-3.59.86-.75 0-1.9-.84-3.12-.82-1.61.02-3.09.94-3.92 2.38-1.67 2.9-.43 7.2 1.2 9.55.8 1.15 1.75 2.45 3 2.4 1.2-.05 1.66-.78 3.11-.78 1.45 0 1.86.78 3.13.75 1.29-.02 2.11-1.17 2.9-2.33.92-1.34 1.3-2.64 1.32-2.71-.03-.01-2.59-.99-2.62-3.89zM14.15 5.48c.66-.8 1.11-1.91.99-3.02-.95.04-2.1.63-2.78 1.43-.61.7-1.14 1.84-1 2.92 1.06.08 2.13-.54 2.79-1.33z"/>
-                    </svg>
-                  </span>
-                  <span>Apple</span>
+                  <span>Continuar con Google</span>
                 </a>
               </div>
 
@@ -126,44 +334,120 @@
             </section>
 
             <section class="customer-auth-card customer-auth-card--register" id="registro" data-register-panel hidden>
+              <img class="customer-auth-logo" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs">
               <div class="customer-auth-heading">
                 <h2>Crear cuenta</h2>
-                <p>Reg&iacute;strate para guardar tus pedidos y usar la cesta</p>
+                <p>&Uacute;nete a la comunidad CDP Customs</p>
               </div>
 
-              <form class="shop-form customer-auth-form" data-customer-register>
-                <div class="customer-field">
-                  <label for="register-name">Nombre</label>
-                  <div class="customer-input">
-                    <span data-feather="user"></span>
-                    <input id="register-name" class="form-control cdp-form-control" type="text" name="nombre" maxlength="120" required>
+              <form class="shop-form customer-auth-form" data-customer-register novalidate>
+                <div class="customer-row">
+                  <div class="customer-field">
+                    <label for="register-name">Nombre <span class="customer-required">*</span></label>
+                    <div class="customer-input">
+                      <span data-feather="user"></span>
+                      <input id="register-name" class="form-control cdp-form-control" type="text" name="nombre" placeholder="Ej. Carlos" maxlength="80" autocomplete="given-name" required>
+                    </div>
+                  </div>
+                  <div class="customer-field">
+                    <label for="register-surname">Apellidos <span class="customer-required">*</span></label>
+                    <div class="customer-input">
+                      <span data-feather="user"></span>
+                      <input id="register-surname" class="form-control cdp-form-control" type="text" name="apellidos" placeholder="Ej. P&eacute;rez G&oacute;mez" maxlength="80" autocomplete="family-name" required>
+                    </div>
                   </div>
                 </div>
+
                 <div class="customer-field">
-                  <label for="register-email">Correo electr&oacute;nico</label>
+                  <label for="register-email">Correo electr&oacute;nico <span class="customer-required">*</span></label>
                   <div class="customer-input">
                     <span data-feather="mail"></span>
-                    <input id="register-email" class="form-control cdp-form-control" type="email" name="email" maxlength="160" required>
+                    <input id="register-email" class="form-control cdp-form-control" type="email" name="email" placeholder="tu@email.com" maxlength="160" autocomplete="email" required>
                   </div>
                 </div>
+
                 <div class="customer-field">
-                  <label for="register-phone">Tel&eacute;fono</label>
-                  <div class="customer-input">
-                    <span data-feather="phone"></span>
-                    <input id="register-phone" class="form-control cdp-form-control" type="tel" name="telefono" maxlength="30">
+                  <label for="register-phone">Tel&eacute;fono m&oacute;vil</label>
+                  <div class="customer-phone-group">
+                    <div class="customer-input customer-input--prefix">
+                      <select class="cdp-form-control customer-prefix-select" name="prefijo" aria-label="Prefijo telef&oacute;nico">
+                        <option value="+34" selected>+34 ES</option>
+                        <option value="+33">+33 FR</option>
+                        <option value="+351">+351 PT</option>
+                        <option value="+39">+39 IT</option>
+                        <option value="+49">+49 DE</option>
+                        <option value="+44">+44 UK</option>
+                        <option value="+1">+1 US</option>
+                      </select>
+                    </div>
+                    <div class="customer-input">
+                      <span data-feather="phone"></span>
+                      <input id="register-phone" class="form-control cdp-form-control" type="tel" name="telefono" placeholder="600 000 000" maxlength="20" autocomplete="tel-national" inputmode="numeric">
+                    </div>
                   </div>
                 </div>
+
                 <div class="customer-field">
-                  <label for="register-password">Contrase&ntilde;a</label>
-                  <div class="customer-input">
+                  <label for="register-password">Contrase&ntilde;a <span class="customer-required">*</span></label>
+                  <div class="customer-input customer-input--password">
                     <span data-feather="lock"></span>
-                    <input id="register-password" class="form-control cdp-form-control" type="password" name="password" minlength="8" maxlength="120" required>
+                    <input id="register-password" class="form-control cdp-form-control" type="password" name="password" placeholder="M&iacute;nimo 8 caracteres" minlength="8" maxlength="120" autocomplete="new-password" required>
+                    <button class="customer-password-toggle" type="button" data-password-toggle aria-label="Mostrar contrase&ntilde;a">
+                      <span data-feather="eye"></span>
+                    </button>
+                  </div>
+                  <ul class="customer-password-rules" data-password-rules>
+                    <li data-rule="length"><span data-feather="circle"></span>M&iacute;nimo 8 caracteres</li>
+                    <li data-rule="upper"><span data-feather="circle"></span>Una may&uacute;scula</li>
+                    <li data-rule="number"><span data-feather="circle"></span>Un n&uacute;mero</li>
+                  </ul>
+                </div>
+
+                <div class="customer-field">
+                  <label for="register-password-confirm">Confirmar contrase&ntilde;a <span class="customer-required">*</span></label>
+                  <div class="customer-input customer-input--password">
+                    <span data-feather="lock"></span>
+                    <input id="register-password-confirm" class="form-control cdp-form-control" type="password" name="password_confirm" placeholder="Repite la contrase&ntilde;a" minlength="8" maxlength="120" autocomplete="new-password" required>
+                    <button class="customer-password-toggle" type="button" data-password-toggle aria-label="Mostrar contrase&ntilde;a">
+                      <span data-feather="eye"></span>
+                    </button>
                   </div>
                 </div>
+
+                <div class="customer-consent">
+                  <label class="customer-check">
+                    <input type="checkbox" name="acepta_terminos" required>
+                    <span class="customer-check-mark"></span>
+                    <span class="customer-check-text">He le&iacute;do y acepto los <a href="contacto.html">T&eacute;rminos</a> y la <a href="contacto.html">Pol&iacute;tica de privacidad</a>. <span class="customer-required">*</span></span>
+                  </label>
+                  <label class="customer-check">
+                    <input type="checkbox" name="acepta_newsletter">
+                    <span class="customer-check-mark"></span>
+                    <span class="customer-check-text">Quiero recibir novedades, promociones y lanzamientos exclusivos por email.</span>
+                  </label>
+                </div>
+
                 <button class="btn btn-primary customer-auth-submit" type="submit">Crear cuenta</button>
+                <p class="customer-legal-note">Tus datos se tratar&aacute;n conforme a la Pol&iacute;tica de privacidad de CDP Customs. Podr&aacute;s darte de baja en cualquier momento desde tu cuenta.</p>
                 <div class="shop-status" data-register-status hidden></div>
               </form>
-              <p class="customer-register-prompt">Ya tienes cuenta <button type="button" data-show-login>Inicia sesi&oacute;n</button></p>
+
+              <div class="customer-auth-divider"><span>O reg&iacute;strate con</span></div>
+              <div class="customer-social-grid customer-social-grid--single">
+                <a class="customer-social-button" href="api/oauth_inicio.php?proveedor=google">
+                  <span class="customer-social-icon customer-social-icon--google" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false">
+                      <path fill="#4285F4" d="M21.6 12.23c0-.78-.07-1.53-.2-2.23H12v4.22h5.38a4.6 4.6 0 0 1-2 3.02v2.51h3.24c1.9-1.75 2.98-4.32 2.98-7.52z"/>
+                      <path fill="#34A853" d="M12 22c2.7 0 4.96-.9 6.62-2.25l-3.24-2.51c-.9.6-2.05.96-3.38.96-2.6 0-4.8-1.76-5.59-4.12H3.07v2.59A10 10 0 0 0 12 22z"/>
+                      <path fill="#FBBC05" d="M6.41 14.08A6 6 0 0 1 6.1 12c0-.72.12-1.42.31-2.08V7.33H3.07A10 10 0 0 0 2 12c0 1.61.39 3.14 1.07 4.67l3.34-2.59z"/>
+                      <path fill="#EA4335" d="M12 5.8c1.47 0 2.78.5 3.82 1.49l2.87-2.87C16.95 2.8 14.7 2 12 2a10 10 0 0 0-8.93 5.33l3.34 2.59C7.2 7.56 9.4 5.8 12 5.8z"/>
+                    </svg>
+                  </span>
+                  <span>Continuar con Google</span>
+                </a>
+              </div>
+
+              <p class="customer-register-prompt">&iquest;Ya tienes cuenta? <button type="button" data-show-login>Inicia sesi&oacute;n</button></p>
             </section>
 
             <div class="account-social-panel" aria-label="Redes sociales CDP Customs">
@@ -176,11 +460,13 @@
               <a class="account-social-link account-social-link--wallapop" href="https://es.wallapop.com/user/izanc-448493585" target="_blank" rel="noreferrer" aria-label="Wallapop">
                 <img class="account-social-logo account-social-logo--icon" src="assets/img/social/wallapop-logo.svg?v=2" alt="">
               </a>
-              <a class="account-social-link account-social-link--whatsapp" href="https://wa.me/34676525005" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+              <a class="account-social-link account-social-link--whatsapp" href="#" target="_blank" rel="noreferrer" aria-label="WhatsApp">
                 <img class="account-social-logo account-social-logo--icon" src="assets/img/social/whatsapp.svg?v=2" alt="">
               </a>
             </div>
           </div>
+
+          <div data-volantes-panel hidden></div>
         </div>
       </section>
   </main>
@@ -215,7 +501,7 @@
               <div class="cdp-footer-title mb-3">Soporte</div>
               <ul class="list-unstyled cdp-footer-list">
                 <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="https://wa.me/34676525005" target="_blank" rel="noreferrer">WhatsApp</a></li>
+                <li><a href="#" target="_blank" rel="noreferrer">WhatsApp</a></li>
                 <li><a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer">Instagram</a></li>
                 <li><a href="https://es.wallapop.com/user/izanc-448493585" target="_blank" rel="noreferrer">Wallapop</a></li>
               </ul>
@@ -232,13 +518,18 @@
             <div class="cdp-footer-contact">
               <div class="cdp-footer-title mb-3">Contacto</div>
               <p>Vizcaya, Espa&ntilde;a</p>
-              <p><a href="tel:+34676525005">(+34) 676 525 005</a></p>
-              <p><a href="mailto:info@cdpcustoms.local">info@cdpcustoms.local</a></p>
               <p><a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer">@cdp.performanceparts</a></p>
             </div>
           </div>
         </div>
         <div class="border-bottom border-700 my-4"></div>
+        <div class="cdp-footer-legal d-flex flex-wrap gap-3 justify-content-center mb-3">
+          <a href="aviso-legal.html">Aviso legal</a>
+          <a href="politica-privacidad.html">Privacidad</a>
+          <a href="terminos-condiciones.html">T&eacute;rminos</a>
+          <a href="politica-cookies.html">Cookies</a>
+          <a href="devoluciones.html">Devoluciones</a>
+        </div>
         <div class="cdp-footer-bottom d-flex flex-column flex-md-row justify-content-between gap-3">
           <span>CDP Customs - Ecommerce de volantes personalizados</span>
           <div class="cdp-footer-payments" aria-label="M&eacute;todos de pago">
@@ -258,9 +549,9 @@
     <script src="assets/js/theme.js"></script>
     <script src="assets/js/cdp-header.js?v=flags-1"></script>
     <script src="assets/js/aviso-cookies.js?v=aviso-cookies-1"></script>
-    <script src="assets/js/cliente-servidor.js?v=php-url-2"></script>
+    <script src="assets/js/cliente-servidor.js?v=php-url-3"></script>
     <script src="assets/js/shop.js?v=account-menu-4"></script>
-    <script src="assets/js/cuenta.js?v=oauth-login-1"></script>
+    <script src="assets/js/cuenta.js?v=cuenta-dashboard-1"></script>
     <script>feather.replace();</script>
   </body>
 

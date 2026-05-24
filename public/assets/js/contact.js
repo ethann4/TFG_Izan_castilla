@@ -1,53 +1,53 @@
 (function () {
-  const form = document.querySelector("form[data-backend-table='pedidos_personalizados']");
-  if (!form) return;
+  const formulario = document.querySelector("form[data-backend-table='pedidos_personalizados']");
+  if (!formulario) return;
 
-  const setStatus = (message, type = "info") => {
-    let status = form.querySelector("[data-form-status]");
-    if (!status) {
-      status = document.createElement("div");
-      status.dataset.formStatus = "";
-      status.className = "form-status";
-      form.querySelector(".contact-form-grid")?.appendChild(status);
+  const mostrarEstado = (mensaje, tipo = "info") => {
+    let estado = formulario.querySelector("[data-form-status]");
+    if (!estado) {
+      estado = document.createElement("div");
+      estado.dataset.formStatus = "";
+      estado.className = "form-status";
+      formulario.querySelector(".contact-form-grid")?.appendChild(estado);
     }
-    status.className = `form-status is-${type}`;
-    status.textContent = message;
+    estado.className = `form-status is-${tipo}`;
+    estado.textContent = mensaje;
   };
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+  formulario.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
 
-    if (!form.checkValidity()) {
-      form.reportValidity();
+    if (!formulario.checkValidity()) {
+      formulario.reportValidity();
       return;
     }
 
     if (!window.CDPBackend?.isConfigured()) {
-      setStatus("Abre la web desde XAMPP para guardar solicitudes en MySQL.", "error");
+      mostrarEstado("Abre la web desde XAMPP para guardar solicitudes en MySQL.", "error");
       return;
     }
 
-    const data = new FormData(form);
+    const datos = new FormData(formulario);
     const payload = {
-      nombre: data.get("nombre")?.toString().trim(),
-      email: data.get("email")?.toString().trim(),
-      telefono: data.get("telefono")?.toString().trim() || null,
-      modelo_coche: data.get("modelo")?.toString().trim() || null,
-      material: data.get("material") || null,
-      presupuesto: data.get("presupuesto") || null,
-      mensaje: data.get("mensaje")?.toString().trim(),
+      nombre: datos.get("nombre")?.toString().trim(),
+      email: datos.get("email")?.toString().trim(),
+      telefono: datos.get("telefono")?.toString().trim() || null,
+      modelo_coche: datos.get("modelo")?.toString().trim() || null,
+      material: datos.get("material") || null,
+      presupuesto: datos.get("presupuesto") || null,
+      mensaje: datos.get("mensaje")?.toString().trim(),
       estado: "pendiente",
       origen: "formulario_contacto",
     };
 
     try {
-      setStatus("Enviando solicitud...", "info");
+      mostrarEstado("Enviando solicitud...", "info");
       await window.CDPBackend.createSolicitud(payload);
-      form.reset();
-      setStatus("Solicitud guardada correctamente en MySQL.", "success");
+      formulario.reset();
+      mostrarEstado("Solicitud guardada correctamente en MySQL.", "success");
     } catch (error) {
       console.warn("Error guardando solicitud en MySQL.", error);
-      setStatus("No se pudo guardar la solicitud. Revisa XAMPP, la tabla solicitudes y la conexion.", "error");
+      mostrarEstado("No se pudo guardar la solicitud. Revisa XAMPP, la tabla solicitudes y la conexion.", "error");
     }
   });
 })();
