@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/logo_cdp_transparente.png">
     <link href="../assets/css/theme.css" rel="stylesheet">
     <link href="../assets/css/cdp-common.css?v=account-menu-4" rel="stylesheet">
-    <link href="../assets/css/admin.css?v=admin-no-login-1" rel="stylesheet">
+    <link href="../assets/css/admin.css?v=admin-thumbs-1" rel="stylesheet">
   </head>
 
   <body class="admin-page">
@@ -36,32 +36,136 @@
 
       <section class="admin-shell">
         <div class="container">
-          <div class="row align-items-end mb-4">
-            <div class="col-lg-8">
+          <div class="admin-topbar">
+            <div class="admin-topbar__title">
               <div class="cdp-section-kicker">Gestion privada</div>
               <h1 class="cdp-section-title">Panel administrador</h1>
-              <p class="cdp-section-copy">Crea productos, edita el catalogo y revisa solicitudes guardadas en MySQL.</p>
+              <p class="cdp-section-copy">Catalogo, solicitudes, volantes generados y clientes en un solo sitio.</p>
             </div>
-            <div class="col-lg-4 text-lg-end">
+            <div class="admin-topbar__meta">
               <span class="admin-session-chip" data-admin-session>Comprobando sesion</span>
             </div>
           </div>
 
           <div class="admin-grid" data-admin-dashboard hidden>
             <aside class="admin-sidebar">
-              <button class="is-active" type="button" data-admin-tab="producto"><span data-feather="plus-circle"></span>Nuevo producto</button>
-              <button type="button" data-admin-tab="productos"><span data-feather="package"></span>Productos</button>
-              <button type="button" data-admin-tab="solicitudes"><span data-feather="clipboard"></span>Solicitudes</button>
+              <div class="admin-sidebar__title">Secciones</div>
+              <button class="is-active" type="button" data-admin-tab="dashboard"><span data-feather="grid"></span>Dashboard</button>
+              <button type="button" data-admin-tab="producto"><span data-feather="plus-circle"></span>Nuevo producto</button>
+              <button type="button" data-admin-tab="productos"><span data-feather="package"></span>Productos <span class="admin-sidebar__count" data-products-count-side>0</span></button>
+              <button type="button" data-admin-tab="volantes"><span data-feather="aperture"></span>Volantes 3D <span class="admin-sidebar__count" data-volantes-count-side>0</span></button>
+              <button type="button" data-admin-tab="solicitudes"><span data-feather="clipboard"></span>Solicitudes <span class="admin-sidebar__count" data-requests-count-side>0</span></button>
+              <button type="button" data-admin-tab="clientes"><span data-feather="users"></span>Clientes <span class="admin-sidebar__count" data-clientes-count-side>0</span></button>
+              <div class="admin-sidebar__divider"></div>
+              <a class="admin-sidebar__link" href="../index.html" target="_blank" rel="noreferrer"><span data-feather="external-link"></span>Ver tienda</a>
+              <a class="admin-sidebar__link" href="../Creacionvirtual.html" target="_blank" rel="noreferrer"><span data-feather="layers"></span>Configurador</a>
+              <a class="admin-sidebar__link" href="seguridad.html"><span data-feather="shield"></span>Seguridad &middot; 2FA</a>
             </aside>
 
             <section class="admin-panel">
-              <div class="admin-stat-grid">
-                <div class="admin-stat"><span>Productos</span><strong data-products-count>0</strong></div>
-                <div class="admin-stat"><span>Solicitudes</span><strong data-requests-count>0</strong></div>
-                <div class="admin-stat"><span>Estado</span><strong data-admin-state>OK</strong></div>
+              <div class="admin-tab-panel is-active" data-admin-panel="dashboard">
+                <div class="admin-panel-heading">
+                  <div>
+                    <div class="cdp-section-kicker">Resumen</div>
+                    <h2>Dashboard</h2>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm" type="button" data-dashboard-refresh><span data-feather="refresh-cw"></span>Actualizar</button>
+                </div>
+
+                <div class="admin-kpi-grid">
+                  <div class="admin-kpi admin-kpi--accent">
+                    <div class="admin-kpi__icon"><span data-feather="package"></span></div>
+                    <div class="admin-kpi__data">
+                      <span class="admin-kpi__label">Productos</span>
+                      <strong class="admin-kpi__value" data-kpi-products>0</strong>
+                      <small class="admin-kpi__hint" data-kpi-products-active>0 activos</small>
+                    </div>
+                  </div>
+                  <div class="admin-kpi">
+                    <div class="admin-kpi__icon"><span data-feather="clipboard"></span></div>
+                    <div class="admin-kpi__data">
+                      <span class="admin-kpi__label">Solicitudes</span>
+                      <strong class="admin-kpi__value" data-kpi-requests>0</strong>
+                      <small class="admin-kpi__hint" data-kpi-requests-pending>0 pendientes</small>
+                    </div>
+                  </div>
+                  <div class="admin-kpi">
+                    <div class="admin-kpi__icon"><span data-feather="aperture"></span></div>
+                    <div class="admin-kpi__data">
+                      <span class="admin-kpi__label">Volantes 3D</span>
+                      <strong class="admin-kpi__value" data-kpi-volantes>0</strong>
+                      <small class="admin-kpi__hint" data-kpi-volantes-enviados>0 con solicitud</small>
+                    </div>
+                  </div>
+                  <div class="admin-kpi">
+                    <div class="admin-kpi__icon"><span data-feather="users"></span></div>
+                    <div class="admin-kpi__data">
+                      <span class="admin-kpi__label">Clientes</span>
+                      <strong class="admin-kpi__value" data-kpi-clientes>0</strong>
+                      <small class="admin-kpi__hint" data-kpi-clientes-activos>0 activos</small>
+                    </div>
+                  </div>
+                  <div class="admin-kpi">
+                    <div class="admin-kpi__icon"><span data-feather="trending-up"></span></div>
+                    <div class="admin-kpi__data">
+                      <span class="admin-kpi__label">Valor catalogo</span>
+                      <strong class="admin-kpi__value" data-kpi-valor>0</strong>
+                      <small class="admin-kpi__hint">Suma de precios activos</small>
+                    </div>
+                  </div>
+                  <div class="admin-kpi">
+                    <div class="admin-kpi__icon"><span data-feather="alert-circle"></span></div>
+                    <div class="admin-kpi__data">
+                      <span class="admin-kpi__label">Sin stock</span>
+                      <strong class="admin-kpi__value" data-kpi-sinstock>0</strong>
+                      <small class="admin-kpi__hint">Productos a reponer</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="admin-dashboard-grid">
+                  <div class="admin-block">
+                    <div class="admin-block__head">
+                      <h3>Ultimas solicitudes</h3>
+                      <button class="admin-block__link" type="button" data-go-tab="solicitudes">Ver todas <span data-feather="arrow-right"></span></button>
+                    </div>
+                    <div class="admin-block__body" data-dashboard-requests>
+                      <p class="admin-block__empty">Sin solicitudes todavia.</p>
+                    </div>
+                  </div>
+                  <div class="admin-block">
+                    <div class="admin-block__head">
+                      <h3>Ultimos volantes 3D</h3>
+                      <button class="admin-block__link" type="button" data-go-tab="volantes">Ver todos <span data-feather="arrow-right"></span></button>
+                    </div>
+                    <div class="admin-block__body" data-dashboard-volantes>
+                      <p class="admin-block__empty">Aun no hay volantes generados.</p>
+                    </div>
+                  </div>
+                  <div class="admin-block">
+                    <div class="admin-block__head">
+                      <h3>Ultimos clientes</h3>
+                      <button class="admin-block__link" type="button" data-go-tab="clientes">Ver todos <span data-feather="arrow-right"></span></button>
+                    </div>
+                    <div class="admin-block__body" data-dashboard-clientes>
+                      <p class="admin-block__empty">Aun no hay clientes registrados.</p>
+                    </div>
+                  </div>
+                  <div class="admin-block admin-block--actions">
+                    <div class="admin-block__head">
+                      <h3>Accesos rapidos</h3>
+                    </div>
+                    <div class="admin-quick-actions">
+                      <button class="admin-quick" type="button" data-go-tab="producto"><span data-feather="plus-circle"></span>Crear producto</button>
+                      <button class="admin-quick" type="button" data-import-photo-products><span data-feather="image"></span>Importar fotos</button>
+                      <button class="admin-quick" type="button" data-go-tab="solicitudes"><span data-feather="check-square"></span>Revisar solicitudes</button>
+                      <a class="admin-quick" href="../carrito.html" target="_blank" rel="noreferrer"><span data-feather="shopping-bag"></span>Probar carrito</a>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div class="admin-tab-panel is-active" data-admin-panel="producto">
+              <div class="admin-tab-panel" data-admin-panel="producto">
                 <div class="admin-panel-heading">
                   <div>
                     <div class="cdp-section-kicker">Catalogo</div>
@@ -125,6 +229,10 @@
                     Color
                     <input class="form-control cdp-form-control" type="text" name="color" placeholder="negro rojo">
                   </label>
+                  <label class="admin-check">
+                    <input type="checkbox" name="habilitar_color_detalle">
+                    Activar panel de color
+                  </label>
                   <label class="is-wide">
                     Imagen principal
                     <input class="form-control cdp-form-control" type="text" name="imagen_principal" placeholder="assets/img/gallery/F82/F82_Carbono_cuero.png">
@@ -182,6 +290,22 @@
                   <div class="admin-heading-actions">
                     <button class="btn btn-primary btn-sm" type="button" data-import-photo-products>Importar fotos</button>
                     <button class="btn btn-outline-primary btn-sm" type="button" data-products-refresh>Actualizar</button>
+                    <button class="btn btn-outline-primary btn-sm" type="button" data-clean-duplicates>Limpiar duplicados</button>
+                    <button class="btn btn-outline-primary btn-sm" type="button" data-export-csv="productos">Exportar CSV</button>
+                  </div>
+                </div>
+                <div class="admin-toolbar">
+                  <div class="admin-search">
+                    <span data-feather="search"></span>
+                    <input class="admin-search__input" type="search" placeholder="Buscar por nombre, marca, slug..." data-products-search>
+                  </div>
+                  <div class="admin-filters">
+                    <select class="admin-filter-select" data-products-filter="estado">
+                      <option value="">Todos</option>
+                      <option value="activo">Activos</option>
+                      <option value="inactivo">Inactivos</option>
+                      <option value="sin-stock">Sin stock</option>
+                    </select>
                   </div>
                 </div>
                 <div class="admin-status admin-import-status" data-import-products-status hidden></div>
@@ -204,21 +328,64 @@
                 </div>
               </div>
 
+              <div class="admin-tab-panel" data-admin-panel="volantes">
+                <div class="admin-panel-heading">
+                  <div>
+                    <div class="cdp-section-kicker">Configurador</div>
+                    <h2>Volantes 3D generados</h2>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm" type="button" data-volantes-refresh><span data-feather="refresh-cw"></span>Actualizar</button>
+                </div>
+                <div class="admin-toolbar">
+                  <div class="admin-search">
+                    <span data-feather="search"></span>
+                    <input class="admin-search__input" type="search" placeholder="Buscar por cliente, marca o modelo..." data-volantes-search>
+                  </div>
+                  <div class="admin-filters">
+                    <select class="admin-filter-select" data-volantes-filter="estado">
+                      <option value="">Todos los estados</option>
+                      <option value="guardado">Guardados</option>
+                      <option value="solicitud_enviada">Con solicitud</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="admin-card-grid" data-volantes-grid>
+                  <p class="admin-block__empty">Cargando volantes generados...</p>
+                </div>
+              </div>
+
               <div class="admin-tab-panel" data-admin-panel="solicitudes">
                 <div class="admin-panel-heading">
                   <div>
                     <div class="cdp-section-kicker">Pedidos</div>
                     <h2>Solicitudes recibidas</h2>
                   </div>
-                  <button class="btn btn-outline-primary btn-sm" type="button" data-requests-refresh>Actualizar</button>
+                  <div class="admin-heading-actions">
+                    <button class="btn btn-outline-primary btn-sm" type="button" data-requests-refresh><span data-feather="refresh-cw"></span>Actualizar</button>
+                    <button class="btn btn-outline-primary btn-sm" type="button" data-export-csv="solicitudes">Exportar CSV</button>
+                  </div>
+                </div>
+                <div class="admin-toolbar">
+                  <div class="admin-search">
+                    <span data-feather="search"></span>
+                    <input class="admin-search__input" type="search" placeholder="Buscar por cliente, email o modelo..." data-requests-search>
+                  </div>
+                  <div class="admin-filters">
+                    <select class="admin-filter-select" data-requests-filter="estado">
+                      <option value="">Todos los estados</option>
+                      <option value="pendiente">Pendientes</option>
+                      <option value="confirmada">Confirmadas</option>
+                      <option value="rechazada">Rechazadas</option>
+                    </select>
+                  </div>
                 </div>
                 <div class="table-responsive">
                   <table class="table admin-table align-middle">
                     <thead>
                       <tr>
+                        <th>Diseno</th>
                         <th>Cliente</th>
                         <th>Contacto</th>
-                        <th>Modelo</th>
                         <th>Presupuesto</th>
                         <th>Mensaje</th>
                         <th>Estado</th>
@@ -226,6 +393,49 @@
                     </thead>
                     <tbody data-requests-table>
                       <tr><td colspan="6">Inicia sesion para cargar solicitudes.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="admin-tab-panel" data-admin-panel="clientes">
+                <div class="admin-panel-heading">
+                  <div>
+                    <div class="cdp-section-kicker">Clientes</div>
+                    <h2>Cuentas registradas</h2>
+                  </div>
+                  <div class="admin-heading-actions">
+                    <button class="btn btn-outline-primary btn-sm" type="button" data-clientes-refresh><span data-feather="refresh-cw"></span>Actualizar</button>
+                    <button class="btn btn-outline-primary btn-sm" type="button" data-export-csv="clientes">Exportar CSV</button>
+                  </div>
+                </div>
+                <div class="admin-toolbar">
+                  <div class="admin-search">
+                    <span data-feather="search"></span>
+                    <input class="admin-search__input" type="search" placeholder="Buscar por nombre, email o telefono..." data-clientes-search>
+                  </div>
+                  <div class="admin-filters">
+                    <select class="admin-filter-select" data-clientes-filter="estado">
+                      <option value="">Todos</option>
+                      <option value="activo">Activos</option>
+                      <option value="inactivo">Inactivos</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table admin-table align-middle">
+                    <thead>
+                      <tr>
+                        <th>Cliente</th>
+                        <th>Contacto</th>
+                        <th>Registro</th>
+                        <th>Ultimo acceso</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody data-clientes-table>
+                      <tr><td colspan="6">Cargando clientes...</td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -241,9 +451,9 @@
     <script src="../vendors/is/is.min.js"></script>
     <script src="../vendors/feather-icons/feather.min.js"></script>
     <script src="../assets/js/theme.js"></script>
-    <script src="../assets/js/cliente-servidor.js?v=php-url-2"></script>
+    <script src="../assets/js/cliente-servidor.js?v=admin-duplicados-1"></script>
     <script src="../assets/js/productos-preparados.js?v=productos-preparados-1"></script>
-    <script src="../assets/js/admin.js?v=admin-guard-3"></script>
+    <script src="../assets/js/admin.js?v=admin-duplicados-1"></script>
     <script>feather.replace();</script>
   </body>
 
