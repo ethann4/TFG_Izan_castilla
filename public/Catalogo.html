@@ -5,8 +5,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Catalogo | CDP Customs</title>
-    <meta name="description" content="Catalogo premium de volantes personalizados CDP Customs para BMW, Audi, Mercedes y Volkswagen.">
+    <title>Catalogo de volantes personalizados para BMW, Audi, Mercedes y VW | CDP Customs</title>
+    <meta name="description" content="Catalogo de volantes personalizados a medida para coches deportivos. Acabados en cuero, alcantara, carbono, costuras a elegir, levas magneticas y pantalla RPM. Envios a toda Espana.">
+    <meta name="keywords" content="catalogo volantes personalizados, volante BMW E46, volante BMW F82, volante Audi RS, volante Mercedes AMG, volante VW GTI, volante carbono, volante alcantara">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://www.cdpcustoms.com/Catalogo.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Catalogo de volantes personalizados | CDP Customs">
+    <meta property="og:description" content="Volantes a medida para BMW, Audi, Mercedes y Volkswagen. Cuero, alcantara, carbono y mas.">
+    <meta property="og:image" content="https://www.cdpcustoms.com/assets/img/gallery/hero-amg.jpg">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/img/logo_cdp_transparente.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo_cdp_transparente.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/img/logo_cdp_transparente.png">
@@ -16,7 +23,7 @@
     <meta name="theme-color" content="#000000">
     <link href="assets/css/theme.css" rel="stylesheet">
     <link href="assets/css/cdp-common.css?v=aviso-cookies-1" rel="stylesheet">
-    <link href="assets/css/catalog.css?v=confianza-catalogo-2" rel="stylesheet">
+    <link href="assets/css/catalog.css?v=custom-badge-2" rel="stylesheet">
   </head>
 
   <body class="catalog-page">
@@ -93,7 +100,7 @@
                 <div class="cdp-section-kicker">Tienda CDP Customs</div>
                 <h1>Volantes premium</h1>
               </div>
-              <div class="catalog-stats">Catalogo conectado a PHP/MySQL con filtros normalizados.</div>
+              <div class="catalog-stats">Acabados premium, compatibilidad por modelo y montaje a medida.</div>
             </div>
 
             <div class="catalog-chip-row">
@@ -108,48 +115,93 @@
 
             <div class="catalog-layout">
               <aside class="catalog-filters" aria-label="Filtros de catalogo">
-                <h2>Filtros</h2>
+                <div class="filter-header">
+                  <h2>Filtros</h2>
+                  <span class="filter-results-chip" data-filter-results hidden>0 productos</span>
+                </div>
+
+                <div class="filter-active-chips" data-active-chips hidden></div>
+
                 <form data-filter-form>
-                  <div class="filter-group">
-                    <label class="filter-label" for="filterBrand">Marca</label>
-                    <select class="form-select cdp-form-select" id="filterBrand" name="brand">
-                      <option value="">Todas</option>
-                      <option value="bmw">BMW</option>
-                      <option value="audi">Audi</option>
-                      <option value="mercedes">Mercedes</option>
-                      <option value="volkswagen">Volkswagen</option>
-                    </select>
-                  </div>
-                  <div class="filter-group">
-                    <label class="filter-label" for="filterModel">Modelo</label>
-                    <select class="form-select cdp-form-select" id="filterModel" name="model">
-                      <option value="">Todos</option>
-                      <option value="e46">BMW E46 / E39</option>
-                      <option value="e90">BMW E90 / E60</option>
-                      <option value="f82">BMW Serie F</option>
-                      <option value="audi-sline">Audi RS</option>
-                      <option value="amg">Mercedes AMG</option>
-                      <option value="gti">Volkswagen GTI</option>
-                    </select>
-                  </div>
-                  <div class="filter-group">
-                    <span class="filter-label">Material</span>
-                    <label class="filter-check"><input type="checkbox" name="material" value="cuero"> Cuero</label>
-                    <label class="filter-check"><input type="checkbox" name="material" value="alcantara"> Alcantara</label>
-                    <label class="filter-check"><input type="checkbox" name="material" value="carbono"> Carbono</label>
-                  </div>
-                  <div class="filter-group">
-                    <span class="filter-label">Color</span>
-                    <label class="filter-check"><input type="checkbox" name="color" value="negro"> Negro</label>
-                    <label class="filter-check"><input type="checkbox" name="color" value="rojo"> Rojo</label>
-                    <label class="filter-check"><input type="checkbox" name="color" value="azul"> Azul</label>
-                    <label class="filter-check"><input type="checkbox" name="color" value="amarillo"> Amarillo</label>
-                  </div>
-                  <div class="filter-group">
-                    <label class="filter-label" for="filterPrice">Precio maximo</label>
-                    <input class="form-range" id="filterPrice" type="range" min="400" max="1300" step="50" value="1300" data-filter-price>
-                    <div class="price-output"><span>400 EUR</span><span data-price-output>Hasta 1300 EUR</span></div>
-                  </div>
+                  <details class="filter-group" open>
+                    <summary class="filter-toggle">
+                      <span class="filter-label">Marca</span>
+                      <span class="filter-toggle__icon-wrap"><span data-feather="chevron-down"></span></span>
+                    </summary>
+                    <div class="filter-content">
+                      <select class="form-select cdp-form-select" id="filterBrand" name="brand">
+                        <option value="">Todas</option>
+                        <option value="bmw">BMW</option>
+                        <option value="audi">Audi</option>
+                        <option value="mercedes">Mercedes</option>
+                        <option value="volkswagen">Volkswagen</option>
+                      </select>
+                    </div>
+                  </details>
+
+                  <details class="filter-group" open>
+                    <summary class="filter-toggle">
+                      <span class="filter-label">Modelo</span>
+                      <span class="filter-toggle__icon-wrap"><span data-feather="chevron-down"></span></span>
+                    </summary>
+                    <div class="filter-content">
+                      <select class="form-select cdp-form-select" id="filterModel" name="model">
+                        <option value="">Todos</option>
+                        <option value="e46">BMW E46 / E39</option>
+                        <option value="e90">BMW E90 / E60</option>
+                        <option value="f82">BMW Serie F</option>
+                        <option value="audi-sline">Audi RS</option>
+                        <option value="amg">Mercedes AMG</option>
+                        <option value="gti">Volkswagen GTI</option>
+                      </select>
+                    </div>
+                  </details>
+
+                  <details class="filter-group" open>
+                    <summary class="filter-toggle">
+                      <span class="filter-label">Material</span>
+                      <span class="filter-toggle__icon-wrap"><span data-feather="chevron-down"></span></span>
+                    </summary>
+                    <div class="filter-content filter-pill-list">
+                      <label class="filter-pill"><input type="checkbox" name="material" value="cuero"><span class="filter-pill__check"></span><span class="filter-pill__text">Cuero</span><span class="filter-pill__count" data-count-material="cuero">0</span></label>
+                      <label class="filter-pill"><input type="checkbox" name="material" value="alcantara"><span class="filter-pill__check"></span><span class="filter-pill__text">Alcantara</span><span class="filter-pill__count" data-count-material="alcantara">0</span></label>
+                      <label class="filter-pill"><input type="checkbox" name="material" value="carbono"><span class="filter-pill__check"></span><span class="filter-pill__text">Carbono</span><span class="filter-pill__count" data-count-material="carbono">0</span></label>
+                    </div>
+                  </details>
+
+                  <details class="filter-group" open>
+                    <summary class="filter-toggle">
+                      <span class="filter-label">Color</span>
+                      <span class="filter-toggle__icon-wrap"><span data-feather="chevron-down"></span></span>
+                    </summary>
+                    <div class="filter-content filter-color-list">
+                      <label class="filter-color"><input type="checkbox" name="color" value="negro"><span class="filter-color__swatch" style="--color: #1a1a1a"></span><span class="filter-color__text">Negro</span><span class="filter-color__count" data-count-color="negro">0</span></label>
+                      <label class="filter-color"><input type="checkbox" name="color" value="rojo"><span class="filter-color__swatch" style="--color: #d62828"></span><span class="filter-color__text">Rojo</span><span class="filter-color__count" data-count-color="rojo">0</span></label>
+                      <label class="filter-color"><input type="checkbox" name="color" value="azul"><span class="filter-color__swatch" style="--color: #1b61ff"></span><span class="filter-color__text">Azul</span><span class="filter-color__count" data-count-color="azul">0</span></label>
+                      <label class="filter-color"><input type="checkbox" name="color" value="amarillo"><span class="filter-color__swatch" style="--color: #ffba00"></span><span class="filter-color__text">Amarillo</span><span class="filter-color__count" data-count-color="amarillo">0</span></label>
+                    </div>
+                  </details>
+
+                  <details class="filter-group" open>
+                    <summary class="filter-toggle">
+                      <span class="filter-label">Precio</span>
+                      <span class="filter-toggle__icon-wrap"><span data-feather="chevron-down"></span></span>
+                    </summary>
+                    <div class="filter-content">
+                      <div class="filter-range" data-filter-range>
+                        <div class="filter-range__track">
+                          <div class="filter-range__progress" data-range-progress></div>
+                        </div>
+                        <input class="filter-range__input filter-range__input--min" type="range" min="0" max="1300" step="10" value="0" data-filter-price-min aria-label="Precio minimo">
+                        <input class="filter-range__input filter-range__input--max" type="range" min="0" max="1300" step="10" value="1300" data-filter-price-max aria-label="Precio maximo">
+                      </div>
+                      <div class="filter-range__values">
+                        <div><span class="filter-range__caption">Desde</span><strong data-price-min-output>0 EUR</strong></div>
+                        <div class="text-end"><span class="filter-range__caption">Hasta</span><strong data-price-max-output>1300 EUR</strong></div>
+                      </div>
+                    </div>
+                  </details>
+
                   <button class="btn btn-outline-primary w-100 mt-3" type="button" data-reset-filters>Restablecer filtros</button>
                 </form>
               </aside>
@@ -236,7 +288,7 @@
               <div class="cdp-footer-title mb-3">Soporte</div>
               <ul class="list-unstyled cdp-footer-list">
                 <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="https://wa.me/34676525005" target="_blank" rel="noreferrer">WhatsApp</a></li>
+                <li><a href="#" target="_blank" rel="noreferrer">WhatsApp</a></li>
                 <li><a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer">Instagram</a></li>
                 <li><a href="https://es.wallapop.com/user/izanc-448493585" target="_blank" rel="noreferrer">Wallapop</a></li>
               </ul>
@@ -253,13 +305,18 @@
             <div class="cdp-footer-contact">
               <div class="cdp-footer-title mb-3">Contacto</div>
               <p>Vizcaya, Espa&ntilde;a</p>
-              <p><a href="tel:+34676525005">(+34) 676 525 005</a></p>
-              <p><a href="mailto:info@cdpcustoms.local">info@cdpcustoms.local</a></p>
               <p><a href="https://instagram.com/cdp.performanceparts" target="_blank" rel="noreferrer">@cdp.performanceparts</a></p>
             </div>
           </div>
         </div>
         <div class="border-bottom border-700 my-4"></div>
+        <div class="cdp-footer-legal d-flex flex-wrap gap-3 justify-content-center mb-3">
+          <a href="aviso-legal.html">Aviso legal</a>
+          <a href="politica-privacidad.html">Privacidad</a>
+          <a href="terminos-condiciones.html">T&eacute;rminos</a>
+          <a href="politica-cookies.html">Cookies</a>
+          <a href="devoluciones.html">Devoluciones</a>
+        </div>
         <div class="cdp-footer-bottom d-flex flex-column flex-md-row justify-content-between gap-3">
           <span>CDP Customs - Ecommerce de volantes personalizados</span>
           <div class="cdp-footer-payments" aria-label="M&eacute;todos de pago">
@@ -281,7 +338,7 @@
     <script src="assets/js/aviso-cookies.js?v=aviso-cookies-1"></script>
     <script src="assets/js/cliente-servidor.js?v=php-url-2"></script>
     <script src="assets/js/shop.js?v=account-menu-4"></script>
-    <script src="assets/js/catalog.js"></script>
+    <script src="assets/js/catalog.js?v=custom-badge-1"></script>
     <script>feather.replace();</script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">
   </body>
