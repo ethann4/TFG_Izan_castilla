@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Finalizar pedido | CDP Customs</title>
+    <meta name="description" content="Finaliza la compra de tu volante personalizado CDP Customs. Pago seguro 3DS, PayPal, Bizum o transferencia.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo_cdp_transparente.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/logo_cdp_transparente.png">
+    <meta name="theme-color" content="#000000">
+    <link href="assets/css/theme.css" rel="stylesheet">
+    <link href="assets/css/cdp-common.css?v=aviso-cookies-1" rel="stylesheet">
+    <link href="assets/css/pago.css?v=pago-v1" rel="stylesheet">
+  </head>
+
+  <body class="pago-page">
+    <main class="pago-shell">
+      <header class="pago-topbar">
+        <a class="pago-topbar__back" href="Creacionvirtual.html" aria-label="Volver al configurador">
+          <span data-feather="arrow-left"></span>
+          <span>Seguir editando</span>
+        </a>
+        <a class="pago-topbar__brand" href="index.html" aria-label="CDP Customs">
+          <img src="assets/img/logo_cdp_transparente.png" alt="CDP Customs">
+        </a>
+        <div class="pago-topbar__steps" aria-label="Pasos del pedido">
+          <span class="pago-step is-done"><strong>1</strong>Disen&ntilde;o</span>
+          <span class="pago-step is-active"><strong>2</strong>Datos y pago</span>
+          <span class="pago-step"><strong>3</strong>Confirmaci&oacute;n</span>
+        </div>
+      </header>
+
+      <div class="pago-grid">
+
+        <section class="pago-main">
+
+          <div class="pago-block pago-preview">
+            <div class="pago-preview__media">
+              <img id="pagoPreviewImg" src="assets/img/logo_cdp_transparente.png" alt="Vista previa del dise&ntilde;o">
+              <div class="pago-preview__placeholder" id="pagoPreviewPlaceholder">
+                <span data-feather="image"></span>
+                <p>Tu dise&ntilde;o personalizado</p>
+              </div>
+            </div>
+            <div class="pago-preview__data">
+              <span class="cdp-section-kicker">Tu dise&ntilde;o</span>
+              <h1 id="pagoTitulo">Volante CDP a medida</h1>
+              <p class="pago-preview__subtitle" id="pagoSubtitulo">BMW F82 &middot; Configuraci&oacute;n personalizada</p>
+
+              <div class="pago-features">
+                <div class="pago-feature">
+                  <span data-feather="clock"></span>
+                  <div>
+                    <strong>Entrega</strong>
+                    <small id="pagoEntrega">30 d&iacute;as aprox.</small>
+                  </div>
+                </div>
+                <div class="pago-feature">
+                  <span data-feather="tool"></span>
+                  <div>
+                    <strong>Hecho a medida</strong>
+                    <small>Producci&oacute;n bajo pedido</small>
+                  </div>
+                </div>
+                <div class="pago-feature">
+                  <span data-feather="shield"></span>
+                  <div>
+                    <strong>Garant&iacute;a 2 a&ntilde;os</strong>
+                    <small>Defectos de fabricaci&oacute;n</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <form class="pago-block pago-form" id="pagoForm" novalidate>
+
+            <fieldset class="pago-fieldset">
+              <legend>
+                <span class="pago-fieldset__num">1</span>
+                Datos de contacto
+              </legend>
+              <div class="pago-row">
+                <label class="pago-field">
+                  <span>Nombre *</span>
+                  <input type="text" name="nombre" autocomplete="given-name" maxlength="80" required>
+                </label>
+                <label class="pago-field">
+                  <span>Apellidos *</span>
+                  <input type="text" name="apellidos" autocomplete="family-name" maxlength="80" required>
+                </label>
+              </div>
+              <div class="pago-row">
+                <label class="pago-field">
+                  <span>Correo electr&oacute;nico *</span>
+                  <input type="email" name="email" autocomplete="email" maxlength="160" required>
+                </label>
+                <label class="pago-field">
+                  <span>Tel&eacute;fono *</span>
+                  <input type="tel" name="telefono" autocomplete="tel" maxlength="20" placeholder="+34 600 000 000" required>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="pago-fieldset">
+              <legend>
+                <span class="pago-fieldset__num">2</span>
+                Direcci&oacute;n de env&iacute;o
+              </legend>
+              <label class="pago-field">
+                <span>Direcci&oacute;n *</span>
+                <input type="text" name="direccion" autocomplete="street-address" maxlength="160" placeholder="Calle, n&uacute;mero, piso..." required>
+              </label>
+              <div class="pago-row pago-row--triple">
+                <label class="pago-field">
+                  <span>C&oacute;digo postal *</span>
+                  <input type="text" name="cp" autocomplete="postal-code" maxlength="10" pattern="[0-9]{5}" placeholder="48001" required>
+                </label>
+                <label class="pago-field">
+                  <span>Ciudad *</span>
+                  <input type="text" name="ciudad" autocomplete="address-level2" maxlength="80" placeholder="Bilbao" required>
+                </label>
+                <label class="pago-field">
+                  <span>Provincia *</span>
+                  <input type="text" name="provincia" autocomplete="address-level1" maxlength="80" placeholder="Vizcaya" required>
+                </label>
+              </div>
+              <label class="pago-field">
+                <span>Pa&iacute;s *</span>
+                <select name="pais" required>
+                  <option value="ES" selected>Espa&ntilde;a</option>
+                  <option value="PT">Portugal</option>
+                  <option value="FR">Francia</option>
+                  <option value="IT">Italia</option>
+                  <option value="DE">Alemania</option>
+                </select>
+              </label>
+            </fieldset>
+
+            <fieldset class="pago-fieldset">
+              <legend>
+                <span class="pago-fieldset__num">3</span>
+                M&eacute;todo de pago
+              </legend>
+              <div class="pago-payments">
+                <label class="pago-payment">
+                  <input type="radio" name="metodo" value="tarjeta" checked>
+                  <span class="pago-payment__box">
+                    <span class="pago-payment__icon"><span data-feather="credit-card"></span></span>
+                    <div>
+                      <strong>Tarjeta</strong>
+                      <small>Visa, Mastercard, American Express</small>
+                    </div>
+                  </span>
+                </label>
+                <label class="pago-payment">
+                  <input type="radio" name="metodo" value="paypal">
+                  <span class="pago-payment__box">
+                    <span class="pago-payment__icon pago-payment__icon--paypal">PayPal</span>
+                    <div>
+                      <strong>PayPal</strong>
+                      <small>Pago r&aacute;pido con tu cuenta</small>
+                    </div>
+                  </span>
+                </label>
+                <label class="pago-payment">
+                  <input type="radio" name="metodo" value="bizum">
+                  <span class="pago-payment__box">
+                    <span class="pago-payment__icon pago-payment__icon--bizum">Bizum</span>
+                    <div>
+                      <strong>Bizum</strong>
+                      <small>Pago instant&aacute;neo con m&oacute;vil</small>
+                    </div>
+                  </span>
+                </label>
+                <label class="pago-payment">
+                  <input type="radio" name="metodo" value="transferencia">
+                  <span class="pago-payment__box">
+                    <span class="pago-payment__icon"><span data-feather="repeat"></span></span>
+                    <div>
+                      <strong>Transferencia</strong>
+                      <small>Recibir&aacute;s los datos por email</small>
+                    </div>
+                  </span>
+                </label>
+              </div>
+
+              <div class="pago-card-fields" data-card-fields>
+                <label class="pago-field">
+                  <span>Numero de tarjeta</span>
+                  <input type="text" name="card_number" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242" autocomplete="cc-number">
+                </label>
+                <div class="pago-row">
+                  <label class="pago-field">
+                    <span>Caducidad</span>
+                    <input type="text" name="card_exp" maxlength="5" placeholder="MM/AA" autocomplete="cc-exp">
+                  </label>
+                  <label class="pago-field">
+                    <span>CVC</span>
+                    <input type="text" name="card_cvc" inputmode="numeric" maxlength="4" placeholder="123" autocomplete="cc-csc">
+                  </label>
+                </div>
+                <label class="pago-field">
+                  <span>Nombre del titular</span>
+                  <input type="text" name="card_name" maxlength="80" placeholder="Como aparece en la tarjeta" autocomplete="cc-name">
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="pago-fieldset pago-fieldset--legal">
+              <label class="pago-check">
+                <input type="checkbox" name="terminos" required>
+                <span class="pago-check__mark"></span>
+                <span class="pago-check__text">He le&iacute;do y acepto los <a href="contacto.html">T&eacute;rminos</a> y la <a href="contacto.html">Pol&iacute;tica de privacidad</a>.</span>
+              </label>
+              <label class="pago-check">
+                <input type="checkbox" name="newsletter">
+                <span class="pago-check__mark"></span>
+                <span class="pago-check__text">Quiero recibir novedades, promociones y lanzamientos.</span>
+              </label>
+            </fieldset>
+
+            <div class="pago-status" id="pagoStatus" hidden></div>
+          </form>
+        </section>
+
+        <aside class="pago-aside" aria-label="Resumen del pedido">
+          <div class="pago-summary">
+            <header class="pago-summary__head">
+              <h2>Resumen del pedido</h2>
+              <button class="pago-summary__edit" type="button" onclick="window.location.href='Creacionvirtual.html'">Editar</button>
+            </header>
+
+            <div class="pago-summary__lines" id="pagoLineas">
+              <div class="pago-line pago-line--main">
+                <div>
+                  <strong id="pagoLineaBase">Volante CDP base</strong>
+                  <small id="pagoLineaModelo">BMW F82</small>
+                </div>
+                <span id="pagoLineaBasePrecio">0,00 &euro;</span>
+              </div>
+              <!-- extras se renderizan por JS -->
+            </div>
+
+            <div class="pago-summary__totals">
+              <div class="pago-total-row">
+                <span>Subtotal</span>
+                <span id="pagoSubtotal">0,00 &euro;</span>
+              </div>
+              <div class="pago-total-row">
+                <span>Env&iacute;o</span>
+                <span id="pagoEnvio">Gratis</span>
+              </div>
+              <div class="pago-total-row">
+                <span>IVA (21%)</span>
+                <span id="pagoIva">0,00 &euro;</span>
+              </div>
+              <div class="pago-total-row pago-total-row--grand">
+                <span>Total</span>
+                <strong id="pagoTotal">0,00 &euro;</strong>
+              </div>
+            </div>
+
+            <button class="pago-cta" type="submit" form="pagoForm" id="pagoSubmit">
+              <span data-feather="lock"></span>
+              <span>Pagar <span id="pagoCtaTotal">0,00 &euro;</span></span>
+            </button>
+
+            <div class="pago-trust">
+              <div class="pago-trust__item">
+                <span data-feather="shield"></span>
+                <span>Pago 100% seguro con cifrado 3D Secure</span>
+              </div>
+              <div class="pago-trust__item">
+                <span data-feather="truck"></span>
+                <span>Env&iacute;o gratis a toda Espa&ntilde;a peninsular</span>
+              </div>
+              <div class="pago-trust__item">
+                <span data-feather="refresh-cw"></span>
+                <span>Devoluci&oacute;n en 14 d&iacute;as si no es a medida</span>
+              </div>
+            </div>
+
+            <div class="pago-payments-icons" aria-label="M&eacute;todos de pago aceptados">
+              <span>Visa</span>
+              <span>Mastercard</span>
+              <span>Amex</span>
+              <span>PayPal</span>
+              <span>Bizum</span>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </main>
+
+    <div class="pago-overlay" id="pagoOverlay" hidden>
+      <div class="pago-overlay__panel">
+        <div class="pago-overlay__spinner"></div>
+        <h2 id="pagoOverlayTitle">Procesando pago...</h2>
+        <p id="pagoOverlayCopy">Estamos confirmando tu pedido con la pasarela segura. No cierres esta ventana.</p>
+      </div>
+    </div>
+
+    <div class="pago-success" id="pagoSuccess" hidden>
+      <div class="pago-success__panel">
+        <div class="pago-success__icon">
+          <span data-feather="check"></span>
+        </div>
+        <span class="cdp-section-kicker">Pedido confirmado</span>
+        <h2>&iexcl;Gracias por tu compra!</h2>
+        <p>Tu volante personalizado est&aacute; en producci&oacute;n. Te hemos enviado un correo de confirmaci&oacute;n con el detalle del pedido.</p>
+        <div class="pago-success__data">
+          <div>
+            <span>N&uacute;mero de pedido</span>
+            <strong id="pagoSuccessId">CDP-000000</strong>
+          </div>
+          <div>
+            <span>Entrega estimada</span>
+            <strong id="pagoSuccessFecha">en 30 d&iacute;as</strong>
+          </div>
+        </div>
+        <div class="pago-success__actions">
+          <a class="btn btn-primary" href="cuenta.html">Ver mis pedidos</a>
+          <a class="btn btn-outline-primary" href="Catalogo.html">Seguir comprando</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="vendors/feather-icons/feather.min.js"></script>
+    <script src="assets/js/cliente-servidor.js?v=admin-duplicados-1"></script>
+    <script src="assets/js/pago.js?v=pago-cart-1"></script>
+    <script>feather.replace();</script>
+  </body>
+
+</html>
