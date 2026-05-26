@@ -7,9 +7,11 @@ require_once __DIR__ . '/../modelos/AdministradorModelo.php';
 final class AdministradorControlador
 {
     private AdministradorModelo $administradores;
+    private PDO $pdo;
 
     public function __construct(PDO $pdo)
     {
+        $this->pdo = $pdo;
         $this->administradores = new AdministradorModelo($pdo);
     }
 
@@ -20,6 +22,7 @@ final class AdministradorControlador
         $data = read_json_body();
         $email = filter_var($data['email'] ?? '', FILTER_VALIDATE_EMAIL);
         $password = (string) ($data['password'] ?? '');
+        $codigoTotp = preg_replace('/\s+/', '', (string) ($data['totp'] ?? ''));
 
         if (!$email || $password === '') {
             send_json(['error' => 'Email y contrasena son obligatorios.'], 422);
@@ -29,11 +32,26 @@ final class AdministradorControlador
             send_json(['error' => 'Credenciales incorrectas.'], 401);
         }
 
+        rate_limit_verificar($this->pdo, $email, 'admin');
+
         $admin = $this->administradores->buscarPorEmail($email);
 
         if (!$admin || !(bool) $admin['activo'] || !password_verify($password, $admin['password_hash'])) {
+            rate_limit_registrar($this->pdo, $email, 'admin', false);
             send_json(['error' => 'Credenciales incorrectas.'], 401);
         }
+
+        if (!empty($admin['totp_activo']) && !empty($admin['totp_secret'])) {
+            if ($codigoTotp === '') {
+                send_json(['totp_required' => true, 'error' => 'Codigo de verificacion en dos pasos requerido.'], 401);
+            }
+            if (!totp_verificar((string) $admin['totp_secret'], $codigoTotp)) {
+                rate_limit_registrar($this->pdo, $email, 'admin', false);
+                send_json(['error' => 'Codigo de verificacion incorrecto.'], 401);
+            }
+        }
+
+        rate_limit_registrar($this->pdo, $email, 'admin', true);
 
         $user = [
             'id' => (string) $admin['id'],
@@ -79,6 +97,68 @@ final class AdministradorControlador
         session_destroy();
 
         send_json(['ok' => true]);
+    }
+
+    public function totpEstado(): void
+    {
+        require_method(['GET']);
+        $admin = require_admin();
+        $registro = $this->administradores->buscarPorId((int) $admin['id']);
+        send_json([
+            'activo' => (bool) ($registro['totp_activo'] ?? false),
+            'configurado' => !empty($registro['totp_secret']),
+        ]);
+    }
+
+    public function totpIniciar(): void
+    {
+        require_method(['POST']);
+        $admin = require_admin();
+        $secreto = totp_generar_secreto();
+        $this->administradores->guardarTotp((int) $admin['id'], $secreto, false);
+
+        send_json([
+            'secret' => $secreto,
+            'uri' => totp_uri('CDP Customs', (string) $admin['email'], $secreto),
+        ]);
+    }
+
+    public function totpVerificar(): void
+    {
+        require_method(['POST']);
+        $admin = require_admin();
+        $data = read_json_body();
+        $codigo = preg_replace('/\s+/', '', (string) ($data['codigo'] ?? ''));
+
+        $registro = $this->administradores->buscarPorId((int) $admin['id']);
+        $secreto = (string) ($registro['totp_secret'] ?? '');
+
+        if ($secreto === '') {
+            send_json(['error' => 'No hay 2FA configurado. Primero genera un nuevo secreto.'], 422);
+        }
+
+        if (!totp_verificar($secreto, $codigo)) {
+            send_json(['error' => 'El codigo no es valido. Comprueba la hora del telefono y prueba con el siguiente codigo.'], 401);
+        }
+
+        $this->administradores->guardarTotp((int) $admin['id'], $secreto, true);
+        send_json(['activo' => true]);
+    }
+
+    public function totpDesactivar(): void
+    {
+        require_method(['POST']);
+        $admin = require_admin();
+        $data = read_json_body();
+        $password = (string) ($data['password'] ?? '');
+
+        $registro = $this->administradores->buscarPorId((int) $admin['id']);
+        if (!$registro || !password_verify($password, (string) $registro['password_hash'])) {
+            send_json(['error' => 'Contrasena actual incorrecta.'], 401);
+        }
+
+        $this->administradores->guardarTotp((int) $admin['id'], null, false);
+        send_json(['activo' => false]);
     }
 
     public function usuarios(string $metodo): void

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Seguridad y 2FA | Administrador CDP</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/logo_cdp_transparente.png">
+    <link href="../assets/css/theme.css" rel="stylesheet">
+    <link href="../assets/css/cdp-common.css" rel="stylesheet">
+    <link href="../assets/css/admin.css" rel="stylesheet">
+    <style>
+      .totp-wrap { max-width: 640px; margin: 2.5rem auto; padding: 2rem; background: rgba(28,31,38,.85); border: 1px solid rgba(255,255,255,.07); border-radius: 14px; color: #fff; }
+      .totp-step { margin-bottom: 1.4rem; }
+      .totp-step h3 { font-size: 1rem; letter-spacing: .04em; text-transform: uppercase; color: #ff7a7a; margin-bottom: .5rem; }
+      .totp-secret { font-family: monospace; font-size: 1.15rem; letter-spacing: .15em; padding: .7rem 1rem; background: rgba(0,0,0,.4); border-radius: 8px; word-break: break-all; }
+      .totp-qr { display: grid; place-items: center; margin: 1rem 0; padding: 1rem; background: #fff; border-radius: 12px; min-height: 200px; }
+      .totp-qr canvas { width: 200px; height: 200px; }
+      .totp-status { padding: .85rem 1rem; border-radius: 8px; margin-top: 1rem; font-size: .9rem; }
+      .totp-status.is-success { background: rgba(43, 255, 154, .12); color: #79e3a4; }
+      .totp-status.is-error { background: rgba(255, 36, 50, .14); color: #ff8a8a; }
+      .totp-status.is-info { background: rgba(255, 255, 255, .07); color: #d0d2d6; }
+      .totp-input { font-family: monospace; font-size: 1.5rem; letter-spacing: .4em; text-align: center; }
+    </style>
+  </head>
+
+  <body class="admin-page">
+    <main class="main" id="top">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4 d-block cdp-navbar">
+        <div class="container">
+          <a class="navbar-brand d-inline-flex align-items-center" href="../index.html">
+            <img class="navbar-logo navbar-logo--tall" src="../assets/img/logo_cdp_transparente.png" alt="CDP Customs">
+          </a>
+          <a class="btn btn-outline-primary btn-sm" href="index.html">Volver al panel</a>
+        </div>
+      </nav>
+
+      <section class="admin-shell">
+        <div class="totp-wrap">
+          <h1>Verificaci&oacute;n en dos pasos</h1>
+          <p class="text-muted">A&ntilde;ade un segundo factor de autenticaci&oacute;n a tu cuenta de administrador. Necesitas una app TOTP (Google Authenticator, 1Password, Authy, Bitwarden...).</p>
+
+          <div class="totp-status is-info" id="totpEstado">Comprobando estado...</div>
+
+          <div id="totpSetup" hidden>
+            <div class="totp-step">
+              <h3>Paso 1 &middot; Escanea el c&oacute;digo</h3>
+              <div class="totp-qr"><canvas id="totpQr"></canvas></div>
+              <p class="text-muted">&iquest;No puedes escanear? Introduce esta clave manualmente:</p>
+              <div class="totp-secret" id="totpSecret">--</div>
+            </div>
+            <div class="totp-step">
+              <h3>Paso 2 &middot; Verifica un c&oacute;digo</h3>
+              <input class="form-control totp-input" id="totpCodigo" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="000000">
+              <button class="btn btn-primary mt-3" type="button" id="totpActivar">Activar 2FA</button>
+              <div class="shop-status mt-2" id="totpMsgActivar" hidden></div>
+            </div>
+          </div>
+
+          <div id="totpActivo" hidden>
+            <div class="totp-status is-success">2FA est&aacute; activo en tu cuenta. Necesitar&aacute;s introducir un c&oacute;digo en cada inicio de sesi&oacute;n.</div>
+            <div class="totp-step mt-3">
+              <h3>Desactivar 2FA</h3>
+              <p class="text-muted">Si pierdes acceso a tu app de c&oacute;digos, escribe tu contrase&ntilde;a actual para desactivar 2FA. Despu&eacute;s podr&aacute;s configurarlo de nuevo.</p>
+              <input class="form-control" id="totpPassword" type="password" placeholder="Contrasena actual" autocomplete="current-password">
+              <button class="btn btn-outline-primary mt-3" type="button" id="totpDesactivar">Desactivar 2FA</button>
+              <div class="shop-status mt-2" id="totpMsgDesactivar" hidden></div>
+            </div>
+          </div>
+
+          <div id="totpInicio" hidden>
+            <button class="btn btn-primary" type="button" id="totpGenerar">Configurar 2FA</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script src="../assets/js/cliente-servidor.js"></script>
+    <script>
+      (async () => {
+        const backend = window.CDPBackend;
+        const $ = (sel) => document.querySelector(sel);
+        const showStatus = (sel, msg, tipo) => {
+          const n = $(sel); if (!n) return;
+          n.hidden = false; n.textContent = msg; n.className = `shop-status is-${tipo}`;
+        };
+
+        const cargar = async () => {
+          try {
+            const estado = await backend.fetchJson("admin_totp.php?accion=estado");
+            const elEstado = $("#totpEstado");
+            $("#totpInicio").hidden = estado.activo;
+            $("#totpSetup").hidden = true;
+            $("#totpActivo").hidden = !estado.activo;
+            elEstado.className = `totp-status ${estado.activo ? "is-success" : "is-info"}`;
+            elEstado.textContent = estado.activo
+              ? "2FA esta activo. Necesitaras un codigo TOTP en cada login."
+              : "2FA aun no esta activo en tu cuenta.";
+          } catch (error) {
+            $("#totpEstado").className = "totp-status is-error";
+            $("#totpEstado").textContent = error.message || "No se pudo cargar el estado de 2FA.";
+          }
+        };
+
+        $("#totpGenerar")?.addEventListener("click", async () => {
+          try {
+            const datos = await backend.adminTotpIniciar();
+            $("#totpInicio").hidden = true;
+            $("#totpSetup").hidden = false;
+            $("#totpSecret").textContent = datos.secret;
+            const qrEl = $("#totpQr");
+            qrEl.innerHTML = "";
+            new QRCode(qrEl, { text: datos.uri, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M });
+          } catch (error) {
+            showStatus("#totpEstado", error.message || "No se pudo iniciar 2FA.", "error");
+          }
+        });
+
+        $("#totpActivar")?.addEventListener("click", async () => {
+          const codigo = $("#totpCodigo").value.trim();
+          try {
+            await backend.adminTotpVerificar(codigo);
+            showStatus("#totpMsgActivar", "2FA activado correctamente.", "success");
+            setTimeout(cargar, 900);
+          } catch (error) {
+            showStatus("#totpMsgActivar", error.message || "Codigo no valido.", "error");
+          }
+        });
+
+        $("#totpDesactivar")?.addEventListener("click", async () => {
+          const password = $("#totpPassword").value;
+          try {
+            await backend.adminTotpDesactivar(password);
+            showStatus("#totpMsgDesactivar", "2FA desactivado.", "success");
+            setTimeout(cargar, 900);
+          } catch (error) {
+            showStatus("#totpMsgDesactivar", error.message || "No se pudo desactivar.", "error");
+          }
+        });
+
+        cargar();
+      })();
+    </script>
+  </body>
+</html>

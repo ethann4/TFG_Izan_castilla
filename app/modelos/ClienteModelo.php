@@ -8,6 +8,20 @@ final class ClienteModelo
     {
     }
 
+    public function pdo(): PDO
+    {
+        return $this->pdo;
+    }
+
+    public function buscarPorId(int $id): ?array
+    {
+        $stmt = $this->pdo->prepare('SELECT id, nombre, email, telefono, password_hash, activo FROM clientes WHERE id = :id LIMIT 1');
+        $stmt->execute(['id' => $id]);
+        $record = $stmt->fetch();
+
+        return $record ?: null;
+    }
+
     public function buscarPorEmail(string $email): ?array
     {
         $stmt = $this->pdo->prepare('SELECT id, nombre, email, telefono, password_hash, activo FROM clientes WHERE email = :email LIMIT 1');
@@ -74,5 +88,25 @@ final class ClienteModelo
         $stmt->execute(['email' => $email]);
 
         return (bool) $stmt->fetchColumn();
+    }
+
+    public function listarTodos(): array
+    {
+        $stmt = $this->pdo->query(
+            'SELECT id, nombre, email, telefono, activo, creado_en, ultimo_acceso
+             FROM clientes
+             ORDER BY creado_en DESC'
+        );
+
+        return $stmt->fetchAll();
+    }
+
+    public function actualizarActivo(int $id, bool $activo): void
+    {
+        $stmt = $this->pdo->prepare('UPDATE clientes SET activo = :activo WHERE id = :id');
+        $stmt->execute([
+            'id' => $id,
+            'activo' => $activo ? 1 : 0,
+        ]);
     }
 }

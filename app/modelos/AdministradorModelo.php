@@ -10,11 +10,30 @@ final class AdministradorModelo
 
     public function buscarPorEmail(string $email): ?array
     {
-        $stmt = $this->pdo->prepare('SELECT id, email, nombre, password_hash, activo FROM admin_users WHERE email = :email LIMIT 1');
+        $stmt = $this->pdo->prepare('SELECT id, email, nombre, password_hash, activo, totp_secret, totp_activo FROM admin_users WHERE email = :email LIMIT 1');
         $stmt->execute(['email' => $email]);
         $record = $stmt->fetch();
 
         return $record ?: null;
+    }
+
+    public function buscarPorId(int $id): ?array
+    {
+        $stmt = $this->pdo->prepare('SELECT id, email, nombre, password_hash, activo, totp_secret, totp_activo FROM admin_users WHERE id = :id LIMIT 1');
+        $stmt->execute(['id' => $id]);
+        $record = $stmt->fetch();
+
+        return $record ?: null;
+    }
+
+    public function guardarTotp(int $id, ?string $secreto, bool $activo): void
+    {
+        $stmt = $this->pdo->prepare('UPDATE admin_users SET totp_secret = :secreto, totp_activo = :activo WHERE id = :id');
+        $stmt->execute([
+            ':id' => $id,
+            ':secreto' => $secreto,
+            ':activo' => $activo ? 1 : 0,
+        ]);
     }
 
     public function listar(): array

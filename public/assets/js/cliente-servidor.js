@@ -1,22 +1,22 @@
 (function () {
-  const scripts = Array.from(document.scripts || []);
-  const script = document.currentScript || scripts.find((node) => node.src.includes("assets/js/cliente-servidor.js"));
-  const apiBase = script?.src
-    ? new URL("../../api/", script.src).toString()
+  const scriptsDoc = Array.from(document.scripts || []);
+  const scriptActual = document.currentScript || scriptsDoc.find((nodo) => nodo.src.includes("assets/js/cliente-servidor.js"));
+  const baseApi = scriptActual?.src
+    ? new URL("../../api/", scriptActual.src).toString()
     : new URL("api/", window.location.href).toString();
 
-  const isConfigured = () => window.location.protocol.startsWith("http");
+  const estaConfigurado = () => window.location.protocol.startsWith("http");
 
-  const normalizeText = (value) =>
-    (value || "")
+  const normalizarTexto = (valor) =>
+    (valor || "")
       .toString()
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[̀-ͯ]/g, "")
       .trim();
 
-  const escapeHtml = (value) =>
-    (value || "")
+  const escaparHtml = (valor) =>
+    (valor || "")
       .toString()
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
@@ -24,15 +24,15 @@
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
 
-  const toArray = (value) => {
-    if (Array.isArray(value)) return value.filter(Boolean);
-    if (!value) return [];
-    if (typeof value === "string") {
+  const aArreglo = (valor) => {
+    if (Array.isArray(valor)) return valor.filter(Boolean);
+    if (!valor) return [];
+    if (typeof valor === "string") {
       try {
-        const parsed = JSON.parse(value);
-        if (Array.isArray(parsed)) return parsed.filter(Boolean);
+        const parseado = JSON.parse(valor);
+        if (Array.isArray(parseado)) return parseado.filter(Boolean);
       } catch (error) {
-        return value
+        return valor
           .split(",")
           .map((item) => item.trim())
           .filter(Boolean);
@@ -41,312 +41,388 @@
     return [];
   };
 
-  const formatPrice = (value) => {
-    const number = Number.parseFloat(value);
-    if (!Number.isFinite(number)) return "";
-    return `${new Intl.NumberFormat("es-ES").format(number)} EUR`;
+  const formatearPrecio = (valor) => {
+    const numero = Number.parseFloat(valor);
+    if (!Number.isFinite(numero)) return "";
+    return `${new Intl.NumberFormat("es-ES").format(numero)} EUR`;
   };
 
-  const getBrandFilter = (brand) => {
-    const value = normalizeText(brand);
-    if (value.includes("bmw")) return "bmw";
-    if (value.includes("audi")) return "audi";
-    if (value.includes("mercedes")) return "mercedes";
-    if (value.includes("volkswagen") || value.includes("gti")) return "volkswagen";
-    return value.split(" ")[0] || "";
+  const obtenerFiltroMarca = (marca) => {
+    const valor = normalizarTexto(marca);
+    if (valor.includes("bmw")) return "bmw";
+    if (valor.includes("audi")) return "audi";
+    if (valor.includes("mercedes")) return "mercedes";
+    if (valor.includes("volkswagen") || valor.includes("gti")) return "volkswagen";
+    return valor.split(" ")[0] || "";
   };
 
-  const getModelFilter = (value) => normalizeText(value).replace(/[\/,]+/g, " ");
+  const obtenerFiltroModelo = (valor) => normalizarTexto(valor).replace(/[\/,]+/g, " ");
 
-  const normalizeProductRecord = (record) => ({
-    ...record,
-    id: record.id?.toString() || "",
-    slug: record.slug || "",
-    precio: Number.parseFloat(record.precio || "0") || 0,
-    precio_anterior: record.precio_anterior === null || record.precio_anterior === undefined ? null : Number.parseFloat(record.precio_anterior),
-    stock: Number.parseInt(record.stock || "0", 10) || 0,
-    activo: Boolean(Number(record.activo)),
-    galeria: toArray(record.galeria),
-    acabados: toArray(record.acabados),
-    compatibilidad: toArray(record.compatibilidad),
-    especificaciones: toArray(record.especificaciones),
+  const normalizarRegistroProducto = (registro) => ({
+    ...registro,
+    id: registro.id?.toString() || "",
+    slug: registro.slug || "",
+    precio: Number.parseFloat(registro.precio || "0") || 0,
+    precio_anterior: registro.precio_anterior === null || registro.precio_anterior === undefined ? null : Number.parseFloat(registro.precio_anterior),
+    stock: Number.parseInt(registro.stock || "0", 10) || 0,
+    activo: Boolean(Number(registro.activo)),
+    habilitar_color_detalle: Boolean(Number(registro.habilitar_color_detalle || 0)),
+    galeria: aArreglo(registro.galeria),
+    acabados: aArreglo(registro.acabados),
+    compatibilidad: aArreglo(registro.compatibilidad),
+    especificaciones: aArreglo(registro.especificaciones),
   });
 
-  const mapProduct = (record) => {
-    const normalized = normalizeProductRecord(record);
-    const gallery = normalized.galeria;
-    const mainImage = normalized.imagen_principal || gallery[0] || "assets/img/logo_cdp_transparente.png";
-    const finishes = normalized.acabados.length ? normalized.acabados : toArray(normalized.material);
-    const fitment = normalized.compatibilidad.length ? normalized.compatibilidad : toArray(normalized.modelo);
-    const specs = normalized.especificaciones;
-    const brand = normalized.marca || "";
-    const model = normalized.modelo || "";
-    const title = normalized.nombre || "";
-    const price = formatPrice(normalized.precio);
-    const oldPrice = formatPrice(normalized.precio_anterior);
+  const mapearProducto = (registro) => {
+    const normalizado = normalizarRegistroProducto(registro);
+    const galeria = normalizado.galeria;
+    const imagenPrincipal = normalizado.imagen_principal || galeria[0] || "assets/img/logo_cdp_transparente.png";
+    const acabados = normalizado.acabados.length ? normalizado.acabados : aArreglo(normalizado.material);
+    const compatibilidad = normalizado.compatibilidad.length ? normalizado.compatibilidad : aArreglo(normalizado.modelo);
+    const especificaciones = normalizado.especificaciones;
+    const marca = normalizado.marca || "";
+    const modelo = normalizado.modelo || "";
+    const titulo = normalizado.nombre || "";
+    const precio = formatearPrecio(normalizado.precio);
+    const precioAnterior = formatearPrecio(normalizado.precio_anterior);
 
     return {
-      id: normalized.slug || normalized.id,
-      badge: normalized.etiqueta || "Nuevo",
-      brand,
-      brandFilter: normalized.marca_filtro || getBrandFilter(brand),
-      model,
-      modelFilter: normalized.modelo_filtro || getModelFilter(`${brand} ${model}`),
-      title,
-      price,
-      oldPrice,
-      priceNumber: normalized.precio,
-      rating: normalized.valoracion || "4.8",
-      summary: normalized.descripcion || "",
-      fitSummary: normalized.descripcion_corta || finishes.join(" - "),
-      finishes,
-      fitment,
-      specs,
-      gallery: [mainImage, ...gallery.filter((image) => image !== mainImage)],
-      material: normalizeText(normalized.material || finishes.join(" ")),
-      color: normalizeText(normalized.color || ""),
-      tags: normalizeText(normalized.tags || `${brand} ${model} ${title} ${finishes.join(" ")}`),
+      id: normalizado.slug || normalizado.id,
+      badge: normalizado.etiqueta || "Nuevo",
+      brand: marca,
+      brandFilter: normalizado.marca_filtro || obtenerFiltroMarca(marca),
+      model: modelo,
+      modelFilter: normalizado.modelo_filtro || obtenerFiltroModelo(`${marca} ${modelo}`),
+      title: titulo,
+      price: precio,
+      oldPrice: precioAnterior,
+      priceNumber: normalizado.precio,
+      rating: normalizado.valoracion || "4.8",
+      summary: normalizado.descripcion || "",
+      fitSummary: normalizado.descripcion_corta || acabados.join(" - "),
+      finishes: acabados,
+      fitment: compatibilidad,
+      specs: especificaciones,
+      gallery: [imagenPrincipal, ...galeria.filter((imagen) => imagen !== imagenPrincipal)],
+      material: normalizarTexto(normalizado.material || acabados.join(" ")),
+      color: normalizarTexto(normalizado.color || ""),
+      tags: normalizarTexto(normalizado.tags || `${marca} ${modelo} ${titulo} ${acabados.join(" ")}`),
+      habilitar_color_detalle: normalizado.habilitar_color_detalle,
     };
   };
 
-  const getSession = () => {
-    try {
-      return JSON.parse(localStorage.getItem("cdp.admin.session") || "null");
-    } catch (error) {
-      return null;
-    }
+  // Limpieza unica al cargar el script de cualquier cache de sesion
+  // que hubiese quedado en localStorage de versiones anteriores.
+  try {
+    localStorage.removeItem("cdp.admin.session");
+    localStorage.removeItem("cdp.customer.session");
+  } catch (error) { /* navegador sin localStorage */ }
+
+  // Stub legacy: ya no leemos sesion del localStorage, todo se delega
+  // a la cookie HttpOnly del servidor. Devolvemos null para no romper
+  // codigo antiguo que aun llame a getSession().
+  const obtenerSesion = () => null;
+
+  // La sesion ya no se replica en localStorage por seguridad (XSS).
+  // El estado canonico vive en la cookie HttpOnly del servidor PHP.
+  // Esta funcion existe solo para devolver el payload normalizado.
+  const guardarSesion = (datos) => ({
+    user: datos.user,
+    authenticated: Boolean(datos.authenticated),
+    saved_at: Date.now(),
+  });
+
+  const leerCsrfDeCookie = () => {
+    const entrada = document.cookie.split("; ").find((c) => c.startsWith("cdp_csrf="));
+    return entrada ? decodeURIComponent(entrada.slice("cdp_csrf=".length)) : "";
   };
 
-  const saveSession = (data) => {
-    const session = {
-      user: data.user,
-      authenticated: Boolean(data.authenticated),
-      saved_at: Date.now(),
-    };
-    localStorage.setItem("cdp.admin.session", JSON.stringify(session));
-    return session;
-  };
-
-  const request = async (path, options = {}) => {
+  const peticion = async (ruta, opciones = {}) => {
     if (!window.location.protocol.startsWith("http")) {
       throw new Error("Abre la web desde XAMPP con http://localhost/CDP-Wheels/public/cuenta.html. Si abres el HTML como archivo, PHP no puede funcionar.");
     }
 
-    const endpoint = new URL(path.replace(/^\//, ""), apiBase);
-    let response = null;
+    const endpoint = new URL(ruta.replace(/^\//, ""), baseApi);
+    const metodo = (opciones.method || "GET").toUpperCase();
+    const esMutador = !["GET", "HEAD", "OPTIONS"].includes(metodo);
+    let respuesta = null;
+
+    // Si no tenemos token CSRF y vamos a hacer un mutador, primero
+    // pedimos al backend que lo emita (cualquier GET sirve para que el
+    // bootstrap publique la cookie).
+    if (esMutador && !leerCsrfDeCookie()) {
+      try {
+        await fetch(new URL("session.php", baseApi), { credentials: "same-origin" });
+      } catch (error) { /* el siguiente fetch fallara con mensaje claro */ }
+    }
 
     try {
-      response = await fetch(endpoint, {
+      respuesta = await fetch(endpoint, {
         credentials: "same-origin",
-        ...options,
+        ...opciones,
         headers: {
           "Content-Type": "application/json",
-          ...(options.headers || {}),
+          ...(esMutador ? { "X-CSRF-Token": leerCsrfDeCookie() } : {}),
+          ...(opciones.headers || {}),
         },
       });
     } catch (error) {
       throw new Error(`No se pudo conectar con el servidor PHP en ${endpoint.href}. Abre la web desde http://localhost/CDP-Wheels/public/ y revisa Apache en XAMPP.`);
     }
 
-    const text = await response.text();
-    let data = null;
+    const texto = await respuesta.text();
+    let datos = null;
 
     try {
-      data = text ? JSON.parse(text) : null;
+      datos = texto ? JSON.parse(texto) : null;
     } catch (error) {
-      data = {
-        error: text.trim().startsWith("<")
+      datos = {
+        error: texto.trim().startsWith("<")
           ? `No se encontro el endpoint PHP: ${endpoint.pathname}`
-          : text || "Respuesta no valida del servidor PHP.",
+          : texto || "Respuesta no valida del servidor PHP.",
       };
     }
 
-    if (!response.ok) {
-      throw new Error(data?.error || `Error PHP ${response.status}`);
+    if (!respuesta.ok) {
+      throw new Error(datos?.error || `Error PHP ${respuesta.status}`);
     }
 
-    return data;
+    return datos;
   };
 
-  const login = async (email, password) => saveSession(await request("login.php", {
+  const iniciarSesionAdmin = async (email, password) => guardarSesion(await peticion("login.php", {
     method: "POST",
     body: JSON.stringify({ email, password }),
   }));
 
-  const getAdminSession = () =>
-    request("session.php")
-      .then((data) => {
-        if (data.authenticated) {
-          return saveSession(data);
-        }
+  const obtenerSesionAdmin = () =>
+    peticion("session.php")
+      .then((datos) => (datos.authenticated ? guardarSesion(datos) : null))
+      .catch(() => null);
 
-        localStorage.removeItem("cdp.admin.session");
-        return null;
-      })
-      .catch(() => {
-        localStorage.removeItem("cdp.admin.session");
-        return null;
-      });
+  const cerrarSesionAdmin = async () =>
+    peticion("logout.php", { method: "POST", body: "{}" }).catch(() => ({ ok: true }));
 
-  const logout = async () => {
-    localStorage.removeItem("cdp.admin.session");
-    return request("logout.php", { method: "POST", body: "{}" }).catch(() => ({ ok: true }));
-  };
+  const obtenerSesionCliente = () =>
+    peticion("cliente_session.php")
+      .then((datos) => datos)
+      .catch(() => ({ authenticated: false, user: null }));
 
-  const getCustomerSession = () =>
-    request("cliente_session.php")
-      .then((data) => {
-        if (data.authenticated) {
-          localStorage.setItem("cdp.customer.session", JSON.stringify({
-            user: data.user,
-            authenticated: true,
-            saved_at: Date.now(),
-          }));
-        } else {
-          localStorage.removeItem("cdp.customer.session");
-        }
-        return data;
-      })
-      .catch(() => {
-        localStorage.removeItem("cdp.customer.session");
-        return { authenticated: false, user: null };
-      });
+  // Compatibilidad legacy con codigo antiguo que llamaba a
+  // getStoredCustomerSession(): forzamos a que vaya al servidor.
+  const obtenerSesionClienteGuardada = () => null;
 
-  const getStoredCustomerSession = () => {
-    try {
-      return JSON.parse(localStorage.getItem("cdp.customer.session") || "null");
-    } catch (error) {
-      return null;
-    }
-  };
-
-  const registerCustomer = async (payload) => {
-    const data = await request("cliente_registro.php", {
+  const registrarCliente = async (payload) =>
+    peticion("cliente_registro.php", {
       method: "POST",
       body: JSON.stringify(payload),
     });
-    localStorage.removeItem("cdp.admin.session");
-    localStorage.setItem("cdp.customer.session", JSON.stringify({
-      user: data.user,
-      authenticated: Boolean(data.authenticated),
-      saved_at: Date.now(),
-    }));
-    return data;
-  };
 
-  const loginCustomer = async (email, password) => {
-    const data = await request("cliente_login.php", {
+  const iniciarSesionCliente = async (email, password) =>
+    peticion("cliente_login.php", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     });
-    localStorage.removeItem("cdp.admin.session");
-    localStorage.setItem("cdp.customer.session", JSON.stringify({
-      user: data.user,
-      authenticated: Boolean(data.authenticated),
-      saved_at: Date.now(),
-    }));
-    return data;
-  };
 
-  const logoutCustomer = async () => {
-    localStorage.removeItem("cdp.customer.session");
-    return request("cliente_logout.php", { method: "POST", body: "{}" }).catch(() => ({ ok: true }));
-  };
+  const cerrarSesionCliente = async () =>
+    peticion("cliente_logout.php", { method: "POST", body: "{}" }).catch(() => ({ ok: true }));
 
-  const getCustomerAdminAccess = async () =>
-    request("cliente_admin.php").catch(() => ({
+  const cambiarPasswordCliente = async (passwordActual, passwordNueva) =>
+    peticion("cliente_password.php", {
+      method: "POST",
+      body: JSON.stringify({ password_actual: passwordActual, password_nueva: passwordNueva }),
+    });
+
+  const solicitarRecuperacionPassword = async (email) =>
+    peticion("cliente_recuperar.php", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+
+  const restablecerPasswordCliente = async (token, password) =>
+    peticion("cliente_restablecer.php", {
+      method: "POST",
+      body: JSON.stringify({ token, password }),
+    });
+
+  const checkoutProcesar = async (payload) =>
+    peticion("checkout.php?accion=procesar", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+  const checkoutPreview = async (payload) =>
+    peticion("checkout.php?accion=preview", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+  const adminTotpEstado = async () => peticion("admin_totp.php?accion=estado");
+
+  const adminTotpIniciar = async () =>
+    peticion("admin_totp.php?accion=iniciar", { method: "POST", body: "{}" });
+
+  const adminTotpVerificar = async (codigo) =>
+    peticion("admin_totp.php?accion=verificar", {
+      method: "POST",
+      body: JSON.stringify({ codigo }),
+    });
+
+  const adminTotpDesactivar = async (password) =>
+    peticion("admin_totp.php?accion=desactivar", {
+      method: "POST",
+      body: JSON.stringify({ password }),
+    });
+
+  // Helper generico para que admin/seguridad.html pueda hacer GET sin
+  // exponer la funcion privada peticion(). Devuelve el JSON tal cual.
+  const fetchJson = async (ruta) => peticion(ruta);
+
+  const obtenerAccesoAdminCliente = async () =>
+    peticion("cliente_admin.php").catch(() => ({
       has_admin_access: false,
       admin_authenticated: false,
     }));
 
-  const getCart = async () => request("carrito.php");
+  const obtenerCesta = async () => peticion("carrito.php");
 
-  const addCartItem = async (slug, cantidad = 1) =>
-    request("carrito.php", {
+  const anadirItemCesta = async (slug, cantidad = 1) =>
+    peticion("carrito.php", {
       method: "POST",
       body: JSON.stringify({ slug, cantidad }),
     });
 
-  const updateCartItem = async (itemId, cantidad) =>
-    request("carrito.php", {
+  const actualizarItemCesta = async (itemId, cantidad) =>
+    peticion("carrito.php", {
       method: "PATCH",
       body: JSON.stringify({ item_id: itemId, cantidad }),
     });
 
-  const removeCartItem = async (itemId) =>
-    request("carrito.php", {
+  const quitarItemCesta = async (itemId) =>
+    peticion("carrito.php", {
       method: "DELETE",
       body: JSON.stringify({ item_id: itemId }),
     });
 
-  const clearCart = async () =>
-    request("carrito.php", {
+  const vaciarCesta = async () =>
+    peticion("carrito.php", {
       method: "DELETE",
       body: JSON.stringify({ all: true }),
     });
 
-  const listProducts = async () =>
-    request("productos.php").then((response) => (response.data || []).map(mapProduct));
+  const listarProductos = async () =>
+    peticion("productos.php").then((respuesta) => (respuesta.data || []).map(mapearProducto));
 
-  const listProductsAdmin = async () =>
-    request("productos.php?admin=1").then((response) => (response.data || []).map(normalizeProductRecord));
+  const listarProductosAdmin = async () =>
+    peticion("productos.php?admin=1").then((respuesta) => (respuesta.data || []).map(normalizarRegistroProducto));
 
-  const getProductBySlug = async (slug) =>
-    request(`productos.php?slug=${encodeURIComponent(slug)}`).then((response) => (response.data ? mapProduct(response.data) : null));
+  const obtenerProductoPorSlug = async (slug) =>
+    peticion(`productos.php?slug=${encodeURIComponent(slug)}`).then((respuesta) => (respuesta.data ? mapearProducto(respuesta.data) : null));
 
-  const createSolicitud = async (payload) =>
-    request("solicitudes.php", {
+  const crearSolicitud = async (payload) =>
+    peticion("solicitudes.php", {
       method: "POST",
       body: JSON.stringify(payload),
     });
 
-  const listSolicitudes = async () =>
-    request("solicitudes.php").then((response) => response.data || []);
+  const actualizarSolicitud = async (id, estado) =>
+    peticion("solicitudes.php", {
+      method: "PATCH",
+      body: JSON.stringify({ id, estado }),
+    });
 
-  const createProduct = async (payload) =>
-    request("productos.php", {
+  const listarSolicitudes = async () =>
+    peticion("solicitudes.php").then((respuesta) => respuesta.data || []);
+
+  const guardarVolanteGenerado = async (payload) =>
+    peticion("volantes_generados.php", {
       method: "POST",
       body: JSON.stringify(payload),
     });
 
-  const updateProduct = async (id, payload) =>
-    request(`productos.php?id=${encodeURIComponent(id)}`, {
+  const listarVolantesGenerados = async () =>
+    peticion("volantes_generados.php").then((respuesta) => respuesta.data || []);
+
+  const listarVolantesAdmin = async () =>
+    peticion("admin_volantes.php").then((respuesta) => respuesta.data || []);
+
+  const detectarDuplicados = async () =>
+    peticion("admin_duplicados.php").then((respuesta) => respuesta.data || []);
+
+  const limpiarDuplicados = async () =>
+    peticion("admin_duplicados.php", { method: "POST" });
+
+  const listarClientesAdmin = async () =>
+    peticion("admin_clientes.php").then((respuesta) => respuesta.data || []);
+
+  const actualizarClienteActivo = async (id, activo) =>
+    peticion("admin_clientes.php", {
+      method: "PATCH",
+      body: JSON.stringify({ id, activo }),
+    });
+
+  const crearProducto = async (payload) =>
+    peticion("productos.php", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+  const actualizarProducto = async (id, payload) =>
+    peticion(`productos.php?id=${encodeURIComponent(id)}`, {
       method: "PATCH",
       body: JSON.stringify(payload),
     });
 
-  const deleteProduct = async (id) =>
-    request(`productos.php?id=${encodeURIComponent(id)}`, {
+  const eliminarProducto = async (id) =>
+    peticion(`productos.php?id=${encodeURIComponent(id)}`, {
       method: "DELETE",
     });
 
   const backend = {
-    addCartItem,
-    clearCart,
-    createSolicitud,
-    createProduct,
-    deleteProduct,
-    escapeHtml,
-    getCart,
-    getCustomerAdminAccess,
-    getProductBySlug,
-    getAdminSession,
-    getCustomerSession,
-    getSession,
-    getStoredCustomerSession,
-    isConfigured,
-    listProductsAdmin,
-    listProducts,
-    listSolicitudes,
-    login,
-    loginCustomer,
-    logout,
-    logoutCustomer,
-    mapProduct,
-    registerCustomer,
-    removeCartItem,
-    updateCartItem,
-    updateProduct,
+    addCartItem: anadirItemCesta,
+    clearCart: vaciarCesta,
+    createSolicitud: crearSolicitud,
+    createProduct: crearProducto,
+    deleteProduct: eliminarProducto,
+    escapeHtml: escaparHtml,
+    getCart: obtenerCesta,
+    getCustomerAdminAccess: obtenerAccesoAdminCliente,
+    getProductBySlug: obtenerProductoPorSlug,
+    getAdminSession: obtenerSesionAdmin,
+    getCustomerSession: obtenerSesionCliente,
+    getSession: obtenerSesion,
+    getStoredCustomerSession: obtenerSesionClienteGuardada,
+    isConfigured: estaConfigurado,
+    guardarVolanteGenerado,
+    listarVolantesGenerados,
+    listAdminVolantes: listarVolantesAdmin,
+    listAdminClientes: listarClientesAdmin,
+    updateClienteActivo: actualizarClienteActivo,
+    detectarDuplicados,
+    limpiarDuplicados,
+    listProductsAdmin: listarProductosAdmin,
+    listProducts: listarProductos,
+    listSolicitudes: listarSolicitudes,
+    login: iniciarSesionAdmin,
+    loginCustomer: iniciarSesionCliente,
+    logout: cerrarSesionAdmin,
+    logoutCustomer: cerrarSesionCliente,
+    changeCustomerPassword: cambiarPasswordCliente,
+    requestPasswordReset: solicitarRecuperacionPassword,
+    resetCustomerPassword: restablecerPasswordCliente,
+    checkout: checkoutProcesar,
+    checkoutPreview,
+    adminTotpEstado,
+    adminTotpIniciar,
+    adminTotpVerificar,
+    adminTotpDesactivar,
+    fetchJson,
+    mapProduct: mapearProducto,
+    registerCustomer: registrarCliente,
+    removeCartItem: quitarItemCesta,
+    updateCartItem: actualizarItemCesta,
+    updateProduct: actualizarProducto,
+    updateSolicitud: actualizarSolicitud,
   };
 
   window.CDPBackend = backend;
