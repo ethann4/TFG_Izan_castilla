@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../modelos/ClienteModelo.php';
-require_once __DIR__ . '/../../public/config/oauth.php';
+require_once __DIR__ . '/../config/oauth.php';
 
 final class AccesoSocialControlador
 {

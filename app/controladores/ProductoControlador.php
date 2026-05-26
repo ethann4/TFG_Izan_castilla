@@ -90,4 +90,20 @@ final class ProductoControlador
         $this->productos->eliminar($id);
         send_json(['ok' => true]);
     }
+
+    public function limpiarDuplicados(string $metodo): void
+    {
+        require_admin();
+
+        if ($metodo === 'GET') {
+            send_json(['data' => $this->productos->detectarDuplicados()]);
+        }
+
+        if ($metodo === 'POST') {
+            $eliminados = $this->productos->eliminarDuplicados();
+            send_json(['ok' => true, 'eliminados' => $eliminados]);
+        }
+
+        send_json(['error' => 'Metodo no permitido.'], 405);
+    }
 }

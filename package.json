@@ -1,7 +1,7 @@
 {
   "name": "cdp-customs",
   "version": "1.0.0",
-  "description": "Proyecto final DAW para catalogo y configurador de volantes personalizados CDP Customs",
+  "description": "CDP Customs: catalogo y configurador 3D de volantes personalizados.",
   "main": "gulpfile.js",
   "scripts": {
     "start": "gulp",

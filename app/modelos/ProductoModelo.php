@@ -85,4 +85,48 @@ final class ProductoModelo
         $stmt = $this->pdo->prepare('DELETE FROM productos WHERE id = :id');
         $stmt->execute(['id' => $id]);
     }
+
+    public function detectarDuplicados(): array
+    {
+        $stmt = $this->pdo->query(
+            "SELECT nombre,
+                    COUNT(*) AS copias,
+                    GROUP_CONCAT(id ORDER BY id ASC) AS ids,
+                    GROUP_CONCAT(slug ORDER BY id ASC SEPARATOR '|') AS slugs
+             FROM productos
+             GROUP BY nombre
+             HAVING copias > 1
+             ORDER BY copias DESC, nombre ASC"
+        );
+
+        return array_map(static function (array $row): array {
+            return [
+                'nombre' => (string) $row['nombre'],
+                'copias' => (int) $row['copias'],
+                'ids' => array_map('intval', explode(',', (string) $row['ids'])),
+                'slugs' => explode('|', (string) $row['slugs']),
+            ];
+        }, $stmt->fetchAll());
+    }
+
+    public function eliminarDuplicados(): int
+    {
+        $duplicados = $this->detectarDuplicados();
+        if (!$duplicados) return 0;
+
+        $idsAEliminar = [];
+        foreach ($duplicados as $grupo) {
+            $ids = $grupo['ids'];
+            array_shift($ids);
+            $idsAEliminar = array_merge($idsAEliminar, $ids);
+        }
+
+        if (!$idsAEliminar) return 0;
+
+        $placeholders = implode(',', array_fill(0, count($idsAEliminar), '?'));
+        $stmt = $this->pdo->prepare("DELETE FROM productos WHERE id IN ({$placeholders})");
+        $stmt->execute($idsAEliminar);
+
+        return $stmt->rowCount();
+    }
 }

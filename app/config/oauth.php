@@ -2,13 +2,18 @@
 
 declare(strict_types=1);
 
-const GOOGLE_CLIENT_ID = '';
-const GOOGLE_CLIENT_SECRET = '';
+$oauthLocal = __DIR__ . '/oauth.local.php';
+if (is_file($oauthLocal)) {
+    require_once $oauthLocal;
+}
 
-const APPLE_CLIENT_ID = '';
-const APPLE_TEAM_ID = '';
-const APPLE_KEY_ID = '';
-const APPLE_PRIVATE_KEY = '';
+if (!defined('GOOGLE_CLIENT_ID')) define('GOOGLE_CLIENT_ID', '');
+if (!defined('GOOGLE_CLIENT_SECRET')) define('GOOGLE_CLIENT_SECRET', '');
+
+if (!defined('APPLE_CLIENT_ID')) define('APPLE_CLIENT_ID', '');
+if (!defined('APPLE_TEAM_ID')) define('APPLE_TEAM_ID', '');
+if (!defined('APPLE_KEY_ID')) define('APPLE_KEY_ID', '');
+if (!defined('APPLE_PRIVATE_KEY')) define('APPLE_PRIVATE_KEY', '');
 
 function oauth_config_value(string $envName, string $fallback): string
 {

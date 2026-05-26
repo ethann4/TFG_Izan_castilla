@@ -24,6 +24,10 @@ final class SolicitudControlador
             $this->crear();
         }
 
+        if ($metodo === 'PATCH') {
+            $this->actualizar();
+        }
+
         send_json(['error' => 'Metodo no permitido.'], 405);
     }
 
@@ -57,5 +61,23 @@ final class SolicitudControlador
         ];
 
         send_json(['ok' => true, 'id' => $this->solicitudes->crear($payload)], 201);
+    }
+
+    private function actualizar(): void
+    {
+        require_admin();
+
+        $data = read_json_body();
+        $id = (int) ($data['id'] ?? 0);
+        $estado = clean_string($data['estado'] ?? '', 40);
+        $permitidos = ['pendiente', 'confirmada', 'rechazada'];
+
+        if ($id <= 0 || !in_array($estado, $permitidos, true)) {
+            send_json(['error' => 'Estado de solicitud no valido.'], 422);
+        }
+
+        $this->solicitudes->actualizarEstado($id, $estado);
+
+        send_json(['ok' => true]);
     }
 }

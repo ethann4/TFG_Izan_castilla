@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS productos (
   descripcion_corta TEXT NULL,
   material VARCHAR(120) NOT NULL DEFAULT '',
   color VARCHAR(120) NOT NULL DEFAULT '',
+  habilitar_color_detalle TINYINT(1) NOT NULL DEFAULT 0,
   precio DECIMAL(10,2) NOT NULL DEFAULT 0,
   precio_anterior DECIMAL(10,2) NULL,
   etiqueta VARCHAR(80) NOT NULL DEFAULT 'Nuevo',
@@ -56,6 +57,11 @@ CREATE TABLE IF NOT EXISTS solicitudes (
   mensaje TEXT NOT NULL,
   estado VARCHAR(40) NOT NULL DEFAULT 'pendiente',
   origen VARCHAR(80) NOT NULL DEFAULT 'formulario_contacto',
+  volante_generado_id INT UNSIGNED NULL,
+  boceto_3d LONGTEXT NULL,
+  configuracion_json LONGTEXT NULL,
+  resumen_json LONGTEXT NULL,
+  precio_total DECIMAL(10,2) NULL,
   creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_solicitudes_estado (estado),
   INDEX idx_solicitudes_email (email)
@@ -72,6 +78,29 @@ CREATE TABLE IF NOT EXISTS clientes (
   ultimo_acceso DATETIME NULL,
   INDEX idx_clientes_email (email),
   INDEX idx_clientes_activo (activo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS volantes_generados (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  cliente_id INT UNSIGNED NOT NULL,
+  titulo VARCHAR(180) NOT NULL,
+  marca VARCHAR(80) NOT NULL DEFAULT '',
+  modelo VARCHAR(120) NOT NULL DEFAULT '',
+  precio_total DECIMAL(10,2) NOT NULL DEFAULT 0,
+  configuracion_json LONGTEXT NOT NULL,
+  resumen_json LONGTEXT NULL,
+  precio_json LONGTEXT NULL,
+  visual_json LONGTEXT NULL,
+  boceto_3d LONGTEXT NULL,
+  estado VARCHAR(40) NOT NULL DEFAULT 'guardado',
+  solicitud_id INT UNSIGNED NULL,
+  creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  actualizado_en DATETIME NULL,
+  INDEX idx_volantes_generados_cliente (cliente_id),
+  INDEX idx_volantes_generados_estado (estado),
+  CONSTRAINT fk_volantes_cliente
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+    ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS carrito_items (
