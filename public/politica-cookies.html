@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pol&iacute;tica de cookies | CDP Customs</title>
+    <meta name="description" content="Pol&iacute;tica de cookies de CDP Customs: tipos, finalidades, conservaci&oacute;n y gesti&oacute;n del consentimiento.">
+    <meta name="robots" content="index,follow">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo_cdp_transparente.png">
+    <meta name="theme-color" content="#000000">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&amp;display=swap" rel="stylesheet">
+    <link href="assets/css/theme.css" rel="stylesheet">
+    <link href="assets/css/cdp-common.css" rel="stylesheet">
+  </head>
+
+  <body class="legal-page">
+    <main class="main" id="top">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4 d-block cdp-navbar" data-navbar-on-scroll>
+        <div class="container">
+          <a class="navbar-brand d-inline-flex align-items-center" href="index.html">
+            <img class="navbar-logo navbar-logo--tall" src="assets/img/logo_cdp_transparente.png" alt="CDP Customs">
+          </a>
+        </div>
+      </nav>
+
+      <section class="legal-shell">
+        <div class="container">
+          <a class="legal-back" href="index.html"><span data-feather="arrow-left"></span> Volver</a>
+          <header class="legal-header">
+            <span class="cdp-section-kicker">Informaci&oacute;n legal</span>
+            <h1>Pol&iacute;tica de cookies</h1>
+            <p>&Uacute;ltima actualizaci&oacute;n: mayo de 2026.</p>
+          </header>
+
+          <article class="legal-article">
+            <h2>1. &iquest;Qu&eacute; son las cookies?</h2>
+            <p>Las cookies son pequenos archivos de texto que un sitio web almacena en tu dispositivo para reconocerte, recordar tus preferencias y medir c&oacute;mo se usa la web. CDP Customs utiliza cookies propias y de terceros en cumplimiento del Reglamento (UE) 2016/679 (RGPD) y la Ley 34/2002 de Servicios de la Sociedad de la Informaci&oacute;n (LSSI-CE).</p>
+
+            <h2>2. Tipos de cookies que utilizamos</h2>
+            <table class="legal-table">
+              <thead>
+                <tr><th>Categor&iacute;a</th><th>Finalidad</th><th>Caducidad</th><th>Tipo</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Necesarias</td><td>Mantener tu sesi&oacute;n, recordar la cesta y proteger los formularios frente a ataques CSRF.</td><td>Sesi&oacute;n / 24 h</td><td>Propias</td></tr>
+                <tr><td>Anal&iacute;tica</td><td>Medir tr&aacute;fico an&oacute;nimo y mejorar la experiencia (productos m&aacute;s vistos, paginas con error).</td><td>Hasta 13 meses</td><td>Terceros</td></tr>
+                <tr><td>Personalizaci&oacute;n</td><td>Recordar tu idioma, regi&oacute;n y tema preferido.</td><td>6 meses</td><td>Propias</td></tr>
+                <tr><td>Contenido comercial</td><td>Mostrarte volantes, acabados y promociones afines a tu inter&eacute;s.</td><td>Hasta 12 meses</td><td>Propias / Terceros</td></tr>
+              </tbody>
+            </table>
+
+            <h2>3. Base legitimadora</h2>
+            <p>Las cookies necesarias se instalan amparadas en el inter&eacute;s leg&iacute;timo de garantizar el funcionamiento del servicio (art. 22.2 LSSI-CE). El resto solo se activan tras tu consentimiento expreso recogido en el banner inicial.</p>
+
+            <h2>4. Gestionar tu consentimiento</h2>
+            <p>Puedes aceptar, rechazar o personalizar la configuraci&oacute;n desde el banner que aparece la primera vez que visitas la web. Si quieres revisar o cambiar tu elecci&oacute;n m&aacute;s tarde, borra los datos de navegaci&oacute;n de CDP Customs en tu navegador para que el banner vuelva a mostrarse, o bien usa el siguiente bot&oacute;n:</p>
+            <button class="btn btn-outline-primary mt-3" type="button" id="reabrirBannerCookies">Cambiar mi configuraci&oacute;n de cookies</button>
+
+            <h2>5. Cookies de terceros</h2>
+            <p>Algunos servicios de terceros, como proveedores de anal&iacute;tica web o redes sociales, instalan sus propias cookies cuando aceptas dichas categor&iacute;as. Estas cookies se rigen por sus respectivas pol&iacute;ticas, accesibles desde cada proveedor.</p>
+
+            <h2>6. C&oacute;mo deshabilitarlas desde tu navegador</h2>
+            <p>Adem&aacute;s del banner, todos los navegadores modernos permiten bloquear o borrar cookies desde su configuraci&oacute;n. Consulta los enlaces de Chrome, Firefox, Safari o Edge para conocer los pasos exactos.</p>
+
+            <h2>7. Cambios en esta pol&iacute;tica</h2>
+            <p>CDP Customs puede actualizar esta pol&iacute;tica para adaptarla a cambios normativos o funcionales. Cualquier cambio se publicar&aacute; aqu&iacute; con la fecha indicada al inicio del documento.</p>
+
+            <h2>8. Contacto</h2>
+            <p>Para cualquier duda sobre el tratamiento de cookies puedes contactarnos a trav&eacute;s del <a href="contacto.html">formulario de contacto</a>.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="assets/js/aviso-cookies.js"></script>
+    <script>
+      if (window.feather) feather.replace();
+      document.getElementById("reabrirBannerCookies")?.addEventListener("click", () => {
+        try { localStorage.removeItem("cdp.aviso-cookies.v1"); } catch (e) {}
+        window.location.reload();
+      });
+    </script>
+  </body>
+</html>

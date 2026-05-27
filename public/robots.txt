@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+Allow: /Catalogo.html
+Allow: /Creacionvirtual.html
+Allow: /producto.html
+Allow: /contacto.html
+Allow: /cuenta.html
+Allow: /carrito.html
+Allow: /assets/
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /vendors/
+
+User-agent: Googlebot-Image
+Allow: /assets/img/
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+Sitemap: https://www.cdpcustoms.com/sitemap.xml
